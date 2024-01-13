@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -35,18 +36,34 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
 }
 
 // MARK: Update Loop
+bool initializedGameLoop = false;
 struct vec2f textPosition = {0.0f, 0.0f};
 
 static int update(void *userdata) {
     PlaydateAPI *pd = userdata;
+
+    struct vec2f screenBounds = {0.0f, 0.0f};
+    screenBounds.x = (float)pd->display->getWidth();
+    screenBounds.y = (float)pd->display->getHeight();
+
     pd->graphics->clear(kColorWhite);
     pd->graphics->setFont(font);
+
+    if (!initializedGameLoop) {
+        textPosition.x = screenBounds.x / 2;
+        pd->graphics->drawText("@", strlen("@"), kASCIIEncoding, textPosition.x,
+                               textPosition.y);
+        initializedGameLoop = true;
+        return 1;
+    }
+
     pd->graphics->drawText("@", strlen("@"), kASCIIEncoding, textPosition.x,
                            textPosition.y);
 
     float crankPosition = pd->system->getCrankAngle();
 
     if (!pd->system->isCrankDocked())
-        textPosition = get_translated_movement(textPosition, crankPosition);
+        textPosition =
+            get_translated_movement(textPosition, crankPosition, screenBounds);
     return 1; // Always update the display.
 }
