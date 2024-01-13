@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "movement.h"
 #include "pd_api.h"
 #include "vector.h"
 
@@ -34,20 +35,18 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
 }
 
 // MARK: Update Loop
-
-int drawn = 0;
-struct vec2 textPosition = {200, 50};
+struct vec2f textPosition = {0.0f, 0.0f};
 
 static int update(void *userdata) {
-    if (drawn > 0)
-        return 0;
-
     PlaydateAPI *pd = userdata;
     pd->graphics->clear(kColorWhite);
     pd->graphics->setFont(font);
-    pd->graphics->drawText("Hello, world!", strlen("Hello, world!"),
-                           kASCIIEncoding, textPosition.x, textPosition.y);
+    pd->graphics->drawText("@", strlen("@"), kASCIIEncoding, textPosition.x,
+                           textPosition.y);
 
-    drawn = 1;
+    float crankPosition = pd->system->getCrankAngle();
+
+    if (!pd->system->isCrankDocked())
+        textPosition = get_translated_movement(textPosition, crankPosition);
     return 1; // Always update the display.
 }
