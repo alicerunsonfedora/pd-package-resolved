@@ -21,7 +21,7 @@ endif
 VPATH += src
 
 # List C source files here
-SRC = src/main.c src/movement.c src/vector.c
+SRC = src/main.c src/movement.c src/vector.c src/images.c
 
 # List all user directories here
 UINCDIR = 
