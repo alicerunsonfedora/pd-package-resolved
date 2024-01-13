@@ -1,0 +1,8 @@
+{
+  "actions" : {
+    "run" : {
+      "enabled" : true,
+      "script" : "#!\/bin\/sh\nfind src -name '*.[ch]' | xargs \\\n\tclang-format --style='file:.clang-format' -i"
+    }
+  }
+}

@@ -1,4 +1,5 @@
 {
+  "cdragon.format.onSave" : true,
   "prettier.format-on-save" : "Disable",
   "workspace.art_style" : 0,
   "workspace.color" : 2,
