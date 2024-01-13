@@ -9,12 +9,15 @@ static int update(void *userdata);
 const char *fontpath = "/System/Fonts/Asheville-Sans-14-Bold.pft";
 LCDFont *font = NULL;
 
+// clang-format off
+// For Windows DLL support
 #ifdef _WINDLL
 __declspec(dllexport)
 #endif
 
 // MARK: Event Handler
 int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
+    // clang-format on
     if (event == kEventInit) {
         const char *err;
         font = pd->graphics->loadFont(fontpath, &err);
