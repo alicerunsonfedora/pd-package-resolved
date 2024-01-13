@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "pd_api.h"
+#include "vector.h"
 
 static int update(void *userdata);
 
@@ -35,6 +36,7 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
 // MARK: Update Loop
 
 int drawn = 0;
+struct vec2 textPosition = {200, 50};
 
 static int update(void *userdata) {
     if (drawn > 0)
@@ -44,7 +46,7 @@ static int update(void *userdata) {
     pd->graphics->clear(kColorWhite);
     pd->graphics->setFont(font);
     pd->graphics->drawText("Hello, world!", strlen("Hello, world!"),
-                           kASCIIEncoding, 200, 50);
+                           kASCIIEncoding, textPosition.x, textPosition.y);
 
     drawn = 1;
     return 1; // Always update the display.
