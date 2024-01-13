@@ -38,13 +38,13 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
 
 // MARK: Update Loop
 bool initializedGameLoop = false;
-struct vec2f textPosition = {0.0f, 0.0f};
+vec2f textPosition = {0.0f, 0.0f};
 LCDBitmap* splash;
 
 static int update(void *userdata) {
     PlaydateAPI *pd = userdata;
 
-    struct vec2f screenBounds = {0.0f, 0.0f};
+    vec2f screenBounds = {0.0f, 0.0f};
     screenBounds.x = (float)pd->display->getWidth();
     screenBounds.y = (float)pd->display->getHeight();
 
