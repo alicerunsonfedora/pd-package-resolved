@@ -32,10 +32,20 @@ commands in the terminal for CMake:
 ```
 mkdir build
 cd build
-cmake ..
+cmake .
 make
 ```
 
 More information can be found on [Playdate's documentation to build via the command line][pdbuild].
 
 [pdbuild]: https://sdk.play.date/inside-playdate-with-c/#_cmake
+
+To build and run the unit tests, run the following:
+
+```
+mkdir build
+cd build
+cmake -DTARGET_GROUP=test .
+make
+./test/test_app
+```

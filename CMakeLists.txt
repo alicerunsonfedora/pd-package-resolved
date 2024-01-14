@@ -30,11 +30,23 @@ set(PLAYDATE_GAME_DEVICE package_resolved_DEVICE)
 
 project(${PLAYDATE_GAME_NAME} C ASM)
 
-if (TOOLCHAIN STREQUAL "armgcc")
-    add_executable(${PLAYDATE_GAME_DEVICE} src/main.c)
+# set(TARGET_GROUP production STRING "Group to build")
+
+project(${PLAYDATE_GAME_NAME} C ASM)
+
+# Unit testing
+if(TARGET_GROUP STREQUAL "test")
+    message("Wow")
+    include(CTest)
+    add_subdirectory(external)
+    add_subdirectory(test)
 else()
-    add_library(${PLAYDATE_GAME_NAME} SHARED src/main.c )
+   message("oof")
+   if (TOOLCHAIN STREQUAL "armgcc")
+       add_executable(${PLAYDATE_GAME_DEVICE} src/main.c src/images.c src/movement.c src/vector.c)
+   else()
+       add_library(${PLAYDATE_GAME_NAME} SHARED src/main.c src/images.c src/movement.c src/vector.c )
+   endif()
+   
+   include(${SDK}/C_API/buildsupport/playdate_game.cmake)
 endif()
-
-include(${SDK}/C_API/buildsupport/playdate_game.cmake)
-
