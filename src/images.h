@@ -3,6 +3,6 @@
 #ifndef IMAGES_H
 #define IMAGES_H
 
-LCDBitmap* loadBitmap(const char* path, PlaydateAPI *pd);
+LCDBitmap *loadBitmap(const char *path, PlaydateAPI *pd);
 
 #endif

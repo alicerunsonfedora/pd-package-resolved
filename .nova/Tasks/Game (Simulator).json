@@ -1,4 +1,14 @@
 {
+  "actions" : {
+    "build" : {
+      "postActions" : [
+        {
+          "script" : "#!\/bin\/sh\n\nrm -rf build CMakeFiles\ncmake .",
+          "type" : "runScript"
+        }
+      ]
+    }
+  },
   "extension" : {
     "identifier" : "com.panic.Playdate",
     "name" : "Playdate"

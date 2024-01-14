@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "movement.h"
 #include "images.h"
+#include "movement.h"
 #include "pd_api.h"
 #include "vector.h"
 
@@ -39,7 +39,7 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
 // MARK: Update Loop
 bool initializedGameLoop = false;
 vec2f textPosition = {0.0f, 0.0f};
-LCDBitmap* splash;
+LCDBitmap *splash;
 
 static int update(void *userdata) {
     PlaydateAPI *pd = userdata;
@@ -50,29 +50,31 @@ static int update(void *userdata) {
 
     pd->graphics->clear(kColorWhite);
     pd->graphics->setFont(font);
-    
-    const char* splashPath = "Images/splash";
+
+    const char *splashPath = "Images/splash";
     splash = loadBitmap(splashPath, pd);
-    
+
     if (splash != NULL)
         pd->graphics->drawBitmap(splash, 0, 0, kBitmapUnflipped);
-    
 
-//     if (!initializedGameLoop) {
-//         textPosition.x = screenBounds.x / 2;
-//         pd->graphics->drawText("@", strlen("@"), kASCIIEncoding, textPosition.x,
-//                                textPosition.y);
-//         initializedGameLoop = true;
-//         return 1;
-//     }
-// 
-//     pd->graphics->drawText("@", strlen("@"), kASCIIEncoding, textPosition.x,
-//                            textPosition.y);
-// 
-//     float crankPosition = pd->system->getCrankAngle();
-// 
-//     if (!pd->system->isCrankDocked())
-//         textPosition =
-//             get_translated_movement(textPosition, crankPosition, screenBounds);
+    //     if (!initializedGameLoop) {
+    //         textPosition.x = screenBounds.x / 2;
+    //         pd->graphics->drawText("@", strlen("@"), kASCIIEncoding,
+    //         textPosition.x,
+    //                                textPosition.y);
+    //         initializedGameLoop = true;
+    //         return 1;
+    //     }
+    //
+    //     pd->graphics->drawText("@", strlen("@"), kASCIIEncoding,
+    //     textPosition.x,
+    //                            textPosition.y);
+    //
+    //     float crankPosition = pd->system->getCrankAngle();
+    //
+    //     if (!pd->system->isCrankDocked())
+    //         textPosition =
+    //             get_translated_movement(textPosition, crankPosition,
+    //             screenBounds);
     return 1; // Always update the display.
 }
