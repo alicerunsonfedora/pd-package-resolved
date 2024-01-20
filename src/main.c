@@ -36,7 +36,7 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
     return 0;
 }
 
-// MARK: Update Loop
+// - MARK: Update Loop
 
 #define CHARLIE_WIDTH 32
 #define CHARLIE_HEIGHT 64
@@ -46,53 +46,60 @@ bool frameUpdated = false;
 bool initializedGameLoop = false;
 vec2f spritePosition = {0.0f, 24.0f};
 vec2i spriteSize = {CHARLIE_WIDTH, CHARLIE_HEIGHT};
+vec2f screenBounds = {0.0f, 0.0f};
 LCDBitmapTable *table;
 LCDBitmap *spriteImage;
 LCDSprite *sprite;
 
+void cycle() {
+    if (frameUpdated == true) {
+        frameUpdated = false;
+        return;
+    }
+    frame = frame + 1;
+    if (frame > 5)
+        frame = 0;
+    frameUpdated = true;
+}
+
 static int update(void *userdata) {
     PlaydateAPI *pd = userdata;
 
-    vec2f screenBounds = {0.0f, 0.0f};
-    screenBounds.x = (float)pd->display->getWidth();
-    screenBounds.y = (float)pd->display->getHeight();
-
-    pd->graphics->clear(kColorWhite);
-    pd->graphics->setFont(font);
-
-    const char *spritesheet = "Images/charlie";
-    table = loadTable(spritesheet, pd);
-    if (table == NULL) {
-        pd->system->error("Missing the table!");
-        return 0;
-    }
-    spriteImage = pd->graphics->getTableBitmap(table, frame);
-
-    if (spriteImage != NULL && sprite == NULL) {
-        sprite = imagedSprite(pd, spriteSize, spriteImage);
-    }
-
+    // Initial setup.
     if (!initializedGameLoop) {
+        screenBounds.x = (float)pd->display->getWidth();
+        screenBounds.y = (float)pd->display->getHeight();
+        
+        pd->graphics->clear(kColorWhite);
+        pd->graphics->setFont(font);
+        
+        const char *spritesheet = "Images/charlie";
+        table = loadTable(spritesheet, pd);
+        if (table == NULL) {
+            pd->system->error("The table for path %s is missing.", spritesheet);
+            return 0;
+        }
+        spriteImage = pd->graphics->getTableBitmap(table, frame);
+        
+        if (spriteImage != NULL && sprite == NULL) {
+            sprite = imagedSprite(pd, spriteSize, spriteImage);
+        }
+        
         spritePosition.x = screenBounds.x / 2;
         pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
         pd->sprite->updateAndDrawSprites();
         initializedGameLoop = true;
         return 1;
     }
-
+    
+    // Real-time updates.
+    spriteImage = pd->graphics->getTableBitmap(table, frame);
     pd->sprite->setImage(sprite, spriteImage, kBitmapUnflipped);
     pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
     pd->sprite->markDirty(sprite);
     pd->sprite->updateAndDrawSprites();
 
-    if (frameUpdated == true) {
-        frameUpdated = false;
-    } else {
-        frame = frame + 1;
-        if (frame > 5)
-            frame = 0;
-        frameUpdated = true;
-    }
+    cycle();
 
     float crankPosition = pd->system->getCrankAngle();
 
