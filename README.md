@@ -36,7 +36,7 @@ make
 
 More information can be found on [Playdate's documentation to build via the command line][pdbuild].
 
-[pdbuild]: https://sdk.play.date/inside-playdate-with-c/#_cmake
+[pdbuild]: https://sdk.play.date/inside-playdate-with-c/#_make
 
 To build and run the unit tests, run the following:
 
