@@ -13,7 +13,7 @@ floors, or you'll get really injured!
 
 **Required Tools**
 - Make
-- GCC
+- Clang (on macOS) or GCC
 - Playdate SDK 2.1.0 or later
 - (if using Nova) [Playdate extension][nova-ext]
 

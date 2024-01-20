@@ -3,6 +3,14 @@ STACK_SIZE 	= 61800
 
 PRODUCT = PackageResolved.pdx
 
+# Set the appropriate C compiler for the unit tests.
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S), Darwin)
+	TEST_CC := clang
+else
+	TEST_CC := gcc
+endif
+
 # Locate the SDK
 SDK = ${PLAYDATE_SDK_PATH}
 ifeq ($(SDK),)
@@ -44,8 +52,9 @@ ULIBS =
 
 include $(SDK)/C_API/buildsupport/common.mk
 
+# Unit tests.
 test: test/test.c test/munit/munit.h test/munit/munit.c
-	gcc -o test/test_app -std=c11 -Icharolette -Itest/munit $(TESTS) $(TESTS_DEPENDENTS)
+	$(TEST_CC) -o test/test_app -std=c11 -Icharolette -Itest/munit $(TESTS) $(TESTS_DEPENDENTS)
 
 clean:
 	$(MAKE) -f $(SDK)/C_API/buildsupport/common.mk $@
