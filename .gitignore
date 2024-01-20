@@ -61,7 +61,7 @@ CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing
-Makefile
+# Makefile
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
@@ -77,9 +77,6 @@ _deps
 ### Playdate ###
 **.pdx/
 build/
-
-### CMake ###
-DartConfiguration.tcl
 
 ### Tests ###
 test/test_app
