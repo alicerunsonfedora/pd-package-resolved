@@ -12,7 +12,8 @@ floors, or you'll get really injured!
 ## 🏗️ Build instructions
 
 **Required Tools**
-- CMake
+- Make
+- GCC
 - Playdate SDK 2.1.0 or later
 - (if using Nova) [Playdate extension][nova-ext]
 
@@ -24,15 +25,12 @@ Start by cloning this repository via `git clone`, then open the project in
 Nova. Select the "Game (Simulator)" task and run the project, which will
 create the PDX file and open the game in the Playdate Simulator.
 
-### Command line / traditional CMake
+### Command line 
 
 Start by cloning this repository via `git clone`, then run the following
-commands in the terminal for CMake:
+commands in the terminal for Make:
 
 ```
-mkdir build
-cd build
-cmake .
 make
 ```
 
@@ -43,9 +41,6 @@ More information can be found on [Playdate's documentation to build via the comm
 To build and run the unit tests, run the following:
 
 ```
-mkdir build
-cd build
-cmake -DTARGET_GROUP=test .
-make
+make test
 ./test/test_app
 ```
