@@ -38,8 +38,9 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
 
 // MARK: Update Loop
 bool initializedGameLoop = false;
-vec2f textPosition = {0.0f, 0.0f};
-LCDBitmap *splash;
+vec2f spritePosition = {0.0f, 24.0f};
+LCDBitmap *spriteImage;
+LCDSprite *sprite;
 
 static int update(void *userdata) {
     PlaydateAPI *pd = userdata;
@@ -51,30 +52,31 @@ static int update(void *userdata) {
     pd->graphics->clear(kColorWhite);
     pd->graphics->setFont(font);
 
-    const char *splashPath = "Images/splash";
-    splash = loadBitmap(splashPath, pd);
+    const char *spritesheet = "Images/charlie";
+    spriteImage = loadBitmap(spritesheet, pd);
 
-    if (splash != NULL)
-        pd->graphics->drawBitmap(splash, 0, 0, kBitmapUnflipped);
+    if (spriteImage != NULL && sprite == NULL) {
+        sprite = pd->sprite->newSprite();
+        pd->sprite->setSize(sprite, 32.0f, 64.0f);
+        pd->sprite->setImage(sprite, spriteImage, kBitmapUnflipped);
+        pd->sprite->addSprite(sprite);
+    }
+    
+    if (!initializedGameLoop) {
+        spritePosition.x = screenBounds.x / 2;
+        pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
+        pd->sprite->updateAndDrawSprites();
+        initializedGameLoop = true;
+        return 1;
+    }
 
-    //     if (!initializedGameLoop) {
-    //         textPosition.x = screenBounds.x / 2;
-    //         pd->graphics->drawText("@", strlen("@"), kASCIIEncoding,
-    //         textPosition.x,
-    //                                textPosition.y);
-    //         initializedGameLoop = true;
-    //         return 1;
-    //     }
-    //
-    //     pd->graphics->drawText("@", strlen("@"), kASCIIEncoding,
-    //     textPosition.x,
-    //                            textPosition.y);
-    //
-    //     float crankPosition = pd->system->getCrankAngle();
-    //
-    //     if (!pd->system->isCrankDocked())
-    //         textPosition =
-    //             get_translated_movement(textPosition, crankPosition,
-    //             screenBounds);
+    pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
+    pd->sprite->markDirty(sprite);
+    pd->sprite->updateAndDrawSprites();
+
+    float crankPosition = pd->system->getCrankAngle();
+
+    if (!pd->system->isCrankDocked())
+        spritePosition = get_translated_movement(spritePosition, crankPosition, screenBounds);
     return 1; // Always update the display.
 }

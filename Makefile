@@ -24,7 +24,7 @@ endif
 VPATH += src
 
 # List C source files here
-SRC = src/main.c src/images.c 
+SRC = src/main.c src/images.c charolette/movement.c charolette/vector.c
 
 # List test source files here
 TESTS = test/test.c
