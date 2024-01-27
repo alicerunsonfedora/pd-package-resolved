@@ -2,11 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "boxes.h"
 #include "images.h"
 #include "movement.h"
 #include "pd_api.h"
 #include "vector.h"
-#include "boxes.h"
 
 static int update(void *userdata);
 
@@ -52,7 +52,7 @@ vec2f screenBounds = {0.0f, 0.0f};
 LCDBitmapTable *table;
 LCDBitmap *spriteImage;
 LCDSprite *sprite;
-vec2f* boxes[BOXES_COUNT];
+vec2f *boxes[BOXES_COUNT];
 
 void cycle() {
     if (frameUpdated == true) {
@@ -72,10 +72,10 @@ static int update(void *userdata) {
     if (!initializedGameLoop) {
         screenBounds.x = (float)pd->display->getWidth();
         screenBounds.y = (float)pd->display->getHeight();
-        
+
         pd->graphics->clear(kColorWhite);
         pd->graphics->setFont(font);
-        
+
         const char *spritesheet = "Images/charlie";
         table = loadTable(spritesheet, pd);
         if (table == NULL) {
@@ -83,31 +83,32 @@ static int update(void *userdata) {
             return 0;
         }
         spriteImage = pd->graphics->getTableBitmap(table, frame);
-        
+
         if (spriteImage != NULL && sprite == NULL) {
             sprite = imagedSprite(pd, spriteSize, spriteImage);
         }
-        
+
         spritePosition.x = screenBounds.x / 2;
         pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
         pd->sprite->updateAndDrawSprites();
-        
+
         fill_boxes(boxes, 8.0, screenBounds);
-        
+
         initializedGameLoop = true;
         return 1;
     }
-    
+
     // Real-time updates.
     spriteImage = pd->graphics->getTableBitmap(table, frame);
     pd->sprite->setImage(sprite, spriteImage, kBitmapUnflipped);
     pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
     pd->sprite->markDirty(sprite);
     pd->sprite->updateAndDrawSprites();
-    
+
     for (int i = 0; i < BOXES_COUNT; i++) {
         pd->system->logToConsole("Position: %f, %f", boxes[i]->x, boxes[i]->y);
-        pd->graphics->drawText("a", strlen("a"), kASCIIEncoding, boxes[i]->x, boxes[i]->y);
+        pd->graphics->drawText("a", strlen("a"), kASCIIEncoding, boxes[i]->x,
+                               boxes[i]->y);
     }
 
     cycle();
