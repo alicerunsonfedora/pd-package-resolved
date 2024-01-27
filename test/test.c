@@ -1,6 +1,18 @@
+#define MUNIT_ENABLE_ASSERT_ALIASES
+
 #include "movement.h"
 #include "munit.h"
 #include "vector.h"
+#include <stdbool.h>
+#include <stdlib.h>
+#include <math.h>
+#include <stdio.h>
+
+bool isapprox(float a, float b, float prec) {
+    float val = fabsf(a - b);
+    printf(" Approxing %f and %f (diff: %f)", a, b, val);
+    return val <= prec;
+}
 
 static MunitResult test_vector(const MunitParameter params[], void *data) {
     vec2i vector = {0, 0};
@@ -14,7 +26,7 @@ static MunitResult test_movement(const MunitParameter params[], void *data) {
     vec2f originalPosition = {15.0f, 0.0f};
     vec2f translated = get_translated_movement(originalPosition, 15.69, bounds);
 
-    munit_assert_float(translated.x, ==, 15.69);
+    assert_true(isapprox(translated.x, 30.69, 0.001));
     return MUNIT_OK;
 }
 
