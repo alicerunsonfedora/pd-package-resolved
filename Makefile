@@ -23,14 +23,19 @@ endif
 
 VPATH += src
 
+# Source files for the Charolette lib
+CHAROLETTE_SRC = charolette/movement.c \
+	charolette/boxes.c \
+	charolette/vector.c
+
 # List C source files here
-SRC = src/main.c src/images.c charolette/movement.c charolette/vector.c
+SRC = src/main.c src/images.c $(CHAROLETTE_SRC)
 
 # List test source files here
 TESTS = test/test.c
 
 # List test dependencies here
-TESTS_DEPENDENTS = charolette/movement.c test/munit/munit.c
+TESTS_DEPENDENTS = test/munit/munit.c $(CHAROLETTE_SRC)
 
 # List all user directories here
 UINCDIR = charolette

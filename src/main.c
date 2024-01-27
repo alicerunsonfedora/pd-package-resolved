@@ -6,6 +6,7 @@
 #include "movement.h"
 #include "pd_api.h"
 #include "vector.h"
+#include "boxes.h"
 
 static int update(void *userdata);
 
@@ -50,6 +51,7 @@ vec2f screenBounds = {0.0f, 0.0f};
 LCDBitmapTable *table;
 LCDBitmap *spriteImage;
 LCDSprite *sprite;
+vec2f* boxes[8];
 
 void cycle() {
     if (frameUpdated == true) {
@@ -88,6 +90,9 @@ static int update(void *userdata) {
         spritePosition.x = screenBounds.x / 2;
         pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
         pd->sprite->updateAndDrawSprites();
+        
+        fill_boxes(boxes, 8.0, (float)pd->display->getWidth());
+        
         initializedGameLoop = true;
         return 1;
     }

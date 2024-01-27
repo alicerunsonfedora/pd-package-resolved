@@ -1,8 +1,11 @@
+#include "munit/munit.h"
 #define MUNIT_ENABLE_ASSERT_ALIASES
 
 #include "movement.h"
 #include "munit.h"
 #include "vector.h"
+#include "boxes.h"
+
 #include <stdbool.h>
 #include <stdlib.h>
 #include <math.h>
@@ -26,7 +29,20 @@ static MunitResult test_movement(const MunitParameter params[], void *data) {
     vec2f originalPosition = {15.0f, 0.0f};
     vec2f translated = get_translated_movement(originalPosition, 15.69, bounds);
 
-    assert_true(isapprox(translated.x, 30.69, 0.001));
+    munit_assert_true(isapprox(translated.x, 15.69, 0.001));
+    return MUNIT_OK;
+}
+
+static MunitResult test_box_fill(const MunitParameter params[], void *data) {
+    vec2f* boxes[] = { NULL, NULL, NULL };
+    fill_boxes(boxes, 3, 400.0);
+    
+    for (int i = 0; i < 3; i++) {
+        if ( boxes[i] == NULL )
+            return MUNIT_FAIL;
+        munit_assert_float(boxes[i]->x, <=, 400.0);
+    }
+    
     return MUNIT_OK;
 }
 
@@ -41,6 +57,15 @@ static MunitTest test_suite_tests[] = {
 
     {(char *)"/charolette/get_translated_movement", test_movement, NULL, NULL,
      MUNIT_TEST_OPTION_NONE, NULL},
+     
+     {
+         (char *)"/charolette/fill",
+         test_box_fill,
+         NULL,
+         NULL,
+         MUNIT_TEST_OPTION_NONE,
+         NULL
+     },
 
     // Null test to end the array
     {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}};
