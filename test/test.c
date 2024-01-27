@@ -34,13 +34,15 @@ static MunitResult test_movement(const MunitParameter params[], void *data) {
 }
 
 static MunitResult test_box_fill(const MunitParameter params[], void *data) {
+    vec2f bounds = { 400.0f, 240.f };
     vec2f* boxes[] = { NULL, NULL, NULL };
-    fill_boxes(boxes, 3, 400.0);
+    fill_boxes(boxes, 3, bounds);
     
     for (int i = 0; i < 3; i++) {
         if ( boxes[i] == NULL )
             return MUNIT_FAIL;
         munit_assert_float(boxes[i]->x, <=, 400.0);
+        munit_assert_float(boxes[i]->y, ==, (240.0 / 3)* i);
     }
     
     return MUNIT_OK;
