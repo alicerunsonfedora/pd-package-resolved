@@ -120,10 +120,10 @@
 #define MUNIT_STRINGIFY(x) #x
 #define MUNIT_XSTRINGIFY(x) MUNIT_STRINGIFY(x)
 
-#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__SUNPRO_CC) ||  \
+#if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__SUNPRO_CC) ||            \
     defined(__IBMCPP__)
 #define MUNIT_THREAD_LOCAL __thread
-#elif (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201102L)) ||          \
+#elif (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201102L)) ||                    \
     defined(_Thread_local)
 #define MUNIT_THREAD_LOCAL _Thread_local
 #elif defined(_WIN32)
@@ -167,8 +167,8 @@ static MUNIT_THREAD_LOCAL jmp_buf munit_error_jmp_buf;
 #endif
 
 MUNIT_PRINTF(5, 0)
-static void munit_logf_exv(MunitLogLevel level, FILE *fp, const char *filename,
-                           int line, const char *format, va_list ap) {
+static void munit_logf_exv(MunitLogLevel level, FILE *fp, const char *filename, int line,
+                           const char *format, va_list ap) {
     if (level < munit_log_level_visible)
         return;
 
@@ -186,8 +186,7 @@ static void munit_logf_exv(MunitLogLevel level, FILE *fp, const char *filename,
         fputs("Error", fp);
         break;
     default:
-        munit_logf_ex(MUNIT_LOG_ERROR, filename, line, "Invalid log level (%d)",
-                      level);
+        munit_logf_ex(MUNIT_LOG_ERROR, filename, line, "Invalid log level (%d)", level);
         return;
     }
 
@@ -199,8 +198,7 @@ static void munit_logf_exv(MunitLogLevel level, FILE *fp, const char *filename,
 }
 
 MUNIT_PRINTF(3, 4)
-static void munit_logf_internal(MunitLogLevel level, FILE *fp,
-                                const char *format, ...) {
+static void munit_logf_internal(MunitLogLevel level, FILE *fp, const char *format, ...) {
     va_list ap;
 
     va_start(ap, format);
@@ -208,8 +206,7 @@ static void munit_logf_internal(MunitLogLevel level, FILE *fp,
     va_end(ap);
 }
 
-static void munit_log_internal(MunitLogLevel level, FILE *fp,
-                               const char *message) {
+static void munit_log_internal(MunitLogLevel level, FILE *fp, const char *message) {
     munit_logf_internal(level, fp, "%s", message);
 }
 
@@ -253,7 +250,7 @@ void munit_errorf_ex(const char *filename, int line, const char *format, ...) {
 #endif
 
 static void munit_log_errno(MunitLogLevel level, FILE *fp, const char *msg) {
-#if defined(MUNIT_NO_STRERROR_R) ||                                            \
+#if defined(MUNIT_NO_STRERROR_R) ||                                                      \
     (defined(__MINGW32__) && !defined(MINGW_HAS_SECURE_API))
     munit_logf_internal(level, fp, "%s: %s (%d)", msg, strerror(errno), errno);
 #else
@@ -281,8 +278,7 @@ void *munit_malloc_ex(const char *filename, int line, size_t size) {
     ptr = calloc(1, size);
     if (MUNIT_UNLIKELY(ptr == NULL)) {
         munit_logf_ex(MUNIT_LOG_ERROR, filename, line,
-                      "Failed to allocate %" MUNIT_SIZE_MODIFIER "u bytes.",
-                      size);
+                      "Failed to allocate %" MUNIT_SIZE_MODIFIER "u bytes.", size);
     }
 
     return ptr;
@@ -386,8 +382,8 @@ struct PsnipClockTimespec {
 #if defined(_POSIX_TIMERS) && (_POSIX_TIMERS > 0)
 /* These are known to work without librt.  If you know of others
  * please let us know so we can add them. */
-#if (defined(__GLIBC__) &&                                                     \
-     (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 17))) ||          \
+#if (defined(__GLIBC__) &&                                                               \
+     (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 17))) ||                    \
     (defined(__FreeBSD__))
 #define PSNIP_CLOCK_HAVE_CLOCK_GETTIME
 #elif !defined(PSNIP_CLOCK_NO_LIBRT)
@@ -459,73 +455,72 @@ struct PsnipClockTimespec {
 #endif
 
 /* Primarily here for testing. */
-#if !defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                  \
-    defined(PSNIP_CLOCK_REQUIRE_MONOTONIC)
+#if !defined(PSNIP_CLOCK_MONOTONIC_METHOD) && defined(PSNIP_CLOCK_REQUIRE_MONOTONIC)
 #error No monotonic clock found.
 #endif
 
 /* Implementations */
 
-#if (defined(PSNIP_CLOCK_CPU_METHOD) &&                                        \
-     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME)) ||          \
-    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                       \
-     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME)) ||         \
-    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                  \
-     (PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME)) ||    \
-    (defined(PSNIP_CLOCK_CPU_METHOD) &&                                        \
-     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_CLOCK)) ||                  \
-    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                       \
-     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_CLOCK)) ||                 \
-    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                  \
-     (PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_CLOCK)) ||            \
-    (defined(PSNIP_CLOCK_CPU_METHOD) &&                                        \
-     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_TIME)) ||                   \
-    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                       \
-     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_TIME)) ||                  \
-    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                  \
+#if (defined(PSNIP_CLOCK_CPU_METHOD) &&                                                  \
+     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME)) ||                    \
+    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                                 \
+     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME)) ||                   \
+    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                            \
+     (PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME)) ||              \
+    (defined(PSNIP_CLOCK_CPU_METHOD) &&                                                  \
+     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_CLOCK)) ||                            \
+    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                                 \
+     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_CLOCK)) ||                           \
+    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                            \
+     (PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_CLOCK)) ||                      \
+    (defined(PSNIP_CLOCK_CPU_METHOD) &&                                                  \
+     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_TIME)) ||                             \
+    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                                 \
+     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_TIME)) ||                            \
+    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                            \
      (PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_TIME))
 #include <time.h>
 #endif
 
-#if (defined(PSNIP_CLOCK_CPU_METHOD) &&                                        \
-     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_GETTIMEOFDAY)) ||           \
-    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                       \
-     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_GETTIMEOFDAY)) ||          \
-    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                  \
+#if (defined(PSNIP_CLOCK_CPU_METHOD) &&                                                  \
+     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_GETTIMEOFDAY)) ||                     \
+    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                                 \
+     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_GETTIMEOFDAY)) ||                    \
+    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                            \
      (PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_GETTIMEOFDAY))
 #include <sys/time.h>
 #endif
 
-#if (defined(PSNIP_CLOCK_CPU_METHOD) &&                                        \
-     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_GETPROCESSTIMES)) ||        \
-    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                       \
-     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_GETPROCESSTIMES)) ||       \
-    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                  \
-     (PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_GETPROCESSTIMES)) ||  \
-    (defined(PSNIP_CLOCK_CPU_METHOD) &&                                        \
-     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_GETTICKCOUNT64)) ||         \
-    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                       \
-     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_GETTICKCOUNT64)) ||        \
-    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                  \
+#if (defined(PSNIP_CLOCK_CPU_METHOD) &&                                                  \
+     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_GETPROCESSTIMES)) ||                  \
+    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                                 \
+     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_GETPROCESSTIMES)) ||                 \
+    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                            \
+     (PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_GETPROCESSTIMES)) ||            \
+    (defined(PSNIP_CLOCK_CPU_METHOD) &&                                                  \
+     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_GETTICKCOUNT64)) ||                   \
+    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                                 \
+     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_GETTICKCOUNT64)) ||                  \
+    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                            \
      (PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_GETTICKCOUNT64))
 #include <windows.h>
 #endif
 
-#if (defined(PSNIP_CLOCK_CPU_METHOD) &&                                        \
-     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_GETRUSAGE)) ||              \
-    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                       \
-     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_GETRUSAGE)) ||             \
-    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                  \
+#if (defined(PSNIP_CLOCK_CPU_METHOD) &&                                                  \
+     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_GETRUSAGE)) ||                        \
+    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                                 \
+     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_GETRUSAGE)) ||                       \
+    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                            \
      (PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_GETRUSAGE))
 #include <sys/resource.h>
 #include <sys/time.h>
 #endif
 
-#if (defined(PSNIP_CLOCK_CPU_METHOD) &&                                        \
-     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_MACH_ABSOLUTE_TIME)) ||     \
-    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                       \
-     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_MACH_ABSOLUTE_TIME)) ||    \
-    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                  \
+#if (defined(PSNIP_CLOCK_CPU_METHOD) &&                                                  \
+     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_MACH_ABSOLUTE_TIME)) ||               \
+    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                                 \
+     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_MACH_ABSOLUTE_TIME)) ||              \
+    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                            \
      (PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_MACH_ABSOLUTE_TIME))
 #include <CoreServices/CoreServices.h>
 #include <mach/mach.h>
@@ -536,14 +531,13 @@ struct PsnipClockTimespec {
 
 #define PSNIP_CLOCK_NSEC_PER_SEC ((psnip_uint32_t)(1000000000ULL))
 
-#if (defined(PSNIP_CLOCK_CPU_METHOD) &&                                        \
-     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME)) ||          \
-    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                       \
-     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME)) ||         \
-    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                  \
+#if (defined(PSNIP_CLOCK_CPU_METHOD) &&                                                  \
+     (PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME)) ||                    \
+    (defined(PSNIP_CLOCK_WALL_METHOD) &&                                                 \
+     (PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME)) ||                   \
+    (defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                            \
      (PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME))
-PSNIP_CLOCK__FUNCTION psnip_uint32_t
-psnip_clock__clock_getres(clockid_t clk_id) {
+PSNIP_CLOCK__FUNCTION psnip_uint32_t psnip_clock__clock_getres(clockid_t clk_id) {
     struct timespec res;
     int r;
 
@@ -554,8 +548,8 @@ psnip_clock__clock_getres(clockid_t clk_id) {
     return (psnip_uint32_t)(PSNIP_CLOCK_NSEC_PER_SEC / res.tv_nsec);
 }
 
-PSNIP_CLOCK__FUNCTION int
-psnip_clock__clock_gettime(clockid_t clk_id, struct PsnipClockTimespec *res) {
+PSNIP_CLOCK__FUNCTION int psnip_clock__clock_gettime(clockid_t clk_id,
+                                                     struct PsnipClockTimespec *res) {
     struct timespec ts;
 
     if (clock_gettime(clk_id, &ts) != 0)
@@ -571,13 +565,13 @@ psnip_clock__clock_gettime(clockid_t clk_id, struct PsnipClockTimespec *res) {
 PSNIP_CLOCK__FUNCTION psnip_uint32_t psnip_clock_wall_get_precision(void) {
 #if !defined(PSNIP_CLOCK_WALL_METHOD)
     return 0;
-#elif defined(PSNIP_CLOCK_WALL_METHOD) &&                                      \
+#elif defined(PSNIP_CLOCK_WALL_METHOD) &&                                                \
     PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME
     return psnip_clock__clock_getres(PSNIP_CLOCK_CLOCK_GETTIME_WALL);
-#elif defined(PSNIP_CLOCK_WALL_METHOD) &&                                      \
+#elif defined(PSNIP_CLOCK_WALL_METHOD) &&                                                \
     PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_GETTIMEOFDAY
     return 1000000;
-#elif defined(PSNIP_CLOCK_WALL_METHOD) &&                                      \
+#elif defined(PSNIP_CLOCK_WALL_METHOD) &&                                                \
     PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_TIME
     return 1;
 #else
@@ -585,20 +579,19 @@ PSNIP_CLOCK__FUNCTION psnip_uint32_t psnip_clock_wall_get_precision(void) {
 #endif
 }
 
-PSNIP_CLOCK__FUNCTION int
-psnip_clock_wall_get_time(struct PsnipClockTimespec *res) {
+PSNIP_CLOCK__FUNCTION int psnip_clock_wall_get_time(struct PsnipClockTimespec *res) {
     (void)res;
 
 #if !defined(PSNIP_CLOCK_WALL_METHOD)
     return -2;
-#elif defined(PSNIP_CLOCK_WALL_METHOD) &&                                      \
+#elif defined(PSNIP_CLOCK_WALL_METHOD) &&                                                \
     PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME
     return psnip_clock__clock_gettime(PSNIP_CLOCK_CLOCK_GETTIME_WALL, res);
-#elif defined(PSNIP_CLOCK_WALL_METHOD) &&                                      \
+#elif defined(PSNIP_CLOCK_WALL_METHOD) &&                                                \
     PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_TIME
     res->seconds = time(NULL);
     res->nanoseconds = 0;
-#elif defined(PSNIP_CLOCK_WALL_METHOD) &&                                      \
+#elif defined(PSNIP_CLOCK_WALL_METHOD) &&                                                \
     PSNIP_CLOCK_WALL_METHOD == PSNIP_CLOCK_METHOD_GETTIMEOFDAY
     struct timeval tv;
 
@@ -617,13 +610,13 @@ psnip_clock_wall_get_time(struct PsnipClockTimespec *res) {
 PSNIP_CLOCK__FUNCTION psnip_uint32_t psnip_clock_cpu_get_precision(void) {
 #if !defined(PSNIP_CLOCK_CPU_METHOD)
     return 0;
-#elif defined(PSNIP_CLOCK_CPU_METHOD) &&                                       \
+#elif defined(PSNIP_CLOCK_CPU_METHOD) &&                                                 \
     PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME
     return psnip_clock__clock_getres(PSNIP_CLOCK_CLOCK_GETTIME_CPU);
-#elif defined(PSNIP_CLOCK_CPU_METHOD) &&                                       \
+#elif defined(PSNIP_CLOCK_CPU_METHOD) &&                                                 \
     PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_CLOCK
     return CLOCKS_PER_SEC;
-#elif defined(PSNIP_CLOCK_CPU_METHOD) &&                                       \
+#elif defined(PSNIP_CLOCK_CPU_METHOD) &&                                                 \
     PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_GETPROCESSTIMES
     return PSNIP_CLOCK_NSEC_PER_SEC / 100;
 #else
@@ -631,29 +624,27 @@ PSNIP_CLOCK__FUNCTION psnip_uint32_t psnip_clock_cpu_get_precision(void) {
 #endif
 }
 
-PSNIP_CLOCK__FUNCTION int
-psnip_clock_cpu_get_time(struct PsnipClockTimespec *res) {
+PSNIP_CLOCK__FUNCTION int psnip_clock_cpu_get_time(struct PsnipClockTimespec *res) {
 #if !defined(PSNIP_CLOCK_CPU_METHOD)
     (void)res;
     return -2;
-#elif defined(PSNIP_CLOCK_CPU_METHOD) &&                                       \
+#elif defined(PSNIP_CLOCK_CPU_METHOD) &&                                                 \
     PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME
     return psnip_clock__clock_gettime(PSNIP_CLOCK_CLOCK_GETTIME_CPU, res);
-#elif defined(PSNIP_CLOCK_CPU_METHOD) &&                                       \
+#elif defined(PSNIP_CLOCK_CPU_METHOD) &&                                                 \
     PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_CLOCK
     clock_t t = clock();
     if (t == ((clock_t)-1))
         return -5;
     res->seconds = t / CLOCKS_PER_SEC;
-    res->nanoseconds =
-        (t % CLOCKS_PER_SEC) * (PSNIP_CLOCK_NSEC_PER_SEC / CLOCKS_PER_SEC);
-#elif defined(PSNIP_CLOCK_CPU_METHOD) &&                                       \
+    res->nanoseconds = (t % CLOCKS_PER_SEC) * (PSNIP_CLOCK_NSEC_PER_SEC / CLOCKS_PER_SEC);
+#elif defined(PSNIP_CLOCK_CPU_METHOD) &&                                                 \
     PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_GETPROCESSTIMES
     FILETIME CreationTime, ExitTime, KernelTime, UserTime;
     LARGE_INTEGER date, adjust;
 
-    if (!GetProcessTimes(GetCurrentProcess(), &CreationTime, &ExitTime,
-                         &KernelTime, &UserTime))
+    if (!GetProcessTimes(GetCurrentProcess(), &CreationTime, &ExitTime, &KernelTime,
+                         &UserTime))
         return -7;
 
     /* http://www.frenk.com/2009/12/convert-filetime-to-unix-timestamp/ */
@@ -663,8 +654,7 @@ psnip_clock_cpu_get_time(struct PsnipClockTimespec *res) {
     date.QuadPart -= adjust.QuadPart;
 
     res->seconds = date.QuadPart / 10000000;
-    res->nanoseconds =
-        (date.QuadPart % 10000000) * (PSNIP_CLOCK_NSEC_PER_SEC / 100);
+    res->nanoseconds = (date.QuadPart % 10000000) * (PSNIP_CLOCK_NSEC_PER_SEC / 100);
 #elif PSNIP_CLOCK_CPU_METHOD == PSNIP_CLOCK_METHOD_GETRUSAGE
     struct rusage usage;
     if (getrusage(RUSAGE_SELF, &usage) != 0)
@@ -683,10 +673,10 @@ psnip_clock_cpu_get_time(struct PsnipClockTimespec *res) {
 PSNIP_CLOCK__FUNCTION psnip_uint32_t psnip_clock_monotonic_get_precision(void) {
 #if !defined(PSNIP_CLOCK_MONOTONIC_METHOD)
     return 0;
-#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                 \
+#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                           \
     PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME
     return psnip_clock__clock_getres(PSNIP_CLOCK_CLOCK_GETTIME_MONOTONIC);
-#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                 \
+#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                           \
     PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_MACH_ABSOLUTE_TIME
     static mach_timebase_info_data_t tbi = {
         0,
@@ -694,10 +684,10 @@ PSNIP_CLOCK__FUNCTION psnip_uint32_t psnip_clock_monotonic_get_precision(void) {
     if (tbi.denom == 0)
         mach_timebase_info(&tbi);
     return (psnip_uint32_t)(tbi.numer / tbi.denom);
-#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                 \
+#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                           \
     PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_GETTICKCOUNT64
     return 1000;
-#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                 \
+#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                           \
     PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_QUERYPERFORMANCECOUNTER
     LARGE_INTEGER Frequency;
     QueryPerformanceFrequency(&Frequency);
@@ -709,15 +699,14 @@ PSNIP_CLOCK__FUNCTION psnip_uint32_t psnip_clock_monotonic_get_precision(void) {
 #endif
 }
 
-PSNIP_CLOCK__FUNCTION int
-psnip_clock_monotonic_get_time(struct PsnipClockTimespec *res) {
+PSNIP_CLOCK__FUNCTION int psnip_clock_monotonic_get_time(struct PsnipClockTimespec *res) {
 #if !defined(PSNIP_CLOCK_MONOTONIC_METHOD)
     (void)res;
     return -2;
-#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                 \
+#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                           \
     PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_CLOCK_GETTIME
     return psnip_clock__clock_gettime(PSNIP_CLOCK_CLOCK_GETTIME_MONOTONIC, res);
-#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                 \
+#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                           \
     PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_MACH_ABSOLUTE_TIME
     psnip_uint64_t nsec = mach_absolute_time();
     static mach_timebase_info_data_t tbi = {
@@ -728,7 +717,7 @@ psnip_clock_monotonic_get_time(struct PsnipClockTimespec *res) {
     nsec *= ((psnip_uint64_t)tbi.numer) / ((psnip_uint64_t)tbi.denom);
     res->seconds = nsec / PSNIP_CLOCK_NSEC_PER_SEC;
     res->nanoseconds = nsec % PSNIP_CLOCK_NSEC_PER_SEC;
-#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                 \
+#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                           \
     PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_QUERYPERFORMANCECOUNTER
     LARGE_INTEGER t, f;
     if (QueryPerformanceCounter(&t) == 0)
@@ -741,7 +730,7 @@ psnip_clock_monotonic_get_time(struct PsnipClockTimespec *res) {
         res->nanoseconds /= f.QuadPart / PSNIP_CLOCK_NSEC_PER_SEC;
     else
         res->nanoseconds *= PSNIP_CLOCK_NSEC_PER_SEC / f.QuadPart;
-#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                 \
+#elif defined(PSNIP_CLOCK_MONOTONIC_METHOD) &&                                           \
     PSNIP_CLOCK_MONOTONIC_METHOD == PSNIP_CLOCK_METHOD_GETTICKCOUNT64
     const ULONGLONG msec = GetTickCount64();
     res->seconds = msec / 1000;
@@ -802,8 +791,7 @@ PSNIP_CLOCK__FUNCTION int psnip_clock_get_time(enum PsnipClockType clock_type,
 
 static psnip_uint64_t munit_clock_get_elapsed(struct PsnipClockTimespec *start,
                                               struct PsnipClockTimespec *end) {
-    psnip_uint64_t r =
-        (end->seconds - start->seconds) * PSNIP_CLOCK_NSEC_PER_SEC;
+    psnip_uint64_t r = (end->seconds - start->seconds) * PSNIP_CLOCK_NSEC_PER_SEC;
     if (end->nanoseconds < start->nanoseconds) {
         r -= (start->nanoseconds - end->nanoseconds);
     } else {
@@ -829,9 +817,9 @@ static psnip_uint64_t munit_clock_get_elapsed(struct PsnipClockTimespec *start,
  * important that it be reproducible, so bug reports have a better
  * chance of being reproducible. */
 
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) &&              \
-    !defined(__STDC_NO_ATOMICS__) && !defined(__EMSCRIPTEN__) &&               \
-    (!defined(__GNUC_MINOR__) || (__GNUC__ > 4) ||                             \
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L) &&                        \
+    !defined(__STDC_NO_ATOMICS__) && !defined(__EMSCRIPTEN__) &&                         \
+    (!defined(__GNUC_MINOR__) || (__GNUC__ > 4) ||                                       \
      (__GNUC__ == 4 && __GNUC_MINOR__ > 8))
 #define HAVE_STDATOMIC
 #elif defined(__clang__)
@@ -869,8 +857,7 @@ static psnip_uint64_t munit_clock_get_elapsed(struct PsnipClockTimespec *start,
 static ATOMIC_UINT32_T munit_rand_state = ATOMIC_UINT32_INIT(42);
 
 #if defined(_OPENMP)
-static inline void munit_atomic_store(ATOMIC_UINT32_T *dest,
-                                      ATOMIC_UINT32_T value) {
+static inline void munit_atomic_store(ATOMIC_UINT32_T *dest, ATOMIC_UINT32_T value) {
 #pragma omp critical(munit_atomics)
     *dest = value;
 }
@@ -882,8 +869,7 @@ static inline uint32_t munit_atomic_load(ATOMIC_UINT32_T *src) {
     return ret;
 }
 
-static inline uint32_t munit_atomic_cas(ATOMIC_UINT32_T *dest,
-                                        ATOMIC_UINT32_T *expected,
+static inline uint32_t munit_atomic_cas(ATOMIC_UINT32_T *dest, ATOMIC_UINT32_T *expected,
                                         ATOMIC_UINT32_T desired) {
     munit_bool ret;
 
@@ -902,44 +888,41 @@ static inline uint32_t munit_atomic_cas(ATOMIC_UINT32_T *dest,
 #elif defined(HAVE_STDATOMIC)
 #define munit_atomic_store(dest, value) atomic_store(dest, value)
 #define munit_atomic_load(src) atomic_load(src)
-#define munit_atomic_cas(dest, expected, value)                                \
+#define munit_atomic_cas(dest, expected, value)                                          \
     atomic_compare_exchange_weak(dest, expected, value)
 #elif defined(HAVE_CLANG_ATOMICS)
-#define munit_atomic_store(dest, value)                                        \
-    __c11_atomic_store(dest, value, __ATOMIC_SEQ_CST)
+#define munit_atomic_store(dest, value) __c11_atomic_store(dest, value, __ATOMIC_SEQ_CST)
 #define munit_atomic_load(src) __c11_atomic_load(src, __ATOMIC_SEQ_CST)
-#define munit_atomic_cas(dest, expected, value)                                \
-    __c11_atomic_compare_exchange_weak(dest, expected, value,                  \
-                                       __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST)
-#elif defined(__GNUC__) && (__GNUC__ > 4) ||                                   \
-    (__GNUC__ == 4 && __GNUC_MINOR__ >= 7)
-#define munit_atomic_store(dest, value)                                        \
-    __atomic_store_n(dest, value, __ATOMIC_SEQ_CST)
+#define munit_atomic_cas(dest, expected, value)                                          \
+    __c11_atomic_compare_exchange_weak(dest, expected, value, __ATOMIC_SEQ_CST,          \
+                                       __ATOMIC_SEQ_CST)
+#elif defined(__GNUC__) && (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 7)
+#define munit_atomic_store(dest, value) __atomic_store_n(dest, value, __ATOMIC_SEQ_CST)
 #define munit_atomic_load(src) __atomic_load_n(src, __ATOMIC_SEQ_CST)
-#define munit_atomic_cas(dest, expected, value)                                \
-    __atomic_compare_exchange_n(dest, expected, value, 1, __ATOMIC_SEQ_CST,    \
+#define munit_atomic_cas(dest, expected, value)                                          \
+    __atomic_compare_exchange_n(dest, expected, value, 1, __ATOMIC_SEQ_CST,              \
                                 __ATOMIC_SEQ_CST)
 #elif defined(__GNUC__) && (__GNUC__ >= 4)
-#define munit_atomic_store(dest, value)                                        \
-    do {                                                                       \
-        *(dest) = (value);                                                     \
+#define munit_atomic_store(dest, value)                                                  \
+    do {                                                                                 \
+        *(dest) = (value);                                                               \
     } while (0)
 #define munit_atomic_load(src) (*(src))
-#define munit_atomic_cas(dest, expected, value)                                \
+#define munit_atomic_cas(dest, expected, value)                                          \
     __sync_bool_compare_and_swap(dest, *expected, value)
 #elif defined(_WIN32) /* Untested */
-#define munit_atomic_store(dest, value)                                        \
-    do {                                                                       \
-        *(dest) = (value);                                                     \
+#define munit_atomic_store(dest, value)                                                  \
+    do {                                                                                 \
+        *(dest) = (value);                                                               \
     } while (0)
 #define munit_atomic_load(src) (*(src))
-#define munit_atomic_cas(dest, expected, value)                                \
+#define munit_atomic_cas(dest, expected, value)                                          \
     InterlockedCompareExchange((dest), (value), *(expected))
 #else
 #warning No atomic implementation, PRNG will not be thread-safe
-#define munit_atomic_store(dest, value)                                        \
-    do {                                                                       \
-        *(dest) = (value);                                                     \
+#define munit_atomic_store(dest, value)                                                  \
+    do {                                                                                 \
+        *(dest) = (value);                                                               \
     } while (0)
 #define munit_atomic_load(src) (*(src))
 static inline munit_bool munit_atomic_cas(ATOMIC_UINT32_T *dest,
@@ -962,8 +945,7 @@ static munit_uint32_t munit_rand_next_state(munit_uint32_t state) {
 }
 
 static munit_uint32_t munit_rand_from_state(munit_uint32_t state) {
-    munit_uint32_t res =
-        ((state >> ((state >> 28) + 4)) ^ state) * (277803737U);
+    munit_uint32_t res = ((state >> ((state >> 28) + 4)) ^ state) * (277803737U);
     res ^= res >> 22;
     return res;
 }
@@ -1007,9 +989,8 @@ munit_uint32_t munit_rand_uint32(void) {
     return munit_rand_from_state(old);
 }
 
-static void
-munit_rand_state_memory(munit_uint32_t *state, size_t size,
-                        munit_uint8_t data[MUNIT_ARRAY_PARAM(size)]) {
+static void munit_rand_state_memory(munit_uint32_t *state, size_t size,
+                                    munit_uint8_t data[MUNIT_ARRAY_PARAM(size)]) {
     size_t members_remaining = size / sizeof(munit_uint32_t);
     size_t bytes_remaining = size % sizeof(munit_uint32_t);
     munit_uint8_t *b = data;
@@ -1025,8 +1006,7 @@ munit_rand_state_memory(munit_uint32_t *state, size_t size,
     }
 }
 
-void munit_rand_memory(size_t size,
-                       munit_uint8_t data[MUNIT_ARRAY_PARAM(size)]) {
+void munit_rand_memory(size_t size, munit_uint8_t data[MUNIT_ARRAY_PARAM(size)]) {
     munit_uint32_t old, state;
 
     do {
@@ -1035,8 +1015,7 @@ void munit_rand_memory(size_t size,
     } while (!munit_atomic_cas(&munit_rand_state, &old, state));
 }
 
-static munit_uint32_t munit_rand_state_at_most(munit_uint32_t *state,
-                                               munit_uint32_t salt,
+static munit_uint32_t munit_rand_state_at_most(munit_uint32_t *state, munit_uint32_t salt,
                                                munit_uint32_t max) {
     /* We want (UINT32_MAX + 1) % max, which in unsigned arithmetic is the same
      * as (UINT32_MAX + 1 - max) % max = -max % max. We compute -max using not
@@ -1057,8 +1036,7 @@ static munit_uint32_t munit_rand_state_at_most(munit_uint32_t *state,
     return x % max;
 }
 
-static munit_uint32_t munit_rand_at_most(munit_uint32_t salt,
-                                         munit_uint32_t max) {
+static munit_uint32_t munit_rand_at_most(munit_uint32_t salt, munit_uint32_t max) {
     munit_uint32_t old, state;
     munit_uint32_t retval;
 
@@ -1092,8 +1070,7 @@ double munit_rand_double(void) {
         /* See http://mumble.net/~campbell/tmp/random_real.c for how to do
          * this right.  Patches welcome if you feel that this is too
          * biased. */
-        retval =
-            munit_rand_state_uint32(&state) / ((~((munit_uint32_t)0U)) + 1.0);
+        retval = munit_rand_state_uint32(&state) / ((~((munit_uint32_t)0U)) + 1.0);
     } while (!munit_atomic_cas(&munit_rand_state, &old, state));
 
     return retval;
@@ -1128,8 +1105,7 @@ typedef struct {
     munit_bool fatal_failures;
 } MunitTestRunner;
 
-const char *munit_parameters_get(const MunitParameter params[],
-                                 const char *key) {
+const char *munit_parameters_get(const MunitParameter params[], const char *key) {
     const MunitParameter *param;
 
     for (param = params; param != NULL && param->name != NULL; param++)
@@ -1148,8 +1124,8 @@ static void munit_print_time(FILE *fp, munit_uint64_t nanoseconds) {
 /* Add a paramter to an array of parameters. */
 static MunitResult
 munit_parameters_add(size_t *params_size,
-                     MunitParameter *params[MUNIT_ARRAY_PARAM(*params_size)],
-                     char *name, char *value) {
+                     MunitParameter *params[MUNIT_ARRAY_PARAM(*params_size)], char *name,
+                     char *value) {
     *params = realloc(*params, sizeof(MunitParameter) * (*params_size + 2));
     if (*params == NULL)
         return MUNIT_ERROR;
@@ -1194,8 +1170,7 @@ static char *munit_maybe_concat(size_t *len, char *prefix, char *suffix) {
 }
 
 /* Possbily free a string returned by munit_maybe_concat. */
-static void munit_maybe_free_concat(char *s, const char *prefix,
-                                    const char *suffix) {
+static void munit_maybe_free_concat(char *s, const char *prefix, const char *suffix) {
     if (prefix != s && suffix != s)
         free(s);
 }
@@ -1238,8 +1213,7 @@ static void munit_splice(int from, int to) {
 }
 
 /* This is the part that should be handled in the child process */
-static MunitResult munit_test_runner_exec(MunitTestRunner *runner,
-                                          const MunitTest *test,
+static MunitResult munit_test_runner_exec(MunitTestRunner *runner, const MunitTest *test,
                                           const MunitParameter params[],
                                           MunitReport *report) {
     unsigned int iterations = runner->iterations;
@@ -1271,9 +1245,8 @@ static MunitResult munit_test_runner_exec(MunitTestRunner *runner,
     munit_rand_seed(runner->seed);
 
     do {
-        void *data = (test->setup == NULL)
-                         ? runner->user_data
-                         : test->setup(params, runner->user_data);
+        void *data = (test->setup == NULL) ? runner->user_data
+                                           : test->setup(params, runner->user_data);
 
 #if defined(MUNIT_ENABLE_TIMING)
         psnip_clock_get_time(PSNIP_CLOCK_TYPE_WALL, &wall_clock_begin);
@@ -1368,10 +1341,9 @@ static void munit_restore_stderr(int orig_stderr) {
 #endif /* !defined(MUNIT_NO_BUFFER) */
 
 /* Run a test with the specified parameters. */
-static void
-munit_test_runner_run_test_with_params(MunitTestRunner *runner,
-                                       const MunitTest *test,
-                                       const MunitParameter params[]) {
+static void munit_test_runner_run_test_with_params(MunitTestRunner *runner,
+                                                   const MunitTest *test,
+                                                   const MunitParameter params[]) {
     MunitResult result = MUNIT_OK;
     MunitReport report = {
         0,
@@ -1411,8 +1383,7 @@ munit_test_runner_run_test_with_params(MunitTestRunner *runner,
                 first = 0;
             }
 
-            output_l +=
-                fprintf(MUNIT_OUTPUT_FILE, "%s=%s", param->name, param->value);
+            output_l += fprintf(MUNIT_OUTPUT_FILE, "%s=%s", param->name, param->value);
         }
         while (output_l++ < MUNIT_TEST_NAME_LEN) {
             fputc(' ', MUNIT_OUTPUT_FILE);
@@ -1428,8 +1399,7 @@ munit_test_runner_run_test_with_params(MunitTestRunner *runner,
     tmpfile_s(&stderr_buf);
 #endif
     if (stderr_buf == NULL) {
-        munit_log_errno(MUNIT_LOG_ERROR, stderr,
-                        "unable to create buffer for stderr");
+        munit_log_errno(MUNIT_LOG_ERROR, stderr, "unable to create buffer for stderr");
         result = MUNIT_ERROR;
         goto print_result;
     }
@@ -1457,8 +1427,7 @@ munit_test_runner_run_test_with_params(MunitTestRunner *runner,
             close(orig_stderr);
 
             do {
-                write_res = write(pipefd[1],
-                                  ((munit_uint8_t *)(&report)) + bytes_written,
+                write_res = write(pipefd[1], ((munit_uint8_t *)(&report)) + bytes_written,
                                   sizeof(report) - bytes_written);
                 if (write_res < 0) {
                     if (stderr_buf != NULL) {
@@ -1486,9 +1455,8 @@ munit_test_runner_run_test_with_params(MunitTestRunner *runner,
         } else {
             close(pipefd[1]);
             do {
-                read_res =
-                    read(pipefd[0], ((munit_uint8_t *)(&report)) + bytes_read,
-                         sizeof(report) - bytes_read);
+                read_res = read(pipefd[0], ((munit_uint8_t *)(&report)) + bytes_read,
+                                sizeof(report) - bytes_read);
                 if (read_res < 1)
                     break;
                 bytes_read += read_res;
@@ -1499,10 +1467,9 @@ munit_test_runner_run_test_with_params(MunitTestRunner *runner,
             if (MUNIT_LIKELY(changed_pid == fork_pid) &&
                 MUNIT_LIKELY(WIFEXITED(status))) {
                 if (bytes_read != sizeof(report)) {
-                    munit_logf_internal(
-                        MUNIT_LOG_ERROR, stderr_buf,
-                        "child exited unexpectedly with status %d",
-                        WEXITSTATUS(status));
+                    munit_logf_internal(MUNIT_LOG_ERROR, stderr_buf,
+                                        "child exited unexpectedly with status %d",
+                                        WEXITSTATUS(status));
                     report.errored++;
                 } else if (WEXITSTATUS(status) != EXIT_SUCCESS) {
                     munit_logf_internal(MUNIT_LOG_ERROR, stderr_buf,
@@ -1515,17 +1482,14 @@ munit_test_runner_run_test_with_params(MunitTestRunner *runner,
 #if defined(_XOPEN_VERSION) && (_XOPEN_VERSION >= 700)
                     munit_logf_internal(MUNIT_LOG_ERROR, stderr_buf,
                                         "child killed by signal %d (%s)",
-                                        WTERMSIG(status),
-                                        strsignal(WTERMSIG(status)));
+                                        WTERMSIG(status), strsignal(WTERMSIG(status)));
 #else
                     munit_logf_internal(MUNIT_LOG_ERROR, stderr_buf,
-                                        "child killed by signal %d",
-                                        WTERMSIG(status));
+                                        "child killed by signal %d", WTERMSIG(status));
 #endif
                 } else if (WIFSTOPPED(status)) {
                     munit_logf_internal(MUNIT_LOG_ERROR, stderr_buf,
-                                        "child stopped by signal %d",
-                                        WSTOPSIG(status));
+                                        "child stopped by signal %d", WSTOPSIG(status));
                 }
                 report.errored++;
             }
@@ -1566,12 +1530,10 @@ print_result:
     fputs("[ ", MUNIT_OUTPUT_FILE);
     if ((test->options & MUNIT_TEST_OPTION_TODO) == MUNIT_TEST_OPTION_TODO) {
         if (report.failed != 0 || report.errored != 0 || report.skipped != 0) {
-            munit_test_runner_print_color(runner, MUNIT_RESULT_STRING_TODO,
-                                          '3');
+            munit_test_runner_print_color(runner, MUNIT_RESULT_STRING_TODO, '3');
             result = MUNIT_OK;
         } else {
-            munit_test_runner_print_color(runner, MUNIT_RESULT_STRING_ERROR,
-                                          '1');
+            munit_test_runner_print_color(runner, MUNIT_RESULT_STRING_ERROR, '1');
             if (MUNIT_LIKELY(stderr_buf != NULL))
                 munit_log_internal(MUNIT_LOG_ERROR, stderr_buf,
                                    "Test marked TODO, but was successful.");
@@ -1594,15 +1556,11 @@ print_result:
         munit_test_runner_print_color(runner, MUNIT_RESULT_STRING_OK, '2');
 #if defined(MUNIT_ENABLE_TIMING)
         fputs(" ] [ ", MUNIT_OUTPUT_FILE);
-        munit_print_time(MUNIT_OUTPUT_FILE,
-                         report.wall_clock / report.successful);
+        munit_print_time(MUNIT_OUTPUT_FILE, report.wall_clock / report.successful);
         fputs(" / ", MUNIT_OUTPUT_FILE);
-        munit_print_time(MUNIT_OUTPUT_FILE,
-                         report.cpu_clock / report.successful);
-        fprintf(
-            MUNIT_OUTPUT_FILE,
-            " CPU ]\n  %-" MUNIT_XSTRINGIFY(MUNIT_TEST_NAME_LEN) "s Total: [ ",
-            "");
+        munit_print_time(MUNIT_OUTPUT_FILE, report.cpu_clock / report.successful);
+        fprintf(MUNIT_OUTPUT_FILE,
+                " CPU ]\n  %-" MUNIT_XSTRINGIFY(MUNIT_TEST_NAME_LEN) "s Total: [ ", "");
         munit_print_time(MUNIT_OUTPUT_FILE, report.wall_clock);
         fputs(" / ", MUNIT_OUTPUT_FILE);
         munit_print_time(MUNIT_OUTPUT_FILE, report.cpu_clock);
@@ -1625,8 +1583,7 @@ print_result:
     fputs(" ]\n", MUNIT_OUTPUT_FILE);
 
     if (stderr_buf != NULL) {
-        if (result == MUNIT_FAIL || result == MUNIT_ERROR ||
-            runner->show_stderr) {
+        if (result == MUNIT_FAIL || result == MUNIT_ERROR || runner->show_stderr) {
             fflush(MUNIT_OUTPUT_FILE);
 
             rewind(stderr_buf);
@@ -1640,10 +1597,8 @@ print_result:
 }
 
 static void munit_test_runner_run_test_wild(MunitTestRunner *runner,
-                                            const MunitTest *test,
-                                            const char *test_name,
-                                            MunitParameter *params,
-                                            MunitParameter *p) {
+                                            const MunitTest *test, const char *test_name,
+                                            MunitParameter *params, MunitParameter *p) {
     const MunitParameterEnum *pe;
     char **values;
     MunitParameter *next;
@@ -1662,8 +1617,7 @@ static void munit_test_runner_run_test_wild(MunitTestRunner *runner,
         if (next->name == NULL) {
             munit_test_runner_run_test_with_params(runner, test, params);
         } else {
-            munit_test_runner_run_test_wild(runner, test, test_name, params,
-                                            next);
+            munit_test_runner_run_test_wild(runner, test, test_name, params, next);
         }
         if (runner->fatal_failures &&
             (runner->report.failed != 0 || runner->report.errored != 0))
@@ -1673,11 +1627,9 @@ static void munit_test_runner_run_test_wild(MunitTestRunner *runner,
 
 /* Run a single test, with every combination of parameters
  * requested. */
-static void munit_test_runner_run_test(MunitTestRunner *runner,
-                                       const MunitTest *test,
+static void munit_test_runner_run_test(MunitTestRunner *runner, const MunitTest *test,
                                        const char *prefix) {
-    char *test_name =
-        munit_maybe_concat(NULL, (char *)prefix, (char *)test->name);
+    char *test_name = munit_maybe_concat(NULL, (char *)prefix, (char *)test->name);
     /* The array of parameters to pass to
      * munit_test_runner_run_test_with_params */
     MunitParameter *params = NULL;
@@ -1701,8 +1653,7 @@ static void munit_test_runner_run_test(MunitTestRunner *runner,
 
     munit_rand_seed(runner->seed);
 
-    fprintf(MUNIT_OUTPUT_FILE, "%-" MUNIT_XSTRINGIFY(MUNIT_TEST_NAME_LEN) "s",
-            test_name);
+    fprintf(MUNIT_OUTPUT_FILE, "%-" MUNIT_XSTRINGIFY(MUNIT_TEST_NAME_LEN) "s", test_name);
 
     if (test->parameters == NULL) {
         /* No parameters.  Simple, nice. */
@@ -1713,12 +1664,11 @@ static void munit_test_runner_run_test(MunitTestRunner *runner,
         for (pe = test->parameters; pe != NULL && pe->name != NULL; pe++) {
             /* Did we received a value for this parameter from the CLI? */
             filled = 0;
-            for (cli_p = runner->parameters;
-                 cli_p != NULL && cli_p->name != NULL; cli_p++) {
+            for (cli_p = runner->parameters; cli_p != NULL && cli_p->name != NULL;
+                 cli_p++) {
                 if (strcmp(cli_p->name, pe->name) == 0) {
-                    if (MUNIT_UNLIKELY(
-                            munit_parameters_add(&params_l, &params, pe->name,
-                                                 cli_p->value) != MUNIT_OK))
+                    if (MUNIT_UNLIKELY(munit_parameters_add(&params_l, &params, pe->name,
+                                                            cli_p->value) != MUNIT_OK))
                         goto cleanup;
                     filled = 1;
                     break;
@@ -1742,18 +1692,15 @@ static void munit_test_runner_run_test(MunitTestRunner *runner,
                  * running a single test, but we don't want every test with
                  * the same number of parameters to choose the same parameter
                  * number, so use the test name as a primitive salt. */
-                pidx =
-                    munit_rand_at_most(munit_str_hash(test_name), possible - 1);
-                if (MUNIT_UNLIKELY(
-                        munit_parameters_add(&params_l, &params, pe->name,
-                                             pe->values[pidx]) != MUNIT_OK))
+                pidx = munit_rand_at_most(munit_str_hash(test_name), possible - 1);
+                if (MUNIT_UNLIKELY(munit_parameters_add(&params_l, &params, pe->name,
+                                                        pe->values[pidx]) != MUNIT_OK))
                     goto cleanup;
             } else {
                 /* We want to try every permutation.  Put in a placeholder
                  * entry, we'll iterate through them later. */
-                if (MUNIT_UNLIKELY(munit_parameters_add(&wild_params_l,
-                                                        &wild_params, pe->name,
-                                                        NULL) != MUNIT_OK))
+                if (MUNIT_UNLIKELY(munit_parameters_add(&wild_params_l, &wild_params,
+                                                        pe->name, NULL) != MUNIT_OK))
                     goto cleanup;
             }
         }
@@ -1762,12 +1709,11 @@ static void munit_test_runner_run_test(MunitTestRunner *runner,
             first_wild = params_l;
             for (wp = wild_params; wp != NULL && wp->name != NULL; wp++) {
                 for (pe = test->parameters;
-                     pe != NULL && pe->name != NULL && pe->values != NULL;
-                     pe++) {
+                     pe != NULL && pe->name != NULL && pe->values != NULL; pe++) {
                     if (strcmp(wp->name, pe->name) == 0) {
-                        if (MUNIT_UNLIKELY(munit_parameters_add(
-                                               &params_l, &params, pe->name,
-                                               pe->values[0]) != MUNIT_OK))
+                        if (MUNIT_UNLIKELY(
+                                munit_parameters_add(&params_l, &params, pe->name,
+                                                     pe->values[0]) != MUNIT_OK))
                             goto cleanup;
                     }
                 }
@@ -1790,28 +1736,25 @@ static void munit_test_runner_run_test(MunitTestRunner *runner,
 /* Recurse through the suite and run all the tests.  If a list of
  * tests to run was provied on the command line, run only those
  * tests.  */
-static void munit_test_runner_run_suite(MunitTestRunner *runner,
-                                        const MunitSuite *suite,
+static void munit_test_runner_run_suite(MunitTestRunner *runner, const MunitSuite *suite,
                                         const char *prefix) {
     size_t pre_l;
-    char *pre =
-        munit_maybe_concat(&pre_l, (char *)prefix, (char *)suite->prefix);
+    char *pre = munit_maybe_concat(&pre_l, (char *)prefix, (char *)suite->prefix);
     const MunitTest *test;
     const char **test_name;
     const MunitSuite *child_suite;
 
     /* Run the tests. */
     for (test = suite->tests; test != NULL && test->test != NULL; test++) {
-        if (runner->tests !=
-            NULL) { /* Specific tests were requested on the CLI */
-            for (test_name = runner->tests;
-                 test_name != NULL && *test_name != NULL; test_name++) {
+        if (runner->tests != NULL) { /* Specific tests were requested on the CLI */
+            for (test_name = runner->tests; test_name != NULL && *test_name != NULL;
+                 test_name++) {
                 if ((pre_l == 0 || strncmp(pre, *test_name, pre_l) == 0) &&
-                    strncmp(test->name, *test_name + pre_l,
-                            strlen(*test_name + pre_l)) == 0) {
+                    strncmp(test->name, *test_name + pre_l, strlen(*test_name + pre_l)) ==
+                        0) {
                     munit_test_runner_run_test(runner, test, pre);
-                    if (runner->fatal_failures && (runner->report.failed != 0 ||
-                                                   runner->report.errored != 0))
+                    if (runner->fatal_failures &&
+                        (runner->report.failed != 0 || runner->report.errored != 0))
                         goto cleanup;
                 }
             }
@@ -1825,8 +1768,8 @@ static void munit_test_runner_run_suite(MunitTestRunner *runner,
         goto cleanup;
 
     /* Run any child suites. */
-    for (child_suite = suite->suites;
-         child_suite != NULL && child_suite->prefix != NULL; child_suite++) {
+    for (child_suite = suite->suites; child_suite != NULL && child_suite->prefix != NULL;
+         child_suite++) {
         munit_test_runner_run_suite(runner, child_suite, pre);
     }
 
@@ -1839,8 +1782,7 @@ static void munit_test_runner_run(MunitTestRunner *runner) {
     munit_test_runner_run_suite(runner, runner->suite, NULL);
 }
 
-static void munit_print_help(int argc,
-                             char *const argv[MUNIT_ARRAY_PARAM(argc + 1)],
+static void munit_print_help(int argc, char *const argv[MUNIT_ARRAY_PARAM(argc + 1)],
                              void *user_data, const MunitArgument arguments[]) {
     const MunitArgument *arg;
     (void)argc;
@@ -1892,22 +1834,20 @@ static void munit_print_help(int argc,
         " --help    Print this help message and exit.\n");
 #if defined(MUNIT_NL_LANGINFO)
     setlocale(LC_ALL, "");
-    fputs((strcasecmp("UTF-8", nl_langinfo(CODESET)) == 0) ? "µnit" : "munit",
-          stdout);
+    fputs((strcasecmp("UTF-8", nl_langinfo(CODESET)) == 0) ? "µnit" : "munit", stdout);
 #else
     puts("munit");
 #endif
     printf(" %d.%d.%d\n"
            "Full documentation at: https://nemequ.github.io/munit/\n",
-           (MUNIT_CURRENT_VERSION >> 16) & 0xff,
-           (MUNIT_CURRENT_VERSION >> 8) & 0xff,
+           (MUNIT_CURRENT_VERSION >> 16) & 0xff, (MUNIT_CURRENT_VERSION >> 8) & 0xff,
            (MUNIT_CURRENT_VERSION >> 0) & 0xff);
     for (arg = arguments; arg != NULL && arg->name != NULL; arg++)
         arg->write_help(arg, user_data);
 }
 
-static const MunitArgument *
-munit_arguments_find(const MunitArgument arguments[], const char *name) {
+static const MunitArgument *munit_arguments_find(const MunitArgument arguments[],
+                                                 const char *name) {
     const MunitArgument *arg;
 
     for (arg = arguments; arg != NULL && arg->name != NULL; arg++)
@@ -1917,11 +1857,10 @@ munit_arguments_find(const MunitArgument arguments[], const char *name) {
     return NULL;
 }
 
-static void munit_suite_list_tests(const MunitSuite *suite,
-                                   munit_bool show_params, const char *prefix) {
+static void munit_suite_list_tests(const MunitSuite *suite, munit_bool show_params,
+                                   const char *prefix) {
     size_t pre_l;
-    char *pre =
-        munit_maybe_concat(&pre_l, (char *)prefix, (char *)suite->prefix);
+    char *pre = munit_maybe_concat(&pre_l, (char *)prefix, (char *)suite->prefix);
     const MunitTest *test;
     const MunitParameterEnum *params;
     munit_bool first;
@@ -1934,8 +1873,8 @@ static void munit_suite_list_tests(const MunitSuite *suite,
         puts(test->name);
 
         if (show_params) {
-            for (params = test->parameters;
-                 params != NULL && params->name != NULL; params++) {
+            for (params = test->parameters; params != NULL && params->name != NULL;
+                 params++) {
                 fprintf(stdout, " - %s: ", params->name);
                 if (params->values == NULL) {
                     puts("Any");
@@ -1955,8 +1894,8 @@ static void munit_suite_list_tests(const MunitSuite *suite,
         }
     }
 
-    for (child_suite = suite->suites;
-         child_suite != NULL && child_suite->prefix != NULL; child_suite++) {
+    for (child_suite = suite->suites; child_suite != NULL && child_suite->prefix != NULL;
+         child_suite++) {
         munit_suite_list_tests(child_suite, show_params, pre);
     }
 
@@ -2080,17 +2019,15 @@ int munit_suite_main_custom(const MunitSuite *suite, void *user_data, int argc,
                     goto cleanup;
                 }
 
-                runner.parameters =
-                    realloc(runner.parameters,
-                            sizeof(MunitParameter) * (parameters_size + 2));
+                runner.parameters = realloc(runner.parameters, sizeof(MunitParameter) *
+                                                                   (parameters_size + 2));
                 if (runner.parameters == NULL) {
                     munit_log_internal(MUNIT_LOG_ERROR, stderr,
                                        "failed to allocate memory");
                     goto cleanup;
                 }
                 runner.parameters[parameters_size].name = (char *)argv[arg + 1];
-                runner.parameters[parameters_size].value =
-                    (char *)argv[arg + 2];
+                runner.parameters[parameters_size].value = (char *)argv[arg + 2];
                 parameters_size++;
                 runner.parameters[parameters_size].name = NULL;
                 runner.parameters[parameters_size].value = NULL;
@@ -2107,8 +2044,7 @@ int munit_suite_main_custom(const MunitSuite *suite, void *user_data, int argc,
                 else if (strcmp(argv[arg + 1], "never") == 0)
                     runner.colorize = 0;
                 else if (strcmp(argv[arg + 1], "auto") == 0)
-                    runner.colorize =
-                        munit_stream_supports_ansi(MUNIT_OUTPUT_FILE);
+                    runner.colorize = munit_stream_supports_ansi(MUNIT_OUTPUT_FILE);
                 else {
                     munit_logf_internal(MUNIT_LOG_ERROR, stderr,
                                         "invalid value ('%s') passed to %s",
@@ -2176,16 +2112,14 @@ int munit_suite_main_custom(const MunitSuite *suite, void *user_data, int argc,
                     goto cleanup;
                 }
 
-                if (!argument->parse_argument(suite, user_data, &arg, argc,
-                                              argv))
+                if (!argument->parse_argument(suite, user_data, &arg, argc, argv))
                     goto cleanup;
             }
         } else {
-            runner_tests = realloc((void *)runner.tests,
-                                   sizeof(char *) * (tests_size + 2));
+            runner_tests =
+                realloc((void *)runner.tests, sizeof(char *) * (tests_size + 2));
             if (runner_tests == NULL) {
-                munit_log_internal(MUNIT_LOG_ERROR, stderr,
-                                   "failed to allocate memory");
+                munit_log_internal(MUNIT_LOG_ERROR, stderr, "failed to allocate memory");
                 goto cleanup;
             }
             runner.tests = runner_tests;
@@ -2195,25 +2129,22 @@ int munit_suite_main_custom(const MunitSuite *suite, void *user_data, int argc,
     }
 
     fflush(stderr);
-    fprintf(MUNIT_OUTPUT_FILE,
-            "Running test suite with seed 0x%08" PRIx32 "...\n", runner.seed);
+    fprintf(MUNIT_OUTPUT_FILE, "Running test suite with seed 0x%08" PRIx32 "...\n",
+            runner.seed);
 
     munit_test_runner_run(&runner);
 
-    tests_run =
-        runner.report.successful + runner.report.failed + runner.report.errored;
+    tests_run = runner.report.successful + runner.report.failed + runner.report.errored;
     tests_total = tests_run + runner.report.skipped;
     if (tests_run == 0) {
-        fprintf(stderr, "No tests run, %d (100%%) skipped.\n",
-                runner.report.skipped);
+        fprintf(stderr, "No tests run, %d (100%%) skipped.\n", runner.report.skipped);
     } else {
-        fprintf(
-            MUNIT_OUTPUT_FILE,
-            "%d of %d (%0.0f%%) tests successful, %d (%0.0f%%) test skipped.\n",
-            runner.report.successful, tests_run,
-            (((double)runner.report.successful) / ((double)tests_run)) * 100.0,
-            runner.report.skipped,
-            (((double)runner.report.skipped) / ((double)tests_total)) * 100.0);
+        fprintf(MUNIT_OUTPUT_FILE,
+                "%d of %d (%0.0f%%) tests successful, %d (%0.0f%%) test skipped.\n",
+                runner.report.successful, tests_run,
+                (((double)runner.report.successful) / ((double)tests_run)) * 100.0,
+                runner.report.skipped,
+                (((double)runner.report.skipped) / ((double)tests_total)) * 100.0);
     }
 
     if (runner.report.failed == 0 && runner.report.errored == 0) {

@@ -116,7 +116,7 @@ static int update(void *userdata) {
     float crankPosition = pd->system->getCrankAngle();
 
     if (!pd->system->isCrankDocked())
-        spritePosition = get_translated_movement(spritePosition, crankPosition,
-                                                 screenBounds);
+        spritePosition =
+            get_translated_movement(spritePosition, crankPosition, screenBounds);
     return 1; // Always update the display.
 }

@@ -60,8 +60,7 @@ static MunitTest test_suite_tests[] = {
     {(char *)"/charolette/get_translated_movement", test_movement, NULL, NULL,
      MUNIT_TEST_OPTION_NONE, NULL},
 
-    {(char *)"/charolette/fill", test_box_fill, NULL, NULL,
-     MUNIT_TEST_OPTION_NONE, NULL},
+    {(char *)"/charolette/fill", test_box_fill, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 
     // Null test to end the array
     {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}};
