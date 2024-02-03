@@ -20,6 +20,8 @@ bool isapprox(float a, float b, float prec) {
     return val <= prec;
 }
 
+// MARK: - Vector Tests
+
 static MunitResult test_vector(const MunitParameter params[], void *data) {
     vec2i vector = {0, 0};
     munit_assert(vector.x == 0);
@@ -34,6 +36,20 @@ static MunitResult test_movement(const MunitParameter params[], void *data) {
     munit_assert_true(isapprox(translated.x, 15.69, 0.001));
     return MUNIT_OK;
 }
+
+static MunitResult test_vec2f_distance(const MunitParameter params[], void *data) {
+    vec2f one = {1, 0};
+    vec2f zero = {0, 0};
+    float distance = vec2f_distance(one, zero);
+    munit_assert_float(distance, ==, 1.0);
+
+    vec2f two = {2, 2};
+    float farther = vec2f_distance(two, zero);
+    munit_assert_true(isapprox(farther, sqrtf(8), 0.001));
+    return MUNIT_OK;
+}
+
+// MARK: - Box Tests
 
 static MunitResult test_box_fill(const MunitParameter params[], void *data) {
     vec2f boxes[3] = {0};
@@ -67,10 +83,10 @@ static MunitTest test_suite_tests[] = {
         MUNIT_TEST_OPTION_NONE,
         NULL // params
     },
-
     {(char *)"/charolette/get_translated_movement", test_movement, NULL, NULL,
      MUNIT_TEST_OPTION_NONE, NULL},
-
+    {(char *)"/charolette/vec2f_distance", test_vec2f_distance, NULL, NULL,
+     MUNIT_TEST_OPTION_NONE, NULL},
     {(char *)"/charolette/fill", test_box_fill, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
     {(char *)"/charolette/shift", test_box_shift, NULL, NULL, MUNIT_TEST_OPTION_NONE,
      NULL},

@@ -98,23 +98,22 @@ static int update(void *userdata) {
         return 1;
     }
 
-    // Real-time updates.
+    // Draw to screen
     spriteImage = pd->graphics->getTableBitmap(table, frame);
     pd->sprite->setImage(sprite, spriteImage, kBitmapUnflipped);
     pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
     pd->sprite->markDirty(sprite);
     pd->sprite->updateAndDrawSprites();
 
-    // TODO: Move this into its own testable method.
+    // Boxes
     for (int i = 0; i < BOXES_COUNT; i++) {
         pd->graphics->drawText("a", strlen("a"), kASCIIEncoding, boxes[i].x, boxes[i].y);
         boxes[i] = shift_box(boxes[i], -CHARLIE_HEIGHT, i, screenBounds, BOXES_COUNT);
     }
 
+    // Actions
     cycle();
-
     float crankPosition = pd->system->getCrankAngle();
-
     if (!pd->system->isCrankDocked())
         spritePosition =
             get_translated_movement(spritePosition, crankPosition, screenBounds);

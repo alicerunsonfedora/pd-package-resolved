@@ -10,4 +10,6 @@ typedef struct vec2f {
     float x;
     float y;
 } vec2f;
+
+float vec2f_distance(vec2f a, vec2f b);
 #endif
