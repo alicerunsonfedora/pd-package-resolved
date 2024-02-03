@@ -41,7 +41,7 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
 
 #define CHARLIE_WIDTH 32
 #define CHARLIE_HEIGHT 64
-#define BOXES_COUNT 8
+#define BOXES_COUNT 6
 
 int frame = 0;
 bool frameUpdated = false;
@@ -92,7 +92,7 @@ static int update(void *userdata) {
         pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
         pd->sprite->updateAndDrawSprites();
 
-        fill_boxes(boxes, 8.0, screenBounds);
+        fill_boxes(boxes, 6, screenBounds);
 
         initializedGameLoop = true;
         return 1;
@@ -105,8 +105,10 @@ static int update(void *userdata) {
     pd->sprite->markDirty(sprite);
     pd->sprite->updateAndDrawSprites();
 
+    // TODO: Move this into its own testable method.
     for (int i = 0; i < BOXES_COUNT; i++) {
         pd->graphics->drawText("a", strlen("a"), kASCIIEncoding, boxes[i].x, boxes[i].y);
+        boxes[i] = shift_box(boxes[i], -CHARLIE_HEIGHT, i, screenBounds, BOXES_COUNT);
     }
 
     cycle();

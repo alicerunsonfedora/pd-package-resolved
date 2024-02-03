@@ -9,4 +9,6 @@
 /// - Parameter bounds: The maximum boundary for a given position.
 void fill_boxes(vec2f boxes[], int quantity, vec2f bounds);
 
+vec2f shift_box(vec2f box, float threshold, int index, vec2f bounds, int total);
+
 #endif
