@@ -9,6 +9,8 @@ floors, or you'll get really injured!
 > C, originating from the Godot-based game of the same title for the 132nd
 > Trijam.
 
+![GIF of current gameplay of Package Resolved](gameplay.gif)
+
 ## 🏗️ Build instructions
 
 **Required Tools**
