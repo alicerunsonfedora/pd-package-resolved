@@ -53,6 +53,8 @@ LCDBitmapTable *table;
 LCDBitmap *spriteImage;
 LCDSprite *sprite;
 vec2f boxes[BOXES_COUNT];
+int boxesCollected = 0;
+char *counterMessage;
 
 void cycle() {
     if (frameUpdated == true) {
@@ -105,10 +107,20 @@ static int update(void *userdata) {
     pd->sprite->markDirty(sprite);
     pd->sprite->updateAndDrawSprites();
 
+    pd->system->formatString(&counterMessage, "Boxes collected: %i", boxesCollected);
+    pd->graphics->drawText(counterMessage, strlen(counterMessage), kASCIIEncoding, 8,
+                           screenBounds.y - 14 - 8);
+
     // Boxes
     for (int i = 0; i < BOXES_COUNT; i++) {
         pd->graphics->drawText("a", strlen("a"), kASCIIEncoding, boxes[i].x, boxes[i].y);
         boxes[i] = shift_box(boxes[i], -CHARLIE_HEIGHT, i, screenBounds, BOXES_COUNT);
+
+        float distanceToPlayer = vec2f_distance(spritePosition, boxes[i]);
+        if (distanceToPlayer < 32) {
+            boxes[i].x = -CHARLIE_HEIGHT;
+            boxesCollected++;
+        }
     }
 
     // Actions
