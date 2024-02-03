@@ -16,14 +16,24 @@ floors, or you'll get really injured!
 - Clang (on macOS) or GCC
 - Playdate SDK 2.1.0 or later
 - (if using Nova) [Playdate extension][nova-ext]
+- (if using Nova) [Icarus extension][icarus-ext]
 
 [nova-ext]: nova://extension/?id=com.panic.Playdate&name=Playdate
+[icarus-ext]: nova://extension/?id=panic.Icarus&name=Icarus
 
 ### Nova
 
 Start by cloning this repository via `git clone`, then open the project in
 Nova. Select the "Game (Simulator)" task and run the project, which will
 create the PDX file and open the game in the Playdate Simulator.
+
+> **Tip: Get Playdate autocompletions**  
+> To get autocompletions and type information for the Playdate C APIs, you
+> can create a symbolic link to the Playdate SDK as `.playdatec`:
+>
+> ```
+> ln -s /path/to/PlaydateSDK/C_API/ .playdatec
+> ```
 
 ### Command line 
 
