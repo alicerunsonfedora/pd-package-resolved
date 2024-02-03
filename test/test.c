@@ -13,7 +13,7 @@
 
 bool isapprox(float a, float b, float prec) {
     float val = fabsf(a - b);
-    printf(" Approxing %f and %f (diff: %f)", a, b, val);
+    printf("Approxing %f and %f (diff: %f)\n", a, b, val);
     return val <= prec;
 }
 
@@ -35,16 +35,14 @@ static MunitResult test_movement(const MunitParameter params[], void *data) {
 
 static MunitResult test_box_fill(const MunitParameter params[], void *data) {
     vec2f bounds = {400.0f, 240.f};
-    vec2f *boxes[] = {NULL, NULL, NULL};
+    vec2f boxes[3] = {0};
     fill_boxes(boxes, 3, bounds);
 
     for (int i = 0; i < 3; i++) {
-        if (boxes[i] == NULL)
-            return MUNIT_FAIL;
-        munit_assert_float(boxes[i]->x, <=, 400.0);
-        munit_assert_float(boxes[i]->y, ==, (240.0 / 3) * i);
+        munit_assert_float(boxes[i].x, <=, 400.0);
+        munit_assert_float(boxes[i].x, !=, 0.0);
+        munit_assert_float(boxes[i].y, ==, i * 80);
     }
-
     return MUNIT_OK;
 }
 

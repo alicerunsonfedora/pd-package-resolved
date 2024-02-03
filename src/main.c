@@ -52,7 +52,7 @@ vec2f screenBounds = {0.0f, 0.0f};
 LCDBitmapTable *table;
 LCDBitmap *spriteImage;
 LCDSprite *sprite;
-vec2f *boxes[BOXES_COUNT];
+vec2f boxes[BOXES_COUNT];
 
 void cycle() {
     if (frameUpdated == true) {
@@ -106,9 +106,7 @@ static int update(void *userdata) {
     pd->sprite->updateAndDrawSprites();
 
     for (int i = 0; i < BOXES_COUNT; i++) {
-        pd->system->logToConsole("Position: %f, %f", boxes[i]->x, boxes[i]->y);
-        pd->graphics->drawText("a", strlen("a"), kASCIIEncoding, boxes[i]->x,
-                               boxes[i]->y);
+        pd->graphics->drawText("a", strlen("a"), kASCIIEncoding, boxes[i].x, boxes[i].y);
     }
 
     cycle();
