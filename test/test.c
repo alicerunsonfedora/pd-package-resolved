@@ -1,6 +1,8 @@
 #include "munit/munit.h"
-#include <sys/_types/_null.h>
 #define MUNIT_ENABLE_ASSERT_ALIASES
+
+#define simple_test(name, method) {(char *)name, method, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
+#define test_end {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
 
 #include "boxes.h"
 #include "movement.h"
@@ -114,20 +116,16 @@ static MunitTest test_suite_tests[] = {
         MUNIT_TEST_OPTION_NONE,
         NULL // params
     },
-    {(char *)"/charolette/get_translated_movement", test_movement, NULL, NULL,
-     MUNIT_TEST_OPTION_NONE, NULL},
-    {(char *)"/charolette/vec2f_distance", test_vec2f_distance, NULL, NULL,
-     MUNIT_TEST_OPTION_NONE, NULL},
-    {(char *)"/charolette/fill", test_box_fill, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {(char *)"/charolette/fill_with_insets", test_box_fill_with_insets, NULL, NULL,
-     MUNIT_TEST_OPTION_NONE, NULL},
-    {(char *)"/charolette/shift", test_box_shift, NULL, NULL, MUNIT_TEST_OPTION_NONE,
-     NULL},
-    {(char *)"/charolette/shift_with_insets", test_box_shift_with_insets, NULL, NULL,
-     MUNIT_TEST_OPTION_NONE, NULL},
+    simple_test("charolette/get_translated_movement", test_movement),
+    simple_test("charolette/vec2f_distance", test_vec2f_distance),
+    simple_test("charolette/fill", test_box_fill),
+    simple_test("charolette/fill_with_insets", test_box_fill_with_insets),
+    simple_test("charolette/shift", test_box_shift),
+    simple_test("charolette/shift_with_insets", test_box_shift_with_insets),
 
     // Null test to end the array
-    {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}};
+    test_end
+};
 
 static const MunitSuite test_suite = {(char *)"/tests", test_suite_tests, NULL,
                                       MUNIT_SUITE_OPTION_NONE};
