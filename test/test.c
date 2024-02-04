@@ -1,8 +1,10 @@
 #include "munit/munit.h"
 #define MUNIT_ENABLE_ASSERT_ALIASES
 
-#define simple_test(name, method) {(char *)name, method, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
-#define test_end {NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL}
+#define simple_test(name, method)                                                        \
+    { (char *)name, method, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
+#define test_end                                                                         \
+    { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 
 #include "boxes.h"
 #include "movement.h"
@@ -124,8 +126,7 @@ static MunitTest test_suite_tests[] = {
     simple_test("charolette/shift_with_insets", test_box_shift_with_insets),
 
     // Null test to end the array
-    test_end
-};
+    test_end};
 
 static const MunitSuite test_suite = {(char *)"/tests", test_suite_tests, NULL,
                                       MUNIT_SUITE_OPTION_NONE};
