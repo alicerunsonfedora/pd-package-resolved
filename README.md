@@ -15,7 +15,7 @@ floors, or you'll get really injured!
 
 **Required Tools**
 - Make
-- Clang (on macOS) or GCC
+- Clang or GCC
 - Playdate SDK 2.1.0 or later
 - (if using Nova) [Playdate extension][nova-ext]
 - (if using Nova) [Icarus extension][icarus-ext]
@@ -33,9 +33,9 @@ create the PDX file and open the game in the Playdate Simulator.
 > To get autocompletions and type information for the Playdate C APIs, you
 > can create a symbolic link to the Playdate SDK as `.playdatec`:
 >
-> ```
-> ln -s /path/to/PlaydateSDK/C_API/ .playdatec
-> ```
+>     ```
+>     ln -s /path/to/PlaydateSDK/C_API/ .playdatec
+>     ```
 
 ### Command line 
 
@@ -49,6 +49,12 @@ make
 More information can be found on [Playdate's documentation to build via the command line][pdbuild].
 
 [pdbuild]: https://sdk.play.date/inside-playdate-with-c/#_make
+
+> **:warning: Unsupported on Asahi!**  
+> Due to Playdate SDK restrictions, building on ARM64 Linux devices is
+> not currently supported. However, you can still edit the charolette
+> library and update unit tests without issue, as it only requires the
+> compiler.
 
 To build and run the unit tests, run the following:
 
