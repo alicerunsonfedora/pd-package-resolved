@@ -3,14 +3,17 @@ STACK_SIZE 	= 61800
 
 PRODUCT = PackageResolved.pdx
 
-# Set the appropriate C compiler for the unit tests.
 UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S), Darwin)
-	TEST_CC := clang
-else
+
+# Set the appropriate C compiler for the unit tests.
+CLANGD := $(shell which clang)
+ifeq ($(CLANGD),)
 	TEST_CC := gcc 
+else
+	TEST_CC := clang 
 endif
 
+# Update the flags to allow linking to the math lib.
 ifeq ($(UNAME_S), Linux)
 	TEST_CC_FLAGS := -lm
 endif
