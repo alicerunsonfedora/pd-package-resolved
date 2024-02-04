@@ -8,7 +8,11 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S), Darwin)
 	TEST_CC := clang
 else
-	TEST_CC := gcc
+	TEST_CC := gcc 
+endif
+
+ifeq ($(UNAME_S), Linux)
+	TEST_CC_FLAGS := -lm
 endif
 
 # Locate the SDK
@@ -59,7 +63,7 @@ include $(SDK)/C_API/buildsupport/common.mk
 
 # Unit tests.
 test: test/test.c test/munit/munit.h test/munit/munit.c
-	$(TEST_CC) -o test/test_app -std=c11 -Icharolette -Itest/munit $(TESTS) $(TESTS_DEPENDENTS)
+	$(TEST_CC) -o test/test_app -std=c11 -Icharolette -Itest/munit $(TESTS) $(TESTS_DEPENDENTS) $(TEST_CC_FLAGS)
 
 clean:
 	$(MAKE) -f $(SDK)/C_API/buildsupport/common.mk $@
