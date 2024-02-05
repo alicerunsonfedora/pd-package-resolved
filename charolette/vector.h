@@ -12,4 +12,8 @@ typedef struct vec2f {
 } vec2f;
 
 float vec2f_distance(vec2f a, vec2f b);
+
+vec2f vec2f_add(vec2f lhs, vec2f rhs);
+vec2f vec2f_sub(vec2f lhs, vec2f rhs);
+
 #endif

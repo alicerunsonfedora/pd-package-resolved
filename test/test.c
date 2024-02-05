@@ -53,6 +53,22 @@ static MunitResult test_vec2f_distance(const MunitParameter params[], void *data
     return MUNIT_OK;
 }
 
+static MunitResult test_vec2f_add(const MunitParameter params[], void *data) {
+    vec2f one = { 1, 1 };
+    vec2f added = vec2f_add(one, one);
+    munit_assert_float(added.x, ==, 2.0);
+    munit_assert_float(added.y, ==, 2.0);
+    return MUNIT_OK;
+}
+
+static MunitResult test_vec2f_sub(const MunitParameter params[], void *data) {
+    vec2f two = { 2, 2 };
+    vec2f subbed = vec2f_sub(two, two);
+    munit_assert_float(subbed.x, ==, 0.0);
+    munit_assert_float(subbed.y, ==, 0.0);
+    return MUNIT_OK;
+}
+
 // MARK: - Box Tests
 
 static MunitResult test_box_fill(const MunitParameter params[], void *data) {
@@ -120,6 +136,8 @@ static MunitTest test_suite_tests[] = {
     },
     simple_test("charolette/get_translated_movement", test_movement),
     simple_test("charolette/vec2f_distance", test_vec2f_distance),
+    simple_test("charolette/vec2f_add", test_vec2f_add),
+    simple_test("charolette/vec2f_sub", test_vec2f_sub),
     simple_test("charolette/fill", test_box_fill),
     simple_test("charolette/fill_with_insets", test_box_fill_with_insets),
     simple_test("charolette/shift", test_box_shift),
