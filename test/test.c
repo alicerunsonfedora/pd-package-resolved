@@ -54,7 +54,7 @@ static MunitResult test_vec2f_distance(const MunitParameter params[], void *data
 }
 
 static MunitResult test_vec2f_add(const MunitParameter params[], void *data) {
-    vec2f one = { 1, 1 };
+    vec2f one = {1, 1};
     vec2f added = vec2f_add(one, one);
     munit_assert_float(added.x, ==, 2.0);
     munit_assert_float(added.y, ==, 2.0);
@@ -62,7 +62,7 @@ static MunitResult test_vec2f_add(const MunitParameter params[], void *data) {
 }
 
 static MunitResult test_vec2f_sub(const MunitParameter params[], void *data) {
-    vec2f two = { 2, 2 };
+    vec2f two = {2, 2};
     vec2f subbed = vec2f_sub(two, two);
     munit_assert_float(subbed.x, ==, 0.0);
     munit_assert_float(subbed.y, ==, 0.0);
