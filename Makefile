@@ -35,13 +35,14 @@ CHAROLETTE_SRC = charolette/movement.c \
 	charolette/boxes.c \
 	charolette/vector.c
 
-KDL_INCLUDES := $(shell find ckdl/include -name '*.h')
+# Source files for the ckdl library
 KDL_SOURCES = ckdl/src/bigint.c \
 	ckdl/src/compat.c \
 	ckdl/src/emitter.c \
 	ckdl/src/parser.c \
 	ckdl/src/str.c \
-	ckdl/src/tokenizer.c
+	ckdl/src/tokenizer.c \
+	ckdl/src/utf8.c
 
 # List C source files here
 SRC = src/main.c src/images.c src/gameloop.c src/text.c $(CHAROLETTE_SRC) $(KDL_SOURCES)
@@ -65,7 +66,7 @@ UDEFS =
 UADEFS = 
 
 # List the user directory to look for the libraries here
-ULIBDIR = ckdl
+ULIBDIR = ckdl/include
 
 # List all user libraries here
 ULIBS = 

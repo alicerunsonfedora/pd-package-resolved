@@ -35,9 +35,6 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
         if (font == NULL) {
             pd->system->error("Failed to load system font! %s", err);
         }
-        
-        const kdl_str myString = kdl_str_from_cstr("Hello, world!");
-        pd->system->logToConsole(myString.data);
 
         pd->system->setUpdateCallback(update, pd);
     }
