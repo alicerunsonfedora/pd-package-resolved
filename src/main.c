@@ -113,7 +113,7 @@ static int update(void *userdata) {
             return 0;
         }
         spriteImage = pd->graphics->getTableBitmap(table, frame);
-        
+
         // Box setup
         const char *boxsheet = "Images/box";
         boxTable = loadTable(boxsheet, pd);
@@ -121,7 +121,7 @@ static int update(void *userdata) {
             pd->system->error("The table for path %s is missing.", boxsheet);
             return 0;
         }
-        
+
         boxOnFrame = pd->graphics->getTableBitmap(boxTable, 0);
         boxOffFrame = pd->graphics->getTableBitmap(boxTable, 1);
 
@@ -161,11 +161,11 @@ static int update(void *userdata) {
             boxesCollected++;
         }
     }
-    
+
     if (boxesCollected > currentBoxesCollectedInFrame)
         pd->system->formatString(&counterMessage, "Boxes collected: %i", boxesCollected);
     pd->graphics->drawText(counterMessage, strlen(counterMessage), kASCIIEncoding, 8,
-       screenBounds.y - 14 - 8);
+                           screenBounds.y - 14 - 8);
 
     // Actions
     cycle();

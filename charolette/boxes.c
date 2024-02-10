@@ -11,7 +11,7 @@ void fill_boxes(vec2f boxes[], int quantity, vec2f bounds, inset insets) {
         float xpos = (float)rand() / (float)(RAND_MAX / (bounds.x - insets.right));
         if (xpos < insets.left)
             xpos = insets.left;
-        float ypos = step * (float)i + 32;
+        float ypos = step * (float)i;
         vec2f vector = {xpos, ypos};
         boxes[i] = vector;
     }
