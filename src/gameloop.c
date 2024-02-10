@@ -69,3 +69,12 @@ void cycleFrames(int *frame, bool *updated) {
     *frame = newFrame;
     *updated = true;
 }
+
+void updatePlayer(PlaydateAPI *pd, LCDSprite **sprite, LCDBitmapTable **table,
+                  LCDBitmap **image, vec2f position, int frame) {
+    *image = pd->graphics->getTableBitmap(*table, frame);
+    pd->sprite->setImage(*sprite, *image, kBitmapUnflipped);
+    pd->sprite->moveTo(*sprite, position.x, position.y);
+    pd->sprite->markDirty(*sprite);
+    pd->sprite->updateAndDrawSprites();
+}

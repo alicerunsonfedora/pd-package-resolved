@@ -103,11 +103,7 @@ static int update(void *userdata) {
     }
 
     // Draw to screen
-    spriteImage = pd->graphics->getTableBitmap(table, frame);
-    pd->sprite->setImage(sprite, spriteImage, kBitmapUnflipped);
-    pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
-    pd->sprite->markDirty(sprite);
-    pd->sprite->updateAndDrawSprites();
+    updatePlayer(pd, &sprite, &table, &spriteImage, spritePosition, frame);
 
     // Boxes
     int currentBoxesCollectedInFrame = boxesCollected;
