@@ -13,4 +13,10 @@
 void drawBox(int index, vec2f boxes[], int boxframe, LCDBitmap *boxOnFrame,
              LCDBitmap *boxOffFrame, PlaydateAPI *pd);
 
+int loadPlayerTable(PlaydateAPI *pd, LCDBitmapTable **table, LCDBitmap **current);
+int loadBoxTable(PlaydateAPI *pd, LCDBitmapTable **table, LCDBitmap **on,
+                 LCDBitmap **off);
+
+void cycleFrames(int *frame, bool *updated);
+
 #endif

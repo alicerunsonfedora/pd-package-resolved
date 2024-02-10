@@ -67,17 +67,6 @@ vec2f boxes[BOXES_COUNT];
 int boxesCollected = 0;
 char *counterMessage;
 
-void cycle() {
-    if (frameUpdated == true) {
-        frameUpdated = false;
-        return;
-    }
-    frame = frame + 1;
-    if (frame > 5)
-        frame = 0;
-    frameUpdated = true;
-}
-
 static int update(void *userdata) {
     PlaydateAPI *pd = userdata;
 
@@ -89,24 +78,14 @@ static int update(void *userdata) {
         pd->graphics->clear(kColorWhite);
         pd->graphics->setFont(font);
 
-        const char *spritesheet = "Images/charlie";
-        table = loadTable(spritesheet, pd);
-        if (table == NULL) {
-            pd->system->error("The table for path %s is missing.", spritesheet);
+        int ret = loadPlayerTable(pd, &table, &spriteImage);
+        if (ret != 0)
             return 0;
-        }
-        spriteImage = pd->graphics->getTableBitmap(table, frame);
 
         // Box setup
-        const char *boxsheet = "Images/box";
-        boxTable = loadTable(boxsheet, pd);
-        if (boxTable == NULL) {
-            pd->system->error("The table for path %s is missing.", boxsheet);
+        ret = loadBoxTable(pd, &boxTable, &boxOnFrame, &boxOffFrame);
+        if (ret != 0)
             return 0;
-        }
-
-        boxOnFrame = pd->graphics->getTableBitmap(boxTable, 0);
-        boxOffFrame = pd->graphics->getTableBitmap(boxTable, 1);
 
         if (spriteImage != NULL && sprite == NULL) {
             sprite = imagedSprite(pd, spriteSize, spriteImage);
@@ -151,7 +130,7 @@ static int update(void *userdata) {
                            screenBounds.y - 14 - 8);
 
     // Actions
-    cycle();
+    cycleFrames(&frame, &frameUpdated);
     float crankPosition = pd->system->getCrankAngle();
     if (!pd->system->isCrankDocked())
         spritePosition =
