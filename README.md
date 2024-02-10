@@ -68,3 +68,14 @@ To build and run the unit tests, run the following:
 make test
 ./test/test_app
 ```
+
+## License
+
+Package Resolved itself is licensed under the Mozilla Public License, v2.
+It also uses libraries under other open source licenses:
+
+- [munit][munit-git]: MIT License
+- [ckdl][ckdl-git]: MIT License
+
+[munit-git]: https://github.com/nemequ/munit
+[ckdl-git]: https://github.com/tjol/ckdl
