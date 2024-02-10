@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "boxes.h"
+#include "gameloop.h"
 #include "images.h"
 #include "movement.h"
 #include "pd_api.h"
@@ -77,24 +78,6 @@ void cycle() {
     frameUpdated = true;
 }
 
-void drawBox(int index, PlaydateAPI *pd) {
-    vec2f box = boxes[index];
-    bool even = index % 2 == 0;
-    if (boxframe == 1) {
-        if (even) {
-            pd->graphics->drawBitmap(boxOnFrame, box.x, box.y, kBitmapUnflipped);
-        } else {
-            pd->graphics->drawBitmap(boxOffFrame, box.x, box.y, kBitmapUnflipped);
-        }
-    } else {
-        if (!even) {
-            pd->graphics->drawBitmap(boxOnFrame, box.x, box.y, kBitmapUnflipped);
-        } else {
-            pd->graphics->drawBitmap(boxOffFrame, box.x, box.y, kBitmapUnflipped);
-        }
-    }
-}
-
 static int update(void *userdata) {
     PlaydateAPI *pd = userdata;
 
@@ -151,7 +134,7 @@ static int update(void *userdata) {
     int currentBoxesCollectedInFrame = boxesCollected;
     boxframe = (frame > 2) ? 1 : 0;
     for (int i = 0; i < BOXES_COUNT; i++) {
-        drawBox(i, pd);
+        drawBox(i, boxes, boxframe, boxOnFrame, boxOffFrame, pd);
         boxes[i] =
             shift_box(boxes[i], -CHARLIE_HEIGHT, i, screenBounds, BOXES_COUNT, walls);
 

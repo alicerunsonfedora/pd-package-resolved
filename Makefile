@@ -36,7 +36,7 @@ CHAROLETTE_SRC = charolette/movement.c \
 	charolette/vector.c
 
 # List C source files here
-SRC = src/main.c src/images.c $(CHAROLETTE_SRC)
+SRC = src/main.c src/images.c src/gameloop.c $(CHAROLETTE_SRC)
 
 # List test source files here
 TESTS = test/test.c
