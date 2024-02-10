@@ -82,11 +82,6 @@ static int update(void *userdata) {
         if (ret != 0)
             return 0;
 
-        // Box setup
-        ret = loadBoxTable(pd, &boxTable, &boxOnFrame, &boxOffFrame);
-        if (ret != 0)
-            return 0;
-
         if (spriteImage != NULL && sprite == NULL) {
             sprite = imagedSprite(pd, spriteSize, spriteImage);
         }
@@ -94,6 +89,11 @@ static int update(void *userdata) {
         spritePosition.x = screenBounds.x / 2;
         pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
         pd->sprite->updateAndDrawSprites();
+
+        // Box setup
+        ret = loadBoxTable(pd, &boxTable, &boxOnFrame, &boxOffFrame);
+        if (ret != 0)
+            return 0;
 
         fill_boxes(boxes, 6, screenBounds, walls);
         counterMessage = "Boxes collected: 0";
