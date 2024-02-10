@@ -7,6 +7,7 @@
 #include "images.h"
 #include "movement.h"
 #include "pd_api.h"
+#include "text.h"
 #include "vector.h"
 
 static int update(void *userdata);
@@ -122,8 +123,9 @@ static int update(void *userdata) {
 
     if (boxesCollected > currentBoxesCollectedInFrame)
         pd->system->formatString(&counterMessage, "Boxes collected: %i", boxesCollected);
-    pd->graphics->drawText(counterMessage, strlen(counterMessage), kASCIIEncoding, 8,
-                           screenBounds.y - 14 - 8);
+
+    const vec2i boxTextPosition = {8, (int)screenBounds.y - 14 - 8};
+    drawASCIIText(pd, counterMessage, boxTextPosition);
 
     // Actions
     cycleFrames(&frame, &frameUpdated);
