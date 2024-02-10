@@ -35,8 +35,16 @@ CHAROLETTE_SRC = charolette/movement.c \
 	charolette/boxes.c \
 	charolette/vector.c
 
+KDL_INCLUDES := $(shell find ckdl/include -name '*.h')
+KDL_SOURCES = ckdl/src/bigint.c \
+	ckdl/src/compat.c \
+	ckdl/src/emitter.c \
+	ckdl/src/parser.c \
+	ckdl/src/str.c \
+	ckdl/src/tokenizer.c
+
 # List C source files here
-SRC = src/main.c src/images.c src/gameloop.c src/text.c $(CHAROLETTE_SRC)
+SRC = src/main.c src/images.c src/gameloop.c src/text.c $(CHAROLETTE_SRC) $(KDL_SOURCES)
 
 # List test source files here
 TESTS = test/test.c
@@ -45,7 +53,7 @@ TESTS = test/test.c
 TESTS_DEPENDENTS = test/munit/munit.c $(CHAROLETTE_SRC)
 
 # List all user directories here
-UINCDIR = charolette
+UINCDIR = charolette ckdl/include
 
 # List user asm files
 UASRC = 
@@ -57,10 +65,10 @@ UDEFS =
 UADEFS = 
 
 # List the user directory to look for the libraries here
-ULIBDIR =
+ULIBDIR = ckdl
 
 # List all user libraries here
-ULIBS =
+ULIBS = 
 
 include $(SDK)/C_API/buildsupport/common.mk
 
