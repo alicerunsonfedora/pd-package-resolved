@@ -68,6 +68,8 @@ vec2f boxes[BOXES_COUNT];
 int boxesCollected = 0;
 char *counterMessage;
 
+int timeRemaning = 60;
+
 static int update(void *userdata) {
     PlaydateAPI *pd = userdata;
 
@@ -99,9 +101,14 @@ static int update(void *userdata) {
         fill_boxes(boxes, 6, screenBounds, walls);
         counterMessage = "Boxes collected: 0";
 
+        pd->system->resetElapsedTime();
+
         initializedGameLoop = true;
         return 1;
     }
+
+    if (timeRemaning <= 0)
+        return 0;
 
     // Draw to screen
     updatePlayer(pd, &sprite, &table, &spriteImage, spritePosition, frame);
@@ -128,6 +135,15 @@ static int update(void *userdata) {
     drawASCIIText(pd, counterMessage, boxTextPosition);
 
     // Actions
+    int timeSinceReset = (int)pd->system->getElapsedTime();
+    timeRemaning = 60 - timeSinceReset;
+
+    char *timerMessage;
+    pd->system->formatString(&timerMessage, "%i", timeRemaning);
+
+    const vec2i timerPosition = {8, 8};
+    drawASCIIText(pd, timerMessage, timerPosition);
+
     cycleFrames(&frame, &frameUpdated);
     float crankPosition = pd->system->getCrankAngle();
     if (!pd->system->isCrankDocked())
