@@ -1345,9 +1345,14 @@ static void munit_test_runner_run_test_with_params(MunitTestRunner *runner,
                                                    const MunitTest *test,
                                                    const MunitParameter params[]) {
     MunitResult result = MUNIT_OK;
-    MunitReport report = {0, 0, 0, 0,
+    MunitReport report = {
+        0,
+        0,
+        0,
+        0,
 #if defined(MUNIT_ENABLE_TIMING)
-                          0, 0
+        0,
+        0
 #endif
     };
     unsigned int output_l;
