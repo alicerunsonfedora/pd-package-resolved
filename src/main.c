@@ -45,6 +45,7 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
 #define CHARLIE_HEIGHT 64
 #define BOXES_COUNT 6
 #define X_INSET 32
+#define FONT_SIZE 14
 
 const inset walls = {0, X_INSET, X_INSET, 0};
 
@@ -131,7 +132,7 @@ static int update(void *userdata) {
     if (boxesCollected > currentBoxesCollectedInFrame)
         pd->system->formatString(&counterMessage, "Boxes collected: %i", boxesCollected);
 
-    const vec2i boxTextPosition = {8, (int)screenBounds.y - 14 - 8};
+    const vec2i boxTextPosition = {8, (int)screenBounds.y - FONT_SIZE - 8};
     drawASCIIText(pd, counterMessage, boxTextPosition);
 
     // Actions
@@ -141,7 +142,8 @@ static int update(void *userdata) {
     char *timerMessage;
     pd->system->formatString(&timerMessage, "%i", timeRemaning);
 
-    const vec2i timerPosition = {8, 8};
+    const vec2i timerPosition = {(int)screenBounds.x - FONT_SIZE - 12,
+                                 (int)screenBounds.y - FONT_SIZE - 8};
     drawASCIIText(pd, timerMessage, timerPosition);
 
     cycleFrames(&frame, &frameUpdated);
