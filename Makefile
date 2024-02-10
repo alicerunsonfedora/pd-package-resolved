@@ -67,7 +67,13 @@ include $(SDK)/C_API/buildsupport/common.mk
 # Unit tests.
 test: test/test.c test/munit/munit.h test/munit/munit.c
 	$(TEST_CC) -o test/test_app -std=c11 -Icharolette -Itest/munit $(TESTS) $(TESTS_DEPENDENTS) $(TEST_CC_FLAGS)
+	
+.PHONY: test
 
+# The real deal. Because overwriting all is hard.
+real_all: all test
+
+# Override clean to add tests
 clean:
 	$(MAKE) -f $(SDK)/C_API/buildsupport/common.mk $@
 	rm -rf test/test_app

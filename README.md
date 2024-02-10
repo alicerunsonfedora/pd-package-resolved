@@ -31,10 +31,11 @@ create the PDX file and open the game in the Playdate Simulator.
 
 > **Tip: Get Playdate autocompletions**  
 > To get autocompletions and type information for the Playdate C APIs, you
-> can create a symbolic link to the Playdate SDK as `.playdatec`:
+> can use the `bear` tool to create a compile_commands.json file for
+> relevant APIs:
 >
 >     ```
->     ln -s /path/to/PlaydateSDK/C_API/ .playdatec
+>     bear -- make real_all
 >     ```
 
 ### Command line 
@@ -43,7 +44,7 @@ Start by cloning this repository via `git clone`, then run the following
 commands in the terminal for Make:
 
 ```
-make
+make real_all
 ```
 
 More information can be found on [Playdate's documentation to build via the command line][pdbuild].
