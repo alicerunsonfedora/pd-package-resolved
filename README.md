@@ -23,6 +23,9 @@ floors, or you'll get really injured!
 [nova-ext]: nova://extension/?id=com.panic.Playdate&name=Playdate
 [icarus-ext]: nova://extension/?id=panic.Icarus&name=Icarus
 
+**Optional Tools**  
+- Just (https://just.systems)
+
 ### Nova
 
 Start by cloning this repository via `git clone`, then open the project in
@@ -37,6 +40,8 @@ create the PDX file and open the game in the Playdate Simulator.
 >     ```
 >     bear -- make real_all
 >     ```
+>
+> You can also call on the `completions` recipe in the Justfile.
 
 ### Command line 
 
