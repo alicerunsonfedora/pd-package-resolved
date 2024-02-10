@@ -10,9 +10,8 @@
     },
     "run" : {
       "enabled" : true,
-      "script" : "#!\/bin\/sh\n\n.\/test\/test_app"
+      "script" : "#!\/bin\/sh\n\njust test"
     }
   },
-  "buildBeforeRunning" : true,
   "openLogOnRun" : "finish"
 }

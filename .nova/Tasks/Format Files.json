@@ -2,7 +2,7 @@
   "actions" : {
     "run" : {
       "enabled" : true,
-      "script" : "#!\/bin\/sh\nfind charolette -name '*.[ch]' | xargs \\\n\tclang-format --style='file:.clang-format' -i\nfind src -name '*.[ch]' | xargs \\\n\tclang-format --style='file:.clang-format' -i\nfind test -name '*.[ch]' | xargs \\\n\tclang-format --style='file:.clang-format' -i"
+      "script" : "#!\/bin\/sh\njust fmt"
     }
   }
 }
