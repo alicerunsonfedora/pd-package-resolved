@@ -84,3 +84,7 @@ test/test_app
 
 ### Neovim ###
 .cache/
+
+### Licensed Files ###
+
+Source/Fonts/Salmon-*.fnt

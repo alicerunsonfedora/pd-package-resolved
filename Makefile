@@ -45,7 +45,12 @@ KDL_SOURCES = ckdl/src/bigint.c \
 	ckdl/src/utf8.c
 
 # List C source files here
-SRC = src/main.c src/images.c src/gameloop.c src/text.c $(CHAROLETTE_SRC) $(KDL_SOURCES)
+SRC = src/main.c \
+	src/images.c \
+	src/gameloop.c \
+	src/text.c \
+	src/fonts.c \
+	$(CHAROLETTE_SRC) $(KDL_SOURCES)
 
 # List test source files here
 TESTS = test/test.c

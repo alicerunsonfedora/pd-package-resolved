@@ -1,4 +1,15 @@
 {
+  "actions" : {
+    "build" : {
+      "preActions" : [
+        {
+          "action" : "run",
+          "taskName" : "Format Files",
+          "type" : "runTask"
+        }
+      ]
+    }
+  },
   "extension" : {
     "identifier" : "com.panic.Playdate",
     "name" : "Playdate"

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "boxes.h"
+#include "fonts.h"
 #include "gameloop.h"
 #include "images.h"
 #include "movement.h"
@@ -10,14 +11,14 @@
 #include "text.h"
 #include "vector.h"
 
-#include "kdl/kdl.h"
 #include "kdl/common.h"
+#include "kdl/kdl.h"
 
 static int update(void *userdata);
 
 // MARK: Font Setup
-const char *fontpath = "/System/Fonts/Asheville-Sans-14-Bold.pft";
 LCDFont *font = NULL;
+int fontSize;
 
 // clang-format off
 // For Windows DLL support
@@ -30,8 +31,9 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
     // clang-format on
     if (event == kEventInit) {
         const char *err;
-        font = pd->graphics->loadFont(fontpath, &err);
-
+        fontset styled = styledFont(BOLD, pd);
+        font = styled.font;
+        fontSize = styled.size;
         if (font == NULL) {
             pd->system->error("Failed to load system font! %s", err);
         }
@@ -48,7 +50,6 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
 #define CHARLIE_HEIGHT 64
 #define BOXES_COUNT 6
 #define X_INSET 32
-#define FONT_SIZE 14
 
 const inset walls = {0, X_INSET, X_INSET, 0};
 
@@ -135,7 +136,7 @@ static int update(void *userdata) {
     if (boxesCollected > currentBoxesCollectedInFrame)
         pd->system->formatString(&counterMessage, "Boxes collected: %i", boxesCollected);
 
-    const vec2i boxTextPosition = {8, (int)screenBounds.y - FONT_SIZE - 8};
+    const vec2i boxTextPosition = {8, (int)screenBounds.y - fontSize - 8};
     drawASCIIText(pd, counterMessage, boxTextPosition);
 
     // Actions
@@ -145,8 +146,8 @@ static int update(void *userdata) {
     char *timerMessage;
     pd->system->formatString(&timerMessage, "%i", timeRemaning);
 
-    const vec2i timerPosition = {(int)screenBounds.x - FONT_SIZE - 12,
-                                 (int)screenBounds.y - FONT_SIZE - 8};
+    const vec2i timerPosition = {(int)screenBounds.x - fontSize - 12,
+                                 (int)screenBounds.y - fontSize - 8};
     drawASCIIText(pd, timerMessage, timerPosition);
 
     cycleFrames(&frame, &frameUpdated);
