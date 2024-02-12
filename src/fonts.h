@@ -4,21 +4,36 @@
 #include "pd_api.h"
 #include <stdlib.h>
 
-/// An enum representing the various font styles used in the game.
+/**
+ * An enumeration representing the different font styles the game can offer.
+ */
 typedef enum fstyle { BOLD } fstyle;
 
-/// A struct that contains information about a styled font.
+/**
+ * A structure that contains information about a font.
+ */
 typedef struct fontset {
-    /// The LCD font to be rendered to the Playdate's screen.
+    /**
+     * The Playdate LCD font that can be rendered to the screen.
+     *
+     * Typically, this is used with `pd->graphics->loadFont` to load
+     * the font as the current one.
+     */
     LCDFont *font;
 
-    /// The size of the font in pixels.
+    /**
+     * The height of the font in pixels.
+     */
     int size;
 } fontset;
 
-/// Retrieves a styled font set based on a specified style.
-/// - Parameter style: The style to get the font set of.
-/// - Parameter pd:  The Playdate API object to retrieve the fonts with.
+/**
+ * Retrieves a font set based on specified style parameters.
+ *
+ * @param style     The font style to get the font set of.
+ * @param pd        The Playdate API object used to retrieve fonts.
+ * @return          The font set for the specified style.
+ */
 fontset styledFont(fstyle style, PlaydateAPI *pd);
 
 #endif
