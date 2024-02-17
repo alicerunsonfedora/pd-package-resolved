@@ -7,6 +7,7 @@
 #include "gameloop.h"
 #include "images.h"
 #include "movement.h"
+#include "palette.h"
 #include "pd_api.h"
 #include "text.h"
 #include "vector.h"
@@ -49,9 +50,11 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
 #define CHARLIE_WIDTH 32
 #define CHARLIE_HEIGHT 64
 #define BOXES_COUNT 6
+#define PALETTE_COUNT 2
 #define X_INSET 32
 
-const inset walls = {0, X_INSET, X_INSET, 0};
+const inset walls = {CHARLIE_HEIGHT + 8, X_INSET, X_INSET, 32};
+const PDRect playerCollider = {0, 48, CHARLIE_WIDTH, 16};
 
 int frame = 0;
 int boxframe = 0;
@@ -68,6 +71,10 @@ LCDSprite *sprite;
 
 LCDBitmap *boxOnFrame;
 LCDBitmap *boxOffFrame;
+
+LCDBitmap *paletteImage;
+
+palette palettes[PALETTE_COUNT];
 
 vec2f boxes[BOXES_COUNT];
 int boxesCollected = 0;
@@ -96,7 +103,17 @@ static int update(void *userdata) {
 
         spritePosition.x = screenBounds.x / 2;
         pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
+        pd->sprite->setCollisionsEnabled(sprite, 1);
+        pd->sprite->setCollideRect(sprite, playerCollider);
         pd->sprite->updateAndDrawSprites();
+
+        // Palette setup
+        paletteImage = loadBitmap("Images/palette", pd);
+        if (paletteImage == NULL) {
+            pd->system->error("Couldn't load palette image.");
+            return 0;
+        }
+        fillPalettes(palettes, 2, screenBounds, walls, paletteImage, pd);
 
         // Box setup
         ret = loadBoxTable(pd, &boxTable, &boxOnFrame, &boxOffFrame);
@@ -117,6 +134,16 @@ static int update(void *userdata) {
 
     // Draw to screen
     updatePlayer(pd, &sprite, &table, &spriteImage, spritePosition, frame);
+    for (int i = 0; i < PALETTE_COUNT; i++) {
+        palette current = palettes[i];
+        pd->sprite->setImage(current.sprite, paletteImage, kBitmapUnflipped);
+        pd->sprite->moveTo(current.sprite, current.position.x, current.position.y);
+        pd->sprite->markDirty(current.sprite);
+        
+        // TODO: Add collision detection code here!
+    }
+
+    pd->sprite->updateAndDrawSprites();
 
     // Boxes
     int currentBoxesCollectedInFrame = boxesCollected;

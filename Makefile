@@ -50,6 +50,7 @@ SRC = src/main.c \
 	src/gameloop.c \
 	src/text.c \
 	src/fonts.c \
+	src/palette.c \
 	$(CHAROLETTE_SRC) $(KDL_SOURCES)
 
 # List test source files here

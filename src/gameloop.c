@@ -76,5 +76,4 @@ void updatePlayer(PlaydateAPI *pd, LCDSprite **sprite, LCDBitmapTable **table,
     pd->sprite->setImage(*sprite, *image, kBitmapUnflipped);
     pd->sprite->moveTo(*sprite, position.x, position.y);
     pd->sprite->markDirty(*sprite);
-    pd->sprite->updateAndDrawSprites();
 }
