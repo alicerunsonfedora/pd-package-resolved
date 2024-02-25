@@ -62,7 +62,7 @@ TESTS = test/test.c
 TESTS_DEPENDENTS = test/munit/munit.c $(CHAROLETTE_SRC)
 
 # List all user directories here
-UINCDIR = charolette ckdl/include
+UINCDIR = charolette ckdl/include include
 
 # List user asm files
 UASRC = 
