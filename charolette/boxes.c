@@ -1,16 +1,18 @@
 #include "boxes.h"
+#include "screen.h"
 #include "vector.h"
 
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-void fillBoxes(vec2f boxes[], int quantity, vec2f bounds, inset insets) {
-    float step = bounds.y / quantity;
+void fillBoxes(vec2f boxes[], int quantity, ScreenData screen) {
+    float step = screen.bounds.y / quantity;
     for (int i = 0; i < quantity; i++) {
-        float xpos = (float)rand() / (float)(RAND_MAX / (bounds.x - insets.right));
-        if (xpos < insets.left)
-            xpos = insets.left;
+        float xpos = (float)rand() /
+                     (float)(RAND_MAX / (screen.bounds.x - screen.edgeInsets.right));
+        if (xpos < screen.edgeInsets.left)
+            xpos = screen.edgeInsets.left;
         float ypos = step * (float)i;
         vec2f vector = {xpos, ypos};
         boxes[i] = vector;

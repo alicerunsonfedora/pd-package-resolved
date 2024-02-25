@@ -9,6 +9,7 @@
 #include "boxes.h"
 #include "movement.h"
 #include "munit.h"
+#include "screen.h"
 #include "vector.h"
 
 #include <math.h>
@@ -74,7 +75,8 @@ static MunitResult testVec2fSub(const MunitParameter params[], void *data) {
 static MunitResult testBoxFill(const MunitParameter params[], void *data) {
     vec2f boxes[3] = {0};
     inset insets = {0, 0, 0, 0};
-    fillBoxes(boxes, 3, SCREEN_BOUNDS, insets);
+    ScreenData screen = {SCREEN_BOUNDS, insets};
+    fillBoxes(boxes, 3, screen);
 
     for (int i = 0; i < 3; i++) {
         munit_assert_float(boxes[i].x, <=, 400.0);
@@ -87,7 +89,8 @@ static MunitResult testBoxFill(const MunitParameter params[], void *data) {
 static MunitResult testBoxFillWithInsets(const MunitParameter params[], void *data) {
     vec2f boxes[3] = {0};
     inset insets = {0, 32, 32, 0};
-    fillBoxes(boxes, 3, SCREEN_BOUNDS, insets);
+    ScreenData screen = {SCREEN_BOUNDS, insets};
+    fillBoxes(boxes, 3, screen);
 
     for (int i = 0; i < 3; i++) {
         munit_assert_float(boxes[i].x, <=, 368.0);

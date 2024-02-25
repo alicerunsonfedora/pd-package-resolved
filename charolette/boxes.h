@@ -9,10 +9,10 @@
  *
  * @param boxes     The array of boxes to fill.
  * @param quantity  The number of boxes to fill in the array.
- * @param bounds    The maximum boundary for a given position.
- * @param insets    The insets from the screen edges by which boxes cannot exist in.
+ * @param screen    Information about the current Playdate screen, such as the dimensions
+ *                  and edge insets.
  */
-void fillBoxes(vec2f boxes[], int quantity, vec2f bounds, inset insets);
+void fillBoxes(vec2f boxes[], int quantity, ScreenData screen);
 
 /**
  * Shifts a box towards the top of the screen, resetting its position if it reaches a

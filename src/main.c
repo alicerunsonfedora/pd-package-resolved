@@ -110,7 +110,7 @@ static int setup(PlaydateAPI *pd) {
     if (ret != 0)
         return 0;
 
-    fillBoxes(boxes, 6, screen.bounds, screen.edgeInsets);
+    fillBoxes(boxes, 6, screen);
     pd->system->resetElapsedTime();
     return 1;
 }
