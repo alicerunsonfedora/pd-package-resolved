@@ -76,6 +76,7 @@ palette palettes[PALETTE_COUNT];
 vec2f boxes[BOXES_COUNT];
 int boxesCollected = 0;
 char *counterMessage;
+char *timerMessage;
 
 int timeRemaning = 60;
 
@@ -143,7 +144,7 @@ static int update(void *userdata) {
     pd->sprite->updateAndDrawSprites();
 
     // Boxes
-    int currentBoxesCollectedInFrame = boxesCollected;
+    const int currentBoxesCollectedInFrame = boxesCollected;
     boxframe = (frame > 2) ? 1 : 0;
     for (int i = 0; i < BOXES_COUNT; i++) {
         drawBox(i, boxes, boxframe, boxOnFrame, boxOffFrame, pd);
@@ -157,25 +158,27 @@ static int update(void *userdata) {
         }
     }
 
-    if (boxesCollected > currentBoxesCollectedInFrame)
+    if (boxesCollected > currentBoxesCollectedInFrame) {
         pd->system->formatString(&counterMessage, "Boxes collected: %i", boxesCollected);
+    }
 
     const vec2i boxTextPosition = {8, (int)screenBounds.y - fontSize - 8};
     drawASCIIText(pd, counterMessage, boxTextPosition);
 
     // Actions
-    int timeSinceReset = (int)pd->system->getElapsedTime();
+    const int timeSinceReset = (int)pd->system->getElapsedTime();
+    const int currentTime = timeRemaning;
     timeRemaning = 60 - timeSinceReset;
 
-    char *timerMessage;
-    pd->system->formatString(&timerMessage, "%i", timeRemaning);
+    if (timeRemaning < currentTime || timerMessage == NULL)
+        pd->system->formatString(&timerMessage, "%i", timeRemaning);
 
     const vec2i timerPosition = {(int)screenBounds.x - fontSize - 12,
                                  (int)screenBounds.y - fontSize - 8};
     drawASCIIText(pd, timerMessage, timerPosition);
 
     cycleFrames(&frame, &frameUpdated);
-    float crankPosition = pd->system->getCrankAngle();
+    const float crankPosition = pd->system->getCrankAngle();
     if (!pd->system->isCrankDocked())
         currentPlayer.position =
             getTranslatedMovement(currentPlayer.position, crankPosition, screenBounds);
