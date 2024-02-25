@@ -3,13 +3,15 @@
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
 
-// Translates a movement vector according to the crank's position angle.
-// - Parameter original: The original movement vector to translate.
-// - Parameter crankAngle: The current angle the crank is at, if the crank is
-//   engaged.
-// - Parameter bounds: The bounds of the screen by which the position cannot
-//   translated past.
-// - Returns: A translated vector accounting for the crank's angle.
+/**
+ * Translates a movement vector according to the crank's position angle.
+ *
+ * @param original      The original movement vector to translate.
+ * @param crankAngle    The current angle the crank is at, if the crank is engaged.
+ * @param bounds        The bounds of the screen by which the position cannot translate
+ *                      past.
+ * @return              A translated vector accounting for the crank's angle.
+ */
 vec2f get_translated_movement(vec2f original, float crankAngle, vec2f bounds);
 
 #endif
