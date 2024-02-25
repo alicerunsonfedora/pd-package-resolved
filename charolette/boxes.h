@@ -38,7 +38,7 @@ typedef struct inset {
  * @param bounds    The maximum boundary for a given position.
  * @param insets    The insets from the screen edges by which boxes cannot exist in.
  */
-void fill_boxes(vec2f boxes[], int quantity, vec2f bounds, inset insets);
+void fillBoxes(vec2f boxes[], int quantity, vec2f bounds, inset insets);
 
 /**
  * Shifts a box towards the top of the screen, resetting its position if it reaches a
@@ -53,7 +53,7 @@ void fill_boxes(vec2f boxes[], int quantity, vec2f bounds, inset insets);
  * @param insets    The screen edge insets.
  * @return          The new position of the box.
  */
-vec2f shift_box(vec2f box, float threshold, int index, vec2f bounds, int total,
-                inset insets);
+vec2f shiftBox(vec2f box, float threshold, int index, vec2f bounds, int total,
+               inset insets);
 
 #endif

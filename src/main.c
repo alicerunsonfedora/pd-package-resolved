@@ -116,7 +116,7 @@ static int setup(PlaydateAPI *pd) {
     if (ret != 0)
         return 0;
 
-    fill_boxes(boxes, 6, screenBounds, walls);
+    fillBoxes(boxes, 6, screenBounds, walls);
     counterMessage = "Boxes collected: 0";
 
     pd->system->resetElapsedTime();
@@ -155,7 +155,7 @@ static int update(void *userdata) {
     for (int i = 0; i < BOXES_COUNT; i++) {
         drawBox(i, boxes, boxframe, boxOnFrame, boxOffFrame, pd);
         boxes[i] =
-            shift_box(boxes[i], -CHARLIE_HEIGHT, i, screenBounds, BOXES_COUNT, walls);
+            shiftBox(boxes[i], -CHARLIE_HEIGHT, i, screenBounds, BOXES_COUNT, walls);
 
         float distanceToPlayer = vec2fDistance(spritePosition, boxes[i]);
         if (distanceToPlayer < 32) {

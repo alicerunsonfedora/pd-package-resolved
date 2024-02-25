@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void fill_boxes(vec2f boxes[], int quantity, vec2f bounds, inset insets) {
+void fillBoxes(vec2f boxes[], int quantity, vec2f bounds, inset insets) {
     float step = bounds.y / quantity;
     for (int i = 0; i < quantity; i++) {
         float xpos = (float)rand() / (float)(RAND_MAX / (bounds.x - insets.right));
@@ -17,8 +17,8 @@ void fill_boxes(vec2f boxes[], int quantity, vec2f bounds, inset insets) {
     }
 }
 
-vec2f shift_box(vec2f box, float threshold, int index, vec2f bounds, int total,
-                inset insets) {
+vec2f shiftBox(vec2f box, float threshold, int index, vec2f bounds, int total,
+               inset insets) {
     vec2f transformed = {box.x, box.y};
     float step = bounds.y / total;
     transformed.y--;

@@ -74,7 +74,7 @@ static MunitResult test_vec2f_sub(const MunitParameter params[], void *data) {
 static MunitResult test_box_fill(const MunitParameter params[], void *data) {
     vec2f boxes[3] = {0};
     inset insets = {0, 0, 0, 0};
-    fill_boxes(boxes, 3, SCREEN_BOUNDS, insets);
+    fillBoxes(boxes, 3, SCREEN_BOUNDS, insets);
 
     for (int i = 0; i < 3; i++) {
         munit_assert_float(boxes[i].x, <=, 400.0);
@@ -87,7 +87,7 @@ static MunitResult test_box_fill(const MunitParameter params[], void *data) {
 static MunitResult test_box_fill_with_insets(const MunitParameter params[], void *data) {
     vec2f boxes[3] = {0};
     inset insets = {0, 32, 32, 0};
-    fill_boxes(boxes, 3, SCREEN_BOUNDS, insets);
+    fillBoxes(boxes, 3, SCREEN_BOUNDS, insets);
 
     for (int i = 0; i < 3; i++) {
         munit_assert_float(boxes[i].x, <=, 368.0);
@@ -100,11 +100,11 @@ static MunitResult test_box_fill_with_insets(const MunitParameter params[], void
 static MunitResult test_box_shift(const MunitParameter params[], void *data) {
     inset zero = {0, 0, 0, 0};
     vec2f simpleShift = {300.0f, 40.0f};
-    simpleShift = shift_box(simpleShift, 32.0f, 0, SCREEN_BOUNDS, 1, zero);
+    simpleShift = shiftBox(simpleShift, 32.0f, 0, SCREEN_BOUNDS, 1, zero);
     munit_assert_float(simpleShift.y, ==, 39.0f);
 
     vec2f newAssignment = {100.0f, -46.0f};
-    simpleShift = shift_box(simpleShift, 32.0f, 0, SCREEN_BOUNDS, 1, zero);
+    simpleShift = shiftBox(simpleShift, 32.0f, 0, SCREEN_BOUNDS, 1, zero);
     munit_assert_float(simpleShift.y, >, 0.0f);
 
     return MUNIT_OK;
@@ -114,11 +114,11 @@ static MunitResult test_box_shift_with_insets(const MunitParameter params[], voi
     inset insets = {0, 32, 32, 0};
 
     vec2f simpleShift = {300.0f, 40.0f};
-    simpleShift = shift_box(simpleShift, 32.0f, 0, SCREEN_BOUNDS, 1, insets);
+    simpleShift = shiftBox(simpleShift, 32.0f, 0, SCREEN_BOUNDS, 1, insets);
     munit_assert_float(simpleShift.y, ==, 39.0f);
 
     vec2f newAssignment = {100.0f, -46.0f};
-    simpleShift = shift_box(simpleShift, 32.0f, 0, SCREEN_BOUNDS, 1, insets);
+    simpleShift = shiftBox(simpleShift, 32.0f, 0, SCREEN_BOUNDS, 1, insets);
     munit_assert_float(simpleShift.y, >, 0.0f);
     munit_assert_float(simpleShift.x, >=, 32.0);
     munit_assert_float(simpleShift.x, <=, 368.0);
