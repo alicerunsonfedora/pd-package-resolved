@@ -139,7 +139,7 @@ static int update(void *userdata) {
         pd->sprite->setImage(current.sprite, paletteImage, kBitmapUnflipped);
         pd->sprite->moveTo(current.sprite, current.position.x, current.position.y);
         pd->sprite->markDirty(current.sprite);
-        
+
         // TODO: Add collision detection code here!
     }
 
