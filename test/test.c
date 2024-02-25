@@ -1,9 +1,9 @@
 #include "munit/munit.h"
 #define MUNIT_ENABLE_ASSERT_ALIASES
 
-#define simple_test(name, method)                                                        \
+#define simpleTest(name, method)                                                        \
     { (char *)name, method, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
-#define test_end                                                                         \
+#define testEnd                                                                         \
     { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 
 #include "boxes.h"
@@ -18,7 +18,7 @@
 
 const vec2f SCREEN_BOUNDS = {400.0f, 240.f};
 
-bool isapprox(float a, float b, float prec) {
+bool isApprox(float a, float b, float prec) {
     float val = fabsf(a - b);
     printf("\nApproxing %f and %f (diff: %f)\n", a, b, val);
     return val <= prec;
@@ -26,22 +26,22 @@ bool isapprox(float a, float b, float prec) {
 
 // MARK: - Vector Tests
 
-static MunitResult test_vector(const MunitParameter params[], void *data) {
+static MunitResult testVector(const MunitParameter params[], void *data) {
     vec2i vector = {0, 0};
     munit_assert(vector.x == 0);
     munit_assert(vector.y == 0);
     return MUNIT_OK;
 }
 
-static MunitResult test_movement(const MunitParameter params[], void *data) {
+static MunitResult testMovement(const MunitParameter params[], void *data) {
     vec2f originalPosition = {15.0f, 0.0f};
     vec2f translated = getTranslatedMovement(originalPosition, 15.69, SCREEN_BOUNDS);
 
-    munit_assert_true(isapprox(translated.x, 15.69, 0.001));
+    munit_assert_true(isApprox(translated.x, 15.69, 0.001));
     return MUNIT_OK;
 }
 
-static MunitResult test_vec2f_distance(const MunitParameter params[], void *data) {
+static MunitResult testVec2fDistance(const MunitParameter params[], void *data) {
     vec2f one = {1, 0};
     vec2f zero = {0, 0};
     float distance = vec2fDistance(one, zero);
@@ -49,11 +49,11 @@ static MunitResult test_vec2f_distance(const MunitParameter params[], void *data
 
     vec2f two = {2, 2};
     float farther = vec2fDistance(two, zero);
-    munit_assert_true(isapprox(farther, sqrtf(8), 0.001));
+    munit_assert_true(isApprox(farther, sqrtf(8), 0.001));
     return MUNIT_OK;
 }
 
-static MunitResult test_vec2f_add(const MunitParameter params[], void *data) {
+static MunitResult testVec2fAdd(const MunitParameter params[], void *data) {
     vec2f one = {1, 1};
     vec2f added = vec2fAdd(one, one);
     munit_assert_float(added.x, ==, 2.0);
@@ -61,7 +61,7 @@ static MunitResult test_vec2f_add(const MunitParameter params[], void *data) {
     return MUNIT_OK;
 }
 
-static MunitResult test_vec2f_sub(const MunitParameter params[], void *data) {
+static MunitResult testVec2fSub(const MunitParameter params[], void *data) {
     vec2f two = {2, 2};
     vec2f subbed = vec2fSub(two, two);
     munit_assert_float(subbed.x, ==, 0.0);
@@ -71,7 +71,7 @@ static MunitResult test_vec2f_sub(const MunitParameter params[], void *data) {
 
 // MARK: - Box Tests
 
-static MunitResult test_box_fill(const MunitParameter params[], void *data) {
+static MunitResult testBoxFill(const MunitParameter params[], void *data) {
     vec2f boxes[3] = {0};
     inset insets = {0, 0, 0, 0};
     fillBoxes(boxes, 3, SCREEN_BOUNDS, insets);
@@ -84,7 +84,7 @@ static MunitResult test_box_fill(const MunitParameter params[], void *data) {
     return MUNIT_OK;
 }
 
-static MunitResult test_box_fill_with_insets(const MunitParameter params[], void *data) {
+static MunitResult testBoxFillWithInsets(const MunitParameter params[], void *data) {
     vec2f boxes[3] = {0};
     inset insets = {0, 32, 32, 0};
     fillBoxes(boxes, 3, SCREEN_BOUNDS, insets);
@@ -97,7 +97,7 @@ static MunitResult test_box_fill_with_insets(const MunitParameter params[], void
     return MUNIT_OK;
 }
 
-static MunitResult test_box_shift(const MunitParameter params[], void *data) {
+static MunitResult testBoxShift(const MunitParameter params[], void *data) {
     inset zero = {0, 0, 0, 0};
     vec2f simpleShift = {300.0f, 40.0f};
     simpleShift = shiftBox(simpleShift, 32.0f, 0, SCREEN_BOUNDS, 1, zero);
@@ -110,7 +110,7 @@ static MunitResult test_box_shift(const MunitParameter params[], void *data) {
     return MUNIT_OK;
 }
 
-static MunitResult test_box_shift_with_insets(const MunitParameter params[], void *data) {
+static MunitResult testBoxShiftWithInsets(const MunitParameter params[], void *data) {
     inset insets = {0, 32, 32, 0};
 
     vec2f simpleShift = {300.0f, 40.0f};
@@ -128,23 +128,23 @@ static MunitResult test_box_shift_with_insets(const MunitParameter params[], voi
 
 static MunitTest test_suite_tests[] = {
     {
-        (char *)"/charolette/vector_init", test_vector,
+        (char *)"/charolette/vector_init", testVector,
         NULL, // setup
         NULL, // teardown
         MUNIT_TEST_OPTION_NONE,
         NULL // params
     },
-    simple_test("charolette/get_translated_movement", test_movement),
-    simple_test("charolette/vec2f_distance", test_vec2f_distance),
-    simple_test("charolette/vec2f_add", test_vec2f_add),
-    simple_test("charolette/vec2f_sub", test_vec2f_sub),
-    simple_test("charolette/fill", test_box_fill),
-    simple_test("charolette/fill_with_insets", test_box_fill_with_insets),
-    simple_test("charolette/shift", test_box_shift),
-    simple_test("charolette/shift_with_insets", test_box_shift_with_insets),
+    simpleTest("charolette/get_translated_movement", testMovement),
+    simpleTest("charolette/vec2f_distance", testVec2fDistance),
+    simpleTest("charolette/vec2f_add", testVec2fAdd),
+    simpleTest("charolette/vec2f_sub", testVec2fSub),
+    simpleTest("charolette/fill", testBoxFill),
+    simpleTest("charolette/fill_with_insets", testBoxFillWithInsets),
+    simpleTest("charolette/shift", testBoxShift),
+    simpleTest("charolette/shift_with_insets", testBoxShiftWithInsets),
 
     // Null test to end the array
-    test_end};
+    testEnd};
 
 static const MunitSuite test_suite = {(char *)"/tests", test_suite_tests, NULL,
                                       MUNIT_SUITE_OPTION_NONE};
