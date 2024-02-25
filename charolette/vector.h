@@ -9,7 +9,7 @@ typedef struct vec2i {
      * The vector's position on the X axis.
      */
     int x;
-    
+
     /**
      * The vector's position on the Y axis.
      */
@@ -24,7 +24,7 @@ typedef struct vec2f {
      * The vector's position on the X axis.
      */
     float x;
-    
+
     /**
      * The vector's position on the Y axis.
      */

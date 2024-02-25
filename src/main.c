@@ -82,51 +82,55 @@ char *counterMessage;
 
 int timeRemaning = 60;
 
+static int setup(PlaydateAPI *pd) {
+    screenBounds.x = (float)pd->display->getWidth();
+    screenBounds.y = (float)pd->display->getHeight();
+
+    pd->graphics->clear(kColorWhite);
+    pd->graphics->setFont(font);
+
+    int ret = loadPlayerTable(pd, &table, &spriteImage);
+    if (ret != 0)
+        return 0;
+
+    if (spriteImage != NULL && sprite == NULL) {
+        sprite = imagedSprite(pd, spriteSize, spriteImage);
+    }
+
+    spritePosition.x = screenBounds.x / 2;
+    pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
+    pd->sprite->setCollisionsEnabled(sprite, 1);
+    pd->sprite->setCollideRect(sprite, playerCollider);
+    pd->sprite->updateAndDrawSprites();
+
+    // Palette setup
+    paletteImage = loadBitmap("Images/palette", pd);
+    if (paletteImage == NULL) {
+        pd->system->error("Couldn't load palette image.");
+        return 0;
+    }
+    fillPalettes(palettes, 2, screenBounds, walls, paletteImage, pd);
+
+    // Box setup
+    ret = loadBoxTable(pd, &boxTable, &boxOnFrame, &boxOffFrame);
+    if (ret != 0)
+        return 0;
+
+    fill_boxes(boxes, 6, screenBounds, walls);
+    counterMessage = "Boxes collected: 0";
+
+    pd->system->resetElapsedTime();
+    return 1;
+}
+
 static int update(void *userdata) {
     PlaydateAPI *pd = userdata;
 
     // Initial setup.
     if (!initializedGameLoop) {
-        screenBounds.x = (float)pd->display->getWidth();
-        screenBounds.y = (float)pd->display->getHeight();
-
-        pd->graphics->clear(kColorWhite);
-        pd->graphics->setFont(font);
-
-        int ret = loadPlayerTable(pd, &table, &spriteImage);
-        if (ret != 0)
-            return 0;
-
-        if (spriteImage != NULL && sprite == NULL) {
-            sprite = imagedSprite(pd, spriteSize, spriteImage);
-        }
-
-        spritePosition.x = screenBounds.x / 2;
-        pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
-        pd->sprite->setCollisionsEnabled(sprite, 1);
-        pd->sprite->setCollideRect(sprite, playerCollider);
-        pd->sprite->updateAndDrawSprites();
-
-        // Palette setup
-        paletteImage = loadBitmap("Images/palette", pd);
-        if (paletteImage == NULL) {
-            pd->system->error("Couldn't load palette image.");
-            return 0;
-        }
-        fillPalettes(palettes, 2, screenBounds, walls, paletteImage, pd);
-
-        // Box setup
-        ret = loadBoxTable(pd, &boxTable, &boxOnFrame, &boxOffFrame);
-        if (ret != 0)
-            return 0;
-
-        fill_boxes(boxes, 6, screenBounds, walls);
-        counterMessage = "Boxes collected: 0";
-
-        pd->system->resetElapsedTime();
-
+        int drawForSetup = setup(pd);
         initializedGameLoop = true;
-        return 1;
+        return drawForSetup;
     }
 
     if (timeRemaning <= 0)

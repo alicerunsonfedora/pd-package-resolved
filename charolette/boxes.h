@@ -18,12 +18,12 @@ typedef struct inset {
      * The number of pixels or units away from the rectangle's left edge.
      */
     float left;
-    
+
     /**
      * The number of pixels or units away from the rectangle's right edge.
      */
     float right;
-    
+
     /**
      * The number of pixels or units away from the rectangle's bottom edge.
      */
