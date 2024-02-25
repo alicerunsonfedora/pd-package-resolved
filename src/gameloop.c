@@ -27,22 +27,6 @@ void drawBox(int index, vec2f boxes[], int boxframe, LCDBitmap *boxOnFrame,
     }
 }
 
-int loadPlayerTable(PlaydateAPI *pd, LCDBitmapTable **table, LCDBitmap **current) {
-    const char *spritesheet = "Images/charlie";
-    LCDBitmapTable *tableStruct = loadTable(spritesheet, pd);
-    if (table == NULL) {
-        pd->system->error("The table for path %s is missing.", spritesheet);
-        return 1;
-    }
-    *table = tableStruct;
-    *current = pd->graphics->getTableBitmap(tableStruct, 0);
-    if (current == NULL) {
-        pd->system->error("The frame for this table couldn't be loaded.");
-        return 1;
-    }
-    return 0;
-}
-
 int loadBoxTable(PlaydateAPI *pd, LCDBitmapTable **table, LCDBitmap **on,
                  LCDBitmap **off) {
     const char *boxsheet = "Images/box";

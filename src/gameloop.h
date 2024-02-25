@@ -24,18 +24,6 @@ void drawBox(int index, vec2f boxes[], int boxframe, LCDBitmap *boxOnFrame,
              LCDBitmap *boxOffFrame, PlaydateAPI *pd);
 
 /**
- * Loads the player image table into memory, setting the current sprite frame
- * in the process.
- *
- * @param pd              The Playdate API object that will retrieve the image table.
- * @param table           A reference to the image table to load the player images into.
- * @param current         A reference to the player's image to load the current frame
- *                        into.
- * @return                0, if the operation succeeds. 1 otherwise.
- */
-int loadPlayerTable(PlaydateAPI *pd, LCDBitmapTable **table, LCDBitmap **current);
-
-/**
  * Loads the box image table into memory, setting the active and inactive frames
  * in the process.
  *
