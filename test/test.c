@@ -44,18 +44,18 @@ static MunitResult test_movement(const MunitParameter params[], void *data) {
 static MunitResult test_vec2f_distance(const MunitParameter params[], void *data) {
     vec2f one = {1, 0};
     vec2f zero = {0, 0};
-    float distance = vec2f_distance(one, zero);
+    float distance = vec2fDistance(one, zero);
     munit_assert_float(distance, ==, 1.0);
 
     vec2f two = {2, 2};
-    float farther = vec2f_distance(two, zero);
+    float farther = vec2fDistance(two, zero);
     munit_assert_true(isapprox(farther, sqrtf(8), 0.001));
     return MUNIT_OK;
 }
 
 static MunitResult test_vec2f_add(const MunitParameter params[], void *data) {
     vec2f one = {1, 1};
-    vec2f added = vec2f_add(one, one);
+    vec2f added = vec2fAdd(one, one);
     munit_assert_float(added.x, ==, 2.0);
     munit_assert_float(added.y, ==, 2.0);
     return MUNIT_OK;
@@ -63,7 +63,7 @@ static MunitResult test_vec2f_add(const MunitParameter params[], void *data) {
 
 static MunitResult test_vec2f_sub(const MunitParameter params[], void *data) {
     vec2f two = {2, 2};
-    vec2f subbed = vec2f_sub(two, two);
+    vec2f subbed = vec2fSub(two, two);
     munit_assert_float(subbed.x, ==, 0.0);
     munit_assert_float(subbed.y, ==, 0.0);
     return MUNIT_OK;

@@ -157,7 +157,7 @@ static int update(void *userdata) {
         boxes[i] =
             shift_box(boxes[i], -CHARLIE_HEIGHT, i, screenBounds, BOXES_COUNT, walls);
 
-        float distanceToPlayer = vec2f_distance(spritePosition, boxes[i]);
+        float distanceToPlayer = vec2fDistance(spritePosition, boxes[i]);
         if (distanceToPlayer < 32) {
             boxes[i].x = -CHARLIE_HEIGHT;
             boxesCollected++;

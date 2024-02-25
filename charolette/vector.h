@@ -39,7 +39,7 @@ typedef struct vec2f {
  * @param b     The final point or vector.
  * @return      The distance between the two vectors.
  */
-float vec2f_distance(vec2f a, vec2f b);
+float vec2fDistance(vec2f a, vec2f b);
 
 /**
  * Adds two floating point vectors together by summing their individual components.
@@ -48,7 +48,7 @@ float vec2f_distance(vec2f a, vec2f b);
  * @param rhs   The right hand side to add to.
  * @return      A new vector with each component summed together.
  */
-vec2f vec2f_add(vec2f lhs, vec2f rhs);
+vec2f vec2fAdd(vec2f lhs, vec2f rhs);
 
 /**
  * Subtracts two floating point vectors together by subtracting their individual
@@ -58,6 +58,6 @@ vec2f vec2f_add(vec2f lhs, vec2f rhs);
  * @param rhs   The right hand side to subtract to.
  * @return      A new vector with each component subtracted.
  */
-vec2f vec2f_sub(vec2f lhs, vec2f rhs);
+vec2f vec2fSub(vec2f lhs, vec2f rhs);
 
 #endif
