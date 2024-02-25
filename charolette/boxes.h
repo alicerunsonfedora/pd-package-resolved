@@ -22,12 +22,11 @@ void fillBoxes(vec2f boxes[], int quantity, ScreenData screen);
  * @param threshold The threshold value for which the box must surpass to be
  *                  repositioned.
  * @param index     The index of the box in its array.
- * @param bounds    The screen's bounds represented as a vector.
+ * @param screen    Information about the current Playdate screen, such as the dimensions
+ *                  and edge insets.
  * @param total     The number of boxes that live in the array of this box.
- * @param insets    The screen edge insets.
  * @return          The new position of the box.
  */
-vec2f shiftBox(vec2f box, float threshold, int index, vec2f bounds, int total,
-               inset insets);
+vec2f shiftBox(vec2f box, float threshold, int index, ScreenData screen, int total);
 
 #endif

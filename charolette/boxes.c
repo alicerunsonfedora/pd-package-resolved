@@ -19,18 +19,18 @@ void fillBoxes(vec2f boxes[], int quantity, ScreenData screen) {
     }
 }
 
-vec2f shiftBox(vec2f box, float threshold, int index, vec2f bounds, int total,
-               inset insets) {
+vec2f shiftBox(vec2f box, float threshold, int index, ScreenData screen, int total) {
     vec2f transformed = {box.x, box.y};
-    float step = bounds.y / total;
+    float step = screen.bounds.y / total;
     transformed.y--;
 
     if (transformed.y >= threshold)
         return transformed;
 
-    transformed.x = (float)rand() / (float)(RAND_MAX / (bounds.x - insets.right));
-    if (transformed.x < insets.left)
-        transformed.x = insets.left;
+    transformed.x =
+        (float)rand() / (float)(RAND_MAX / (screen.bounds.x - screen.edgeInsets.right));
+    if (transformed.x < screen.edgeInsets.left)
+        transformed.x = screen.edgeInsets.left;
     transformed.y = ((float)index * step) + fabsf(threshold);
     return transformed;
 }

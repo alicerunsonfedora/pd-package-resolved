@@ -146,8 +146,7 @@ static int update(void *userdata) {
     boxframe = (frame > 2) ? 1 : 0;
     for (int i = 0; i < BOXES_COUNT; i++) {
         drawBox(i, boxes, boxframe, boxOnFrame, boxOffFrame, pd);
-        boxes[i] = shiftBox(boxes[i], -CHARLIE_HEIGHT, i, screen.bounds, BOXES_COUNT,
-                            screen.edgeInsets);
+        boxes[i] = shiftBox(boxes[i], -CHARLIE_HEIGHT, i, screen, BOXES_COUNT);
 
         float distanceToPlayer = vec2fDistance(currentPlayer.position, boxes[i]);
         if (distanceToPlayer < 32) {
