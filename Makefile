@@ -33,6 +33,7 @@ VPATH += src
 # Source files for the Charolette lib
 CHAROLETTE_SRC = charolette/movement.c \
 	charolette/boxes.c \
+	charolette/screen.c \
 	charolette/vector.c
 
 # Source files for the ckdl library
@@ -46,12 +47,12 @@ KDL_SOURCES = ckdl/src/bigint.c \
 
 # List C source files here
 SRC = src/main.c \
-	src/images.c \
-	src/gameloop.c \
-	src/text.c \
 	src/fonts.c \
+	src/gameloop.c \
+	src/images.c \
 	src/palette.c \
 	src/player.c \
+	src/text.c \
 	$(CHAROLETTE_SRC) $(KDL_SOURCES)
 
 # List test source files here

@@ -2,7 +2,7 @@
 #include "boxes.h"
 #include "images.h"
 #include "pd_api.h"
-#include "pd_api/pd_api_sprite.h"
+#include "screen.h"
 #include "vector.h"
 
 #include <math.h>
@@ -16,15 +16,17 @@ palette createPalette(vec2f position, LCDBitmap *image, PlaydateAPI *pd) {
     return generated;
 }
 
-void fillPalettes(palette palettes[], int quantity, vec2f bounds, inset insets,
-                  LCDBitmap *image, PlaydateAPI *pd) {
+void fillPalettes(palette palettes[], int quantity, ScreenData screen, LCDBitmap *image,
+                  PlaydateAPI *pd) {
     for (int i = 0; i < quantity; i++) {
-        float xpos = (float)rand() / (float)(RAND_MAX / (bounds.x - insets.right));
-        if (xpos < insets.left)
-            xpos = insets.left;
-        float ypos = (float)rand() / (float)(RAND_MAX / (bounds.y - insets.bottom));
-        if (xpos < insets.top)
-            xpos = insets.top;
+        float xpos = (float)rand() /
+                     (float)(RAND_MAX / (screen.bounds.x - screen.edgeInsets.right));
+        if (xpos < screen.edgeInsets.left)
+            xpos = screen.edgeInsets.left;
+        float ypos = (float)rand() /
+                     (float)(RAND_MAX / (screen.bounds.y - screen.edgeInsets.bottom));
+        if (xpos < screen.edgeInsets.top)
+            xpos = screen.edgeInsets.top;
         vec2f position = {xpos, ypos};
 
         palette current = createPalette(position, image, pd);

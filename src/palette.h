@@ -1,9 +1,9 @@
 #ifndef PALETTE_H
 #define PALETTE_H
 
-#include "boxes.h"
 #include "images.h"
 #include "pd_api.h"
+#include "screen.h"
 #include "vector.h"
 
 /**
@@ -39,14 +39,13 @@ palette createPalette(vec2f position, LCDBitmap *image, PlaydateAPI *pd);
  * @param palettes  The array of palettes to fill.
  * @param quantity  The number of palettes to fill in the array. Ideally, this should be
  *                  the size of the array.
- * @param bounds    A vector representing the bounds of the screen in width and height.
- * @param insets    The insets by which positions should sit inside of, relative to the
- *                  screen's edges.
+ * @param screen    Information about the screen, including the edge insets and
+ *                  dimensions.
  * @param image     The palette image object that will be rendered to the Playdate's
  *                  screen.
  * @param pd        The Playdate API object used to create the sprites.
  */
-void fillPalettes(palette palettes[], int quantity, vec2f bounds, inset insets,
-                  LCDBitmap *image, PlaydateAPI *pd);
+void fillPalettes(palette palettes[], int quantity, ScreenData screen, LCDBitmap *image,
+                  PlaydateAPI *pd);
 
 #endif

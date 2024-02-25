@@ -10,6 +10,7 @@
 #include "palette.h"
 #include "pd_api.h"
 #include "player.h"
+#include "screen.h"
 #include "text.h"
 #include "vector.h"
 
@@ -54,7 +55,7 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
 #define PALETTE_COUNT 2
 #define X_INSET 32
 
-const inset walls = {CHARLIE_HEIGHT + 8, X_INSET, X_INSET, 32};
+ScreenData screen = {{0.0f, 0.0f}, {CHARLIE_HEIGHT + 8, X_INSET, X_INSET, 32}};
 
 int frame = 0;
 int boxframe = 0;
@@ -62,9 +63,7 @@ bool frameUpdated = false;
 bool initializedGameLoop = false;
 
 player currentPlayer = {NULL, NULL, {0.0f, 24.0f}, {CHARLIE_WIDTH, CHARLIE_HEIGHT}};
-vec2f screenBounds = {0.0f, 0.0f};
 LCDBitmapTable *table;
-LCDBitmapTable *boxTable;
 
 LCDBitmap *boxOnFrame;
 LCDBitmap *boxOffFrame;
@@ -75,14 +74,14 @@ palette palettes[PALETTE_COUNT];
 
 vec2f boxes[BOXES_COUNT];
 int boxesCollected = 0;
-char *counterMessage;
+char *counterMessage = "Boxes collected: 0";
 char *timerMessage;
 
 int timeRemaning = 60;
 
 static int setup(PlaydateAPI *pd) {
-    screenBounds.x = (float)pd->display->getWidth();
-    screenBounds.y = (float)pd->display->getHeight();
+    screen.bounds.x = (float)pd->display->getWidth();
+    screen.bounds.y = (float)pd->display->getHeight();
 
     pd->graphics->clear(kColorWhite);
     pd->graphics->setFont(font);
@@ -93,7 +92,7 @@ static int setup(PlaydateAPI *pd) {
     if (currentPlayer.sprite == NULL)
         return 0;
 
-    currentPlayer.position.x = screenBounds.x / 2;
+    currentPlayer.position.x = screen.bounds.x / 2;
     movePlayer(currentPlayer, currentPlayer.position, pd);
     pd->sprite->updateAndDrawSprites();
 
@@ -103,16 +102,15 @@ static int setup(PlaydateAPI *pd) {
         pd->system->error("Couldn't load palette image.");
         return 0;
     }
-    fillPalettes(palettes, 2, screenBounds, walls, paletteImage, pd);
+    fillPalettes(palettes, PALETTE_COUNT, screen, paletteImage, pd);
 
     // Box setup
+    LCDBitmapTable *boxTable;
     int ret = loadBoxTable(pd, &boxTable, &boxOnFrame, &boxOffFrame);
     if (ret != 0)
         return 0;
 
-    fillBoxes(boxes, 6, screenBounds, walls);
-    counterMessage = "Boxes collected: 0";
-
+    fillBoxes(boxes, 6, screen.bounds, screen.edgeInsets);
     pd->system->resetElapsedTime();
     return 1;
 }
@@ -148,8 +146,8 @@ static int update(void *userdata) {
     boxframe = (frame > 2) ? 1 : 0;
     for (int i = 0; i < BOXES_COUNT; i++) {
         drawBox(i, boxes, boxframe, boxOnFrame, boxOffFrame, pd);
-        boxes[i] =
-            shiftBox(boxes[i], -CHARLIE_HEIGHT, i, screenBounds, BOXES_COUNT, walls);
+        boxes[i] = shiftBox(boxes[i], -CHARLIE_HEIGHT, i, screen.bounds, BOXES_COUNT,
+                            screen.edgeInsets);
 
         float distanceToPlayer = vec2fDistance(currentPlayer.position, boxes[i]);
         if (distanceToPlayer < 32) {
@@ -162,7 +160,7 @@ static int update(void *userdata) {
         pd->system->formatString(&counterMessage, "Boxes collected: %i", boxesCollected);
     }
 
-    const vec2i boxTextPosition = {8, (int)screenBounds.y - fontSize - 8};
+    const vec2i boxTextPosition = {8, (int)screen.bounds.y - fontSize - 8};
     drawASCIIText(pd, counterMessage, boxTextPosition);
 
     // Actions
@@ -173,14 +171,14 @@ static int update(void *userdata) {
     if (timeRemaning < currentTime || timerMessage == NULL)
         pd->system->formatString(&timerMessage, "%i", timeRemaning);
 
-    const vec2i timerPosition = {(int)screenBounds.x - fontSize - 12,
-                                 (int)screenBounds.y - fontSize - 8};
+    const vec2i timerPosition = {(int)screen.bounds.x - fontSize - 12,
+                                 (int)screen.bounds.y - fontSize - 8};
     drawASCIIText(pd, timerMessage, timerPosition);
 
     cycleFrames(&frame, &frameUpdated);
     const float crankPosition = pd->system->getCrankAngle();
     if (!pd->system->isCrankDocked())
         currentPlayer.position =
-            getTranslatedMovement(currentPlayer.position, crankPosition, screenBounds);
+            getTranslatedMovement(currentPlayer.position, crankPosition, screen.bounds);
     return 1; // Always update the display.
 }
