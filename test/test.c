@@ -1,9 +1,9 @@
 #include "munit/munit.h"
 #define MUNIT_ENABLE_ASSERT_ALIASES
 
-#define simpleTest(name, method)                                                        \
+#define simpleTest(name, method)                                                         \
     { (char *)name, method, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
-#define testEnd                                                                         \
+#define testEnd                                                                          \
     { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 
 #include "boxes.h"

@@ -9,6 +9,7 @@
 #include "movement.h"
 #include "palette.h"
 #include "pd_api.h"
+#include "player.h"
 #include "text.h"
 #include "vector.h"
 
@@ -60,14 +61,11 @@ int frame = 0;
 int boxframe = 0;
 bool frameUpdated = false;
 bool initializedGameLoop = false;
-vec2f spritePosition = {0.0f, 24.0f};
-vec2i spriteSize = {CHARLIE_WIDTH, CHARLIE_HEIGHT};
+
+player currentPlayer = {NULL, NULL, {0.0f, 24.0f}, {CHARLIE_WIDTH, CHARLIE_HEIGHT}};
 vec2f screenBounds = {0.0f, 0.0f};
 LCDBitmapTable *table;
 LCDBitmapTable *boxTable;
-
-LCDBitmap *spriteImage;
-LCDSprite *sprite;
 
 LCDBitmap *boxOnFrame;
 LCDBitmap *boxOffFrame;
@@ -89,18 +87,15 @@ static int setup(PlaydateAPI *pd) {
     pd->graphics->clear(kColorWhite);
     pd->graphics->setFont(font);
 
-    int ret = loadPlayerTable(pd, &table, &spriteImage);
-    if (ret != 0)
+    const vec2f playerPos = {0.0f, 24.0f};
+    const vec2i playerSize = {CHARLIE_WIDTH, CHARLIE_HEIGHT};
+    currentPlayer = createPlayer(playerPos, playerSize, pd, &table);
+    if (currentPlayer.sprite == NULL)
         return 0;
 
-    if (spriteImage != NULL && sprite == NULL) {
-        sprite = imagedSprite(pd, spriteSize, spriteImage);
-    }
-
-    spritePosition.x = screenBounds.x / 2;
-    pd->sprite->moveTo(sprite, spritePosition.x, spritePosition.y);
-    pd->sprite->setCollisionsEnabled(sprite, 1);
-    pd->sprite->setCollideRect(sprite, playerCollider);
+    currentPlayer.position.x = screenBounds.x / 2;
+    pd->sprite->moveTo(currentPlayer.sprite, currentPlayer.position.x,
+                       currentPlayer.position.y);
     pd->sprite->updateAndDrawSprites();
 
     // Palette setup
@@ -112,7 +107,7 @@ static int setup(PlaydateAPI *pd) {
     fillPalettes(palettes, 2, screenBounds, walls, paletteImage, pd);
 
     // Box setup
-    ret = loadBoxTable(pd, &boxTable, &boxOnFrame, &boxOffFrame);
+    int ret = loadBoxTable(pd, &boxTable, &boxOnFrame, &boxOffFrame);
     if (ret != 0)
         return 0;
 
@@ -137,7 +132,8 @@ static int update(void *userdata) {
         return 0;
 
     // Draw to screen
-    updatePlayer(pd, &sprite, &table, &spriteImage, spritePosition, frame);
+    updatePlayer(pd, &currentPlayer.sprite, &table, &currentPlayer.frame,
+                 currentPlayer.position, frame);
     for (int i = 0; i < PALETTE_COUNT; i++) {
         palette current = palettes[i];
         pd->sprite->setImage(current.sprite, paletteImage, kBitmapUnflipped);
@@ -157,7 +153,7 @@ static int update(void *userdata) {
         boxes[i] =
             shiftBox(boxes[i], -CHARLIE_HEIGHT, i, screenBounds, BOXES_COUNT, walls);
 
-        float distanceToPlayer = vec2fDistance(spritePosition, boxes[i]);
+        float distanceToPlayer = vec2fDistance(currentPlayer.position, boxes[i]);
         if (distanceToPlayer < 32) {
             boxes[i].x = -CHARLIE_HEIGHT;
             boxesCollected++;
@@ -184,7 +180,7 @@ static int update(void *userdata) {
     cycleFrames(&frame, &frameUpdated);
     float crankPosition = pd->system->getCrankAngle();
     if (!pd->system->isCrankDocked())
-        spritePosition =
-            getTranslatedMovement(spritePosition, crankPosition, screenBounds);
+        currentPlayer.position =
+            getTranslatedMovement(currentPlayer.position, crankPosition, screenBounds);
     return 1; // Always update the display.
 }
