@@ -55,7 +55,6 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
 #define X_INSET 32
 
 const inset walls = {CHARLIE_HEIGHT + 8, X_INSET, X_INSET, 32};
-const PDRect playerCollider = {0, 48, CHARLIE_WIDTH, 16};
 
 int frame = 0;
 int boxframe = 0;
