@@ -2,6 +2,12 @@
   "cdragon.format.onSave" : true,
   "index.use_scm_ignored_files" : false,
   "prettier.format-on-save" : "Disable",
+  "todo.workspace-ignore-extensions" : [
+    "lst"
+  ],
+  "todo.workspace-ignore-paths" : [
+
+  ],
   "workspace.art_style" : 0,
   "workspace.color" : 2,
   "workspace.name" : "Package Resolved"
