@@ -12,6 +12,6 @@
  *                      past.
  * @return              A translated vector accounting for the crank's angle.
  */
-vec2f get_translated_movement(vec2f original, float crankAngle, vec2f bounds);
+vec2f getTranslatedMovement(vec2f original, float crankAngle, vec2f bounds);
 
 #endif

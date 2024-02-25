@@ -35,7 +35,7 @@ static MunitResult test_vector(const MunitParameter params[], void *data) {
 
 static MunitResult test_movement(const MunitParameter params[], void *data) {
     vec2f originalPosition = {15.0f, 0.0f};
-    vec2f translated = get_translated_movement(originalPosition, 15.69, SCREEN_BOUNDS);
+    vec2f translated = getTranslatedMovement(originalPosition, 15.69, SCREEN_BOUNDS);
 
     munit_assert_true(isapprox(translated.x, 15.69, 0.001));
     return MUNIT_OK;
