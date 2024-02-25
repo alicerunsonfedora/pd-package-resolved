@@ -94,8 +94,7 @@ static int setup(PlaydateAPI *pd) {
         return 0;
 
     currentPlayer.position.x = screenBounds.x / 2;
-    pd->sprite->moveTo(currentPlayer.sprite, currentPlayer.position.x,
-                       currentPlayer.position.y);
+    movePlayer(currentPlayer, currentPlayer.position, pd);
     pd->sprite->updateAndDrawSprites();
 
     // Palette setup
@@ -132,8 +131,7 @@ static int update(void *userdata) {
         return 0;
 
     // Draw to screen
-    updatePlayer(pd, &currentPlayer.sprite, &table, &currentPlayer.frame,
-                 currentPlayer.position, frame);
+    updatePlayer(&currentPlayer, pd, &table, frame);
     for (int i = 0; i < PALETTE_COUNT; i++) {
         palette current = palettes[i];
         pd->sprite->setImage(current.sprite, paletteImage, kBitmapUnflipped);

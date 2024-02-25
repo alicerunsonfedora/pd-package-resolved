@@ -39,15 +39,34 @@ typedef struct player {
 /**
  * Creates a player at a given position in space with a specified size.
  *
- * @param position  The initial position that the player should be located at.
- * @param size      The player's sprite size.
- * @param pd        The Playdate API object that will load the player frame data and
- *                  create sprites.
- * @param table     The image table reference to load the player frames into.
- * @return          A new player object at the specified position and size. If the
- *                  Playdate API is unable to load the frame data, both the sprite and
- *                  frame properties will be NULL.
+ * @param position      The initial position that the player should be located at.
+ * @param size          The player's sprite size.
+ * @param pd            The Playdate API object that will load the player frame data and
+ *                      create sprites.
+ * @param table         The image table reference to load the player frames into.
+ * @return              A new player object at the specified position and size. If the
+ *                      Playdate API is unable to load the frame data, both the sprite
+ *                      and frame properties will be NULL.
  */
 player createPlayer(vec2f position, vec2i size, PlaydateAPI *pd, LCDBitmapTable **table);
+
+/**
+ * Moves the player on the screen to the specified position.
+ *
+ * @param player        The player to move on the screen.
+ * @param newPosition   The new position to where the player should be moved to.
+ * @param pd            The Playdate API object that will move the player sprite.
+ */
+void movePlayer(player player, vec2f newPosition, PlaydateAPI *pd);
+
+/**
+ * Updates the player sprite and image on the screen based on the current frame context.
+ *
+ * @param player        The player whose sprite and current frame is being updated.
+ * @param pd            The Playdate API object that will update the player sprite.
+ * @param table         The image table containing the player's frames.
+ * @param frame         The frame the player's sprite should be updated to.
+ */
+void updatePlayer(player *player, PlaydateAPI *pd, LCDBitmapTable **table, int frame);
 
 #endif

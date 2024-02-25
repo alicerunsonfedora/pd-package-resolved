@@ -56,18 +56,4 @@ int loadBoxTable(PlaydateAPI *pd, LCDBitmapTable **table, LCDBitmap **on,
  */
 void cycleFrames(int *frame, bool *updated);
 
-/**
- * Updates the player's location and image on the screen.
- *
- * @param pd              The Playdate API object that will redraw the player sprite.
- * @param sprite          A reference to the player's sprite object.
- * @param table           A reference to the player's image table containing the animation
- *                        frames.
- * @param image           A reference to the player's current frame image.
- * @param position        The new position the player should be drawn at.
- * @param frame           The frame in the image table to load.
- */
-void updatePlayer(PlaydateAPI *pd, LCDSprite **sprite, LCDBitmapTable **table,
-                  LCDBitmap **image, vec2f position, int frame);
-
 #endif

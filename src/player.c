@@ -23,3 +23,14 @@ player createPlayer(vec2f position, vec2i size, PlaydateAPI *pd, LCDBitmapTable 
     pd->sprite->setCollideRect(newPlayer.sprite, newPlayer.collisionRect);
     return newPlayer;
 }
+
+void movePlayer(player player, vec2f newPosition, PlaydateAPI *pd) {
+    pd->sprite->moveTo(player.sprite, newPosition.x, newPosition.y);
+}
+
+void updatePlayer(player *player, PlaydateAPI *pd, LCDBitmapTable **table, int frame) {
+    player->frame = pd->graphics->getTableBitmap(*table, frame);
+    pd->sprite->setImage(player->sprite, player->frame, kBitmapUnflipped);
+    pd->sprite->moveTo(player->sprite, player->position.x, player->position.y);
+    pd->sprite->markDirty(player->sprite);
+}
