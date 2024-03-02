@@ -131,6 +131,57 @@ static MunitResult testBoxShiftWithInsets(const MunitParameter params[], void *d
     return MUNIT_OK;
 }
 
+static MunitResult testFenceInside(const MunitParameter params[], void *data) {
+    inset insets = {4, 8, 8, 4};
+    ScreenData screen = {SCREEN_BOUNDS, insets};
+
+    vec2f noClamped = {10, 16};
+    vec2f noClampedResult = fenceInside(noClamped, screen);
+    munit_assert_float(noClamped.x, ==, 10);
+    munit_assert_float(noClamped.y, ==, 16);
+
+    vec2f zero = {0, 0};
+    vec2f topLeftCornerResult = fenceInside(topLeftCornerResult, screen);
+    munit_assert_float(topLeftCornerResult.x, ==, 8);
+    munit_assert_float(topLeftCornerResult.y, ==, 4);
+
+    vec2f stuckAtTop = {16, 1};
+    vec2f stuckTopResult = fenceInside(stuckAtTop, screen);
+    munit_assert_float(stuckTopResult.x, ==, 16);
+    munit_assert_float(stuckTopResult.y, ==, 4);
+
+    vec2f topRight = {400, 1};
+    vec2f topRightCornerResult = fenceInside(topRight, screen);
+    munit_assert_float(topRightCornerResult.x, ==, 392);
+    munit_assert_float(topRightCornerResult.y, ==, 4);
+
+    vec2f stuckOnLeft = {0, 40};
+    vec2f stuckOnLeftResult = fenceInside(stuckOnLeft, screen);
+    munit_assert_float(stuckOnLeftResult.x, ==, 8);
+    munit_assert_float(stuckOnLeftResult.y, ==, 40);
+    
+    vec2f stuckOnRight = {420, 40};
+    vec2f stuckOnRightResult = fenceInside(stuckOnRight, screen);
+    munit_assert_float(stuckOnRightResult.x, ==, 392);
+    munit_assert_float(stuckOnRightResult.y, ==, 40);
+    
+    vec2f bottomLeft = {0, 240};
+    vec2f bottomLeftCornerResult = fenceInside(bottomLeft, screen);
+    munit_assert_float(bottomLeftCornerResult.x, ==, 8);
+    munit_assert_float(bottomLeftCornerResult.y, ==, 236);
+    
+    vec2f stuckAtBottom = {16, 240};
+    vec2f stuckBottomResult = fenceInside(stuckAtBottom, screen);
+    munit_assert_float(stuckBottomResult.x, ==, 16);
+    munit_assert_float(stuckBottomResult.y, ==, 236);
+    
+    vec2f bottomRightCornerResult = fenceInside(SCREEN_BOUNDS, screen);
+    munit_assert_float(bottomRightCornerResult.x, ==, 392);
+    munit_assert_float(bottomRightCornerResult.y, ==, 236);
+
+    return MUNIT_OK;
+}
+
 static MunitTest test_suite_tests[] = {
     {
         (char *)"/charolette/vector_init", testVector,
@@ -147,6 +198,7 @@ static MunitTest test_suite_tests[] = {
     simpleTest("charolette/fill_with_insets", testBoxFillWithInsets),
     simpleTest("charolette/shift", testBoxShift),
     simpleTest("charolette/shift_with_insets", testBoxShiftWithInsets),
+    simpleTest("charolette/fence_inside", testFenceInside),
 
     // Null test to end the array
     testEnd};

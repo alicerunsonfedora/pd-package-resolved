@@ -30,9 +30,28 @@ typedef struct inset {
     float bottom;
 } inset;
 
+/**
+ * A structure representing information about the screen.
+ */
 typedef struct ScreenData {
+    /**
+     * The width and height of the screen, represented as a vector.
+     */
     vec2f bounds;
+    
+    /**
+     * The insets set from the edges of the screen's rectangle for suitable drawing.
+     */
     inset edgeInsets;
 } ScreenData;
+
+/**
+ * Shifts a point in space to fit within the screen's safe area.
+ *
+ * @param position  The position to shift into the safe area.
+ * @param screen    The screen data to determine the safe area insets from.
+ * @return          A translated vector that is within the safe areas of the screen.
+ */
+vec2f fenceInside(vec2f position, ScreenData screen);
 
 #endif
