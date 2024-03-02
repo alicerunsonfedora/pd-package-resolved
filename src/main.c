@@ -18,6 +18,7 @@
 #include "kdl/kdl.h"
 
 static int update(void *userdata);
+static void resetGameDbg(void *userdata);
 
 // MARK: Font Setup
 LCDFont *font = NULL;
@@ -40,6 +41,8 @@ int eventHandler(PlaydateAPI *pd, PDSystemEvent event, uint32_t arg) {
         if (font == NULL) {
             pd->system->error("Failed to load system font! %s", err);
         }
+
+        pd->system->addMenuItem("Reset", resetGameDbg, pd);
 
         pd->system->setUpdateCallback(update, pd);
     }
@@ -115,6 +118,42 @@ static int setup(PlaydateAPI *pd) {
     fillBoxes(boxes, 6, screen);
     pd->system->resetElapsedTime();
     return 1;
+}
+
+static void resetGameDbg(void *userdata) {
+    PlaydateAPI *pd = userdata;
+
+    pd->system->logToConsole("Refreshing game state");
+
+    timeRemaning = 60;
+    gameOver = NONE;
+
+    if (!paletteGracePeriodActive) {
+        for (int i = 0; i < PALETTE_COUNT; i++) {
+            vec2f newPosition = {0, screen.bounds.y + 64};
+            palette newPalette = {palettes[i].sprite, newPosition};
+            palettes[i] = newPalette;
+            pd->sprite->markDirty(palettes[i].sprite);
+        }
+    }
+
+    paletteGracePeriodActive = true;
+
+    currentPlayer.position.x = 0;
+    fillBoxes(boxes, BOXES_COUNT, screen);
+
+    updatePlayer(&currentPlayer, pd, &table, frame);
+    pd->sprite->updateAndDrawSprites();
+
+    counterMessage = "Boxes collected: 0";
+    timerMessage = "60";
+
+    const vec2i boxTextPosition = {8, (int)screen.bounds.y - fontSize - 8};
+    drawASCIIText(pd, counterMessage, boxTextPosition);
+
+    const vec2i timerPosition = {(int)screen.bounds.x - fontSize - 12,
+                                 (int)screen.bounds.y - fontSize - 8};
+    drawASCIIText(pd, timerMessage, timerPosition);
 }
 
 static int update(void *userdata) {
