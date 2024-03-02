@@ -79,6 +79,7 @@ char *counterMessage = "Boxes collected: 0";
 char *timerMessage;
 
 int timeRemaning = 60;
+GameOverState gameOver = NONE;
 
 static int setup(PlaydateAPI *pd) {
     screen.bounds.x = (float)pd->display->getWidth();
@@ -101,6 +102,7 @@ static int setup(PlaydateAPI *pd) {
     paletteImage = loadBitmap("Images/palette", pd);
     if (paletteImage == NULL) {
         pd->system->error("Couldn't load palette image.");
+        gameOver = CRASH;
         return 0;
     }
 
@@ -125,8 +127,23 @@ static int update(void *userdata) {
         return drawForSetup;
     }
 
-    if (timeRemaning <= 0)
+    // NOTE: Impl. here is just temporary until we get proper screenage.
+    if (gameOver != NONE) {
+        switch (gameOver) {
+        case CRASH:
+            pd->system->error("A crash occurred!");
+            break;
+        case INJURY:
+            pd->system->logToConsole("You got injured by a palette.");
+            break;
+        case OUT_OF_TIME:
+            pd->system->logToConsole("You ran out of time!");
+            break;
+        default:
+            break;
+        }
         return 0;
+    }
 
     // Draw to screen
     updatePlayer(&currentPlayer, pd, &table, frame);
@@ -142,7 +159,7 @@ static int update(void *userdata) {
 
             if (overlappingCounts <= 0)
                 continue;
-            timeRemaning = 0;
+            gameOver = INJURY;
             return 0;
         }
     }
@@ -196,5 +213,10 @@ static int update(void *userdata) {
     if (!pd->system->isCrankDocked())
         currentPlayer.position =
             getTranslatedMovement(currentPlayer.position, crankPosition, screen.bounds);
+
+    if (timeRemaning <= 0) {
+        gameOver = OUT_OF_TIME;
+    }
+
     return 1; // Always update the display.
 }

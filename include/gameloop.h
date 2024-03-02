@@ -10,6 +10,8 @@
 #include "pd_api.h"
 #include "vector.h"
 
+typedef enum GameOverState { NONE, OUT_OF_TIME, INJURY, CRASH, SUCCESS } GameOverState;
+
 /**
  * Renders a box onto the screen.
  *
