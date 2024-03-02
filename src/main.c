@@ -136,7 +136,13 @@ static int update(void *userdata) {
         pd->sprite->moveTo(current.sprite, current.position.x, current.position.y);
         pd->sprite->markDirty(current.sprite);
 
-        // TODO: Add collision detection code here!
+        int overlappingCounts;
+        pd->sprite->overlappingSprites(current.sprite, &overlappingCounts);
+
+        if (overlappingCounts <= 0)
+            continue;
+        timeRemaning = 0;
+        return 0;
     }
 
     pd->sprite->updateAndDrawSprites();
