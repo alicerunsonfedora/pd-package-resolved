@@ -21,15 +21,15 @@ void fillPalettes(palette palettes[], int quantity, ScreenData screen, LCDBitmap
     for (int i = 0; i < quantity; i++) {
         float xpos = (float)rand() / (float)(RAND_MAX / (screen.bounds.x));
         float ypos = (float)rand() / (float)(RAND_MAX / (screen.bounds.y));
-        if (ypos <= 64)
-            ypos = ypos + 64;
+        if (ypos <= 128)
+            ypos = 128;
         vec2f originalPosition = {xpos, ypos};
         vec2f position = fenceInside(originalPosition, screen);
 
         palette current = createPalette(position, image, pd);
         pd->sprite->setCollisionsEnabled(current.sprite, 1);
 
-        PDRect collider = {0, 8, paletteSize.x, paletteSize.y - 8};
+        PDRect collider = {4, 8, paletteSize.x - 8, paletteSize.y - 8};
         pd->sprite->setCollideRect(current.sprite, collider);
 
         palettes[i] = current;

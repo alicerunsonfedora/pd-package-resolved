@@ -22,7 +22,7 @@ int loadPlayerTable(PlaydateAPI *pd, LCDBitmapTable **table, LCDBitmap **current
 // MARK: - Public Implementations
 
 player createPlayer(vec2f position, vec2i size, PlaydateAPI *pd, LCDBitmapTable **table) {
-    PDRect rect = {0, 48, size.x, 16};
+    PDRect rect = {8, 48, size.x - 16, 16};
     player newPlayer = {NULL, NULL, position, size, rect};
     int loadedTable = loadPlayerTable(pd, table, &newPlayer.frame);
     if (loadedTable != 0) {
