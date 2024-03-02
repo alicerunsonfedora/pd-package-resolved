@@ -48,4 +48,6 @@ palette createPalette(vec2f position, LCDBitmap *image, PlaydateAPI *pd);
 void fillPalettes(palette palettes[], int quantity, ScreenData screen, LCDBitmap *image,
                   PlaydateAPI *pd);
 
+palette shiftPalette(palette palette, LCDBitmap *image, PlaydateAPI *pd);
+
 #endif

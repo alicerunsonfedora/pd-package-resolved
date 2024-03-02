@@ -38,3 +38,15 @@ void fillPalettes(palette palettes[], int quantity, ScreenData screen, LCDBitmap
         palettes[i] = current;
     }
 }
+
+palette shiftPalette(palette current, LCDBitmap *image, PlaydateAPI *pd) {
+    vec2f transformed = current.position;
+    transformed.y--;
+
+    pd->sprite->setImage(current.sprite, image, kBitmapUnflipped);
+    pd->sprite->moveTo(current.sprite, current.position.x, current.position.y);
+    pd->sprite->markDirty(current.sprite);
+
+    palette updated = {current.sprite, transformed};
+    return updated;
+}

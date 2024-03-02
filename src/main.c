@@ -132,9 +132,7 @@ static int update(void *userdata) {
     updatePlayer(&currentPlayer, pd, &table, frame);
     for (int i = 0; i < PALETTE_COUNT; i++) {
         palette current = palettes[i];
-        pd->sprite->setImage(current.sprite, paletteImage, kBitmapUnflipped);
-        pd->sprite->moveTo(current.sprite, current.position.x, current.position.y);
-        pd->sprite->markDirty(current.sprite);
+        palettes[i] = shiftPalette(current, paletteImage, pd);
 
         int overlappingCounts;
         pd->sprite->overlappingSprites(current.sprite, &overlappingCounts);
