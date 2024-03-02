@@ -1,6 +1,10 @@
 {
   "cdragon.format.onSave" : true,
   "editor.default_syntax" : "c",
+  "index.ignored_file_patterns" : [
+    "build",
+    ".cache"
+  ],
   "index.use_scm_ignored_files" : false,
   "prettier.format-on-save" : "Disable",
   "todo.workspace-ignore-extensions" : [
