@@ -48,6 +48,20 @@ palette createPalette(vec2f position, LCDBitmap *image, PlaydateAPI *pd);
 void fillPalettes(palette palettes[], int quantity, ScreenData screen, LCDBitmap *image,
                   PlaydateAPI *pd);
 
-palette shiftPalette(palette palette, LCDBitmap *image, PlaydateAPI *pd);
+/**
+ * Shifts the palette towards the top of the screen, resetting its position after a
+ * threshold point.
+ *
+ * @param palette   The palette to shift on the screen or reposition.
+ * @param threshold The threshold value by which the palette will be repositioned.
+ * @param screen    Information about the screen, including the edge insets and
+ *                  dimensions.
+ * @param image     The palette image object that will be rendered to the Playdate's
+ *                  screen.
+ * @param pd        The Playdate API object used to create the palette.
+ * @return          The palette with a new position to render on the screen.
+ */
+palette shiftPalette(palette palette, float threshold, ScreenData screen,
+                     LCDBitmap *image, PlaydateAPI *pd);
 
 #endif

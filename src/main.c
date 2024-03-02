@@ -134,7 +134,8 @@ static int update(void *userdata) {
     if (!paletteGracePeriodActive) {
         for (int i = 0; i < PALETTE_COUNT; i++) {
             palette current = palettes[i];
-            palettes[i] = shiftPalette(current, paletteImage, pd);
+            palettes[i] =
+                shiftPalette(current, -CHARLIE_HEIGHT, screen, paletteImage, pd);
 
             int overlappingCounts;
             pd->sprite->overlappingSprites(current.sprite, &overlappingCounts);
