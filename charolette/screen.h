@@ -38,7 +38,7 @@ typedef struct ScreenData {
      * The width and height of the screen, represented as a vector.
      */
     vec2f bounds;
-    
+
     /**
      * The insets set from the edges of the screen's rectangle for suitable drawing.
      */

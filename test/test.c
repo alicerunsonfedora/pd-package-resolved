@@ -159,22 +159,22 @@ static MunitResult testFenceInside(const MunitParameter params[], void *data) {
     vec2f stuckOnLeftResult = fenceInside(stuckOnLeft, screen);
     munit_assert_float(stuckOnLeftResult.x, ==, 8);
     munit_assert_float(stuckOnLeftResult.y, ==, 40);
-    
+
     vec2f stuckOnRight = {420, 40};
     vec2f stuckOnRightResult = fenceInside(stuckOnRight, screen);
     munit_assert_float(stuckOnRightResult.x, ==, 392);
     munit_assert_float(stuckOnRightResult.y, ==, 40);
-    
+
     vec2f bottomLeft = {0, 240};
     vec2f bottomLeftCornerResult = fenceInside(bottomLeft, screen);
     munit_assert_float(bottomLeftCornerResult.x, ==, 8);
     munit_assert_float(bottomLeftCornerResult.y, ==, 236);
-    
+
     vec2f stuckAtBottom = {16, 240};
     vec2f stuckBottomResult = fenceInside(stuckAtBottom, screen);
     munit_assert_float(stuckBottomResult.x, ==, 16);
     munit_assert_float(stuckBottomResult.y, ==, 236);
-    
+
     vec2f bottomRightCornerResult = fenceInside(SCREEN_BOUNDS, screen);
     munit_assert_float(bottomRightCornerResult.x, ==, 392);
     munit_assert_float(bottomRightCornerResult.y, ==, 236);
