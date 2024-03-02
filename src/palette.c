@@ -19,15 +19,12 @@ palette createPalette(vec2f position, LCDBitmap *image, PlaydateAPI *pd) {
 void fillPalettes(palette palettes[], int quantity, ScreenData screen, LCDBitmap *image,
                   PlaydateAPI *pd) {
     for (int i = 0; i < quantity; i++) {
-        float xpos = (float)rand() /
-                     (float)(RAND_MAX / (screen.bounds.x - screen.edgeInsets.right));
-        if (xpos < screen.edgeInsets.left)
-            xpos = screen.edgeInsets.left;
-        float ypos = (float)rand() /
-                     (float)(RAND_MAX / (screen.bounds.y - screen.edgeInsets.bottom));
-        if (xpos < screen.edgeInsets.top)
-            xpos = screen.edgeInsets.top;
-        vec2f position = {xpos, ypos};
+        float xpos = (float)rand() / (float)(RAND_MAX / (screen.bounds.x));
+        float ypos = (float)rand() / (float)(RAND_MAX / (screen.bounds.y));
+        if (ypos <= 64)
+            ypos = ypos + 64;
+        vec2f originalPosition = {xpos, ypos};
+        vec2f position = fenceInside(originalPosition, screen);
 
         palette current = createPalette(position, image, pd);
         pd->sprite->setCollisionsEnabled(current.sprite, 1);

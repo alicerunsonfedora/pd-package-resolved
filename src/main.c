@@ -61,6 +61,7 @@ int frame = 0;
 int boxframe = 0;
 bool frameUpdated = false;
 bool initializedGameLoop = false;
+bool paletteGracePeriodActive = true;
 
 player currentPlayer = {NULL, NULL, {0.0f, 24.0f}, {CHARLIE_WIDTH, CHARLIE_HEIGHT}};
 LCDBitmapTable *table;
@@ -102,7 +103,6 @@ static int setup(PlaydateAPI *pd) {
         pd->system->error("Couldn't load palette image.");
         return 0;
     }
-    fillPalettes(palettes, PALETTE_COUNT, screen, paletteImage, pd);
 
     // Box setup
     LCDBitmapTable *boxTable;
@@ -130,17 +130,20 @@ static int update(void *userdata) {
 
     // Draw to screen
     updatePlayer(&currentPlayer, pd, &table, frame);
-    for (int i = 0; i < PALETTE_COUNT; i++) {
-        palette current = palettes[i];
-        palettes[i] = shiftPalette(current, paletteImage, pd);
 
-        int overlappingCounts;
-        pd->sprite->overlappingSprites(current.sprite, &overlappingCounts);
+    if (!paletteGracePeriodActive) {
+        for (int i = 0; i < PALETTE_COUNT; i++) {
+            palette current = palettes[i];
+            palettes[i] = shiftPalette(current, paletteImage, pd);
 
-        if (overlappingCounts <= 0)
-            continue;
-        timeRemaning = 0;
-        return 0;
+            int overlappingCounts;
+            pd->sprite->overlappingSprites(current.sprite, &overlappingCounts);
+
+            if (overlappingCounts <= 0)
+                continue;
+            timeRemaning = 0;
+            return 0;
+        }
     }
 
     pd->sprite->updateAndDrawSprites();
@@ -157,6 +160,15 @@ static int update(void *userdata) {
             boxes[i].x = -CHARLIE_HEIGHT;
             boxesCollected++;
         }
+
+        if (i < BOXES_COUNT - 1)
+            continue;
+        if (!paletteGracePeriodActive)
+            continue;
+        if (boxes[i].y >= 0)
+            continue;
+        fillPalettes(palettes, PALETTE_COUNT, screen, paletteImage, pd);
+        paletteGracePeriodActive = false;
     }
 
     if (boxesCollected > currentBoxesCollectedInFrame) {
