@@ -88,3 +88,6 @@ test/test_app
 ### Licensed Files ###
 
 Source/Fonts/Salmon-*.fnt
+
+### Swift directories ###
+.build/

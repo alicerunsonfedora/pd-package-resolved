@@ -17,6 +17,7 @@
   "extensionTemplate" : "simulator",
   "extensionValues" : {
     "playdate.build-type" : "make",
+    "playdate.output-path" : "build",
     "playdate.product-name" : "PackageResolved"
   }
 }
