@@ -1,5 +1,11 @@
 # 📦 Package Resolved for Playdate
 
+> **Important**  
+> The `rewrite/swift` branch is currently a work in progress as the game
+> is rewritten to use an embedded version of the Swift programming
+> language. Instructions outlined in this document may differ from the
+> actual build instructions.
+
 It's another day at the Swifty Package Factory, and you have a long list
 of orders to deliver, with no time to spare! Can you collect all of the
 packages to deliver in the time allotted? Watch out for palettes and wet
