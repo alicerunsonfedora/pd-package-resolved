@@ -91,3 +91,5 @@ Source/Fonts/Salmon-*.fnt
 
 ### Swift directories ###
 .build/
+.swiftpm/xcode/xcuserdata/
+.swiftpm/xcode/package.xcworkspace/xcuserdata
