@@ -15,9 +15,8 @@ func update() -> Bool {
     case .initialize:
         Playdate.initialize(with: pointer)
         Playdate.System.updateCallback = update
-
         Playdate.System.addMenuItem(title: "PlaydateKit") { _ in
-            Playdate.System.logToConsole(format: "PlaydateKit selected!")
+            Playdate.System.log("PlaydateKit selected!")
         }
     default: break
     }

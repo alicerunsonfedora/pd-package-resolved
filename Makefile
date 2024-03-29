@@ -1,6 +1,6 @@
 REPO_ROOT := ../PlaydateKit
 PRODUCT := build/PackageResolved.pdx
-include $(REPO_ROOT)/Examples/swift.mk
+include swift.mk
 
 # MARK: - Build PlaydateKit Swift Module
 build/Modules/playdatekit_device.o: $(REPO_ROOT)/Sources/PlaydateKit/*.swift
