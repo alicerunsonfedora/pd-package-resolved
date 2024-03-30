@@ -34,19 +34,23 @@ let swiftSettingsSimulator: [SwiftSetting] = [
 let package = Package(
     name: "PackageResolved",
     products: [
+        .library(name: "Charolette", targets: ["Charolette"]),
         .library(name: "PackageResolved", targets: ["PackageResolved"]),
     ],
     dependencies: [
         .package(name: "PlaydateKit", path: "../PlaydateKit"),
     ],
     targets: [
+        .target(name: "Charolette"),
         .target(
             name: "PackageResolved",
             dependencies: [
-                .product(name: "CPlaydate", package: "PlaydateKit"),
+                // .product(name: "CPlaydate", package: "PlaydateKit"),
                 .product(name: "PlaydateKit", package: "PlaydateKit"),
+                "Charolette"
             ],
             swiftSettings: swiftSettingsSimulator
         ),
+        .testTarget(name: "CharoletteTests", dependencies: ["Charolette"])
     ]
 )
