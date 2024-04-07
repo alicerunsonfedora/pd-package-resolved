@@ -10,29 +10,8 @@
             "problemMatcher": [],
             "group": {
                 "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "label": "Build Swift Package",
-            "type": "shell",
-            "command": "swift build -c release --build-tests",
-            "problemMatcher": ["$swiftc"],
-            "group": {
-                "kind": "build",
                 "isDefault": false
             }
-        },
-        {
-            "label": "Run Unit Tests",
-            "type": "shell",
-            "command": "swift test -c release --skip-build",
-            "problemMatcher": ["$swiftc"],
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            },
-            "dependsOn": ["Build Swift Package"]
         },
         {
             "label": "Clean Project",

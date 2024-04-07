@@ -9,7 +9,7 @@ let gccIncludePrefix =
     "/usr/local/playdate/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1"
 #else
 // Note: this may change depending on how the ARM GNU toolchain is installed.
-let gccIncludePrefix = "/usr/local/share/arm-gnu-toolchain-13.2.Rel1-x86_64-arm-none-eabi/lib"
+let gccIncludePrefix = "/usr/lib/gcc/arm-none-eabi/10.3.1"
 #endif
 
 guard let home = Context.environment["HOME"] else {

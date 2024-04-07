@@ -1,0 +1,14 @@
+{
+    "cmake.configureOnOpen": false,
+    "swift.sourcekit-lsp.serverArguments": [
+        "--configuration",
+        "release"
+    ],
+    "swift.buildArguments": [
+        "--configuration",
+        "release"
+    ],
+    "presentation-mode.configBackup": {
+        "editor.fontSize": "undefined"
+    }
+}
