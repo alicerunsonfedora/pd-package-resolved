@@ -14,10 +14,15 @@ func update() -> Bool {
     switch event {
     case .initialize:
         Playdate.initialize(with: pointer)
-        Playdate.System.updateCallback = update
-        Playdate.System.addMenuItem(title: "PlaydateKit") { _ in
-            Playdate.System.log("PlaydateKit selected!")
+
+        do {
+            let styled = try Fonts.styledFont(for: .bold)
+            Playdate.Graphics.setFont(styled.font)
+        } catch {
+            Playdate.System.error("Failed to load a suitable font!")
         }
+
+        Playdate.System.updateCallback = update
     default: break
     }
     return 0
