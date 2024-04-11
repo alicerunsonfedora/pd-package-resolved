@@ -15,13 +15,13 @@ public struct Vector2<Value: Numeric & Hashable> {
 extension Vector2: Equatable, Hashable {}
 
 public extension Vector2 where Value == Int {
-    static let zero = Vector2(x: 0, y: 0)
-    static let one = Vector2(x: 1, y: 1)
+    static var zero: Vector2<Int> { Vector2(x: 0, y: 0) }
+    static var one: Vector2<Int> { Vector2(x: 1, y: 1) }
 }
 
 public extension Vector2 where Value == Float {
-    static let zero = Vector2(x: 0, y: 0)
-    static let one = Vector2(x: 1, y: 1)
+    static var zero: Vector2<Float> { Vector2(x: 0, y: 0) }
+    static var one: Vector2<Float> { Vector2(x: 1, y: 1) }
 }
 
 public extension Vector2 {

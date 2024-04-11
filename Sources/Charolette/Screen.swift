@@ -4,7 +4,7 @@
 /// certain elements or vectors cannot reside in.
 public struct EdgeInsets: Equatable {
     /// A constant for no insets.
-    public static let zero = EdgeInsets(all: 0)
+    public static var zero: EdgeInsets { EdgeInsets(all: 0) }
 
     /// The number of pixels or units away from the rectangle's top edge.
     public var top: Float
