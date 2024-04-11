@@ -1,5 +1,5 @@
 import XCTest
-import Charolette
+import CharoletteStandard
 
 final class ScreenTests: XCTestCase {
     typealias Point = Vector2<Float>

@@ -1,5 +1,5 @@
 import XCTest
-import Charolette
+import CharoletteStandard
 
 final class MovementTests: XCTestCase {
     func testMovementTranslation() throws {

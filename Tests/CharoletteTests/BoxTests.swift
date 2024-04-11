@@ -1,5 +1,5 @@
 import XCTest
-import Charolette
+import CharoletteStandard
 
 final class BoxTests: XCTestCase {
     let screenData = ScreenData(bounds: Vector2<Float>(x: 400, y: 240), insets: .zero)

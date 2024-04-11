@@ -1,5 +1,3 @@
-import Foundation
-
 /// A structure representing insets of a rectangle.
 /// 
 /// Typically, insets are used to provide padding for a rectangle or bounds by which

@@ -1,5 +1,3 @@
-import Foundation
-
 /// A container for the movement APIs.
 public enum Movement {
     /// Translates a movement vector according to the crank's position angle.

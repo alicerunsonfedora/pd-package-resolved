@@ -1,5 +1,3 @@
-import Foundation
-
 /// A structure representing a point in two-dimensional space.
 public struct Vector2<Value: Numeric & Hashable> {
     /// The vector's position on the X axis.
@@ -68,4 +66,24 @@ public extension Vector2 {
         let y = rhs.y - lhs.y
         return Int(sqrt(Float(x * x) + Float(y * y)))
     }
+}
+
+func sqrt(_ value: Float) -> Float {
+    var last: Float = 0
+    var current =  value
+
+    while abs(current - last) > 0.5 {
+        last = current
+        current = 0.5 * (current + value / current)
+    }
+
+    return current
+}
+
+func pow(_ base: Float, _ power: Int) -> Float {
+    var value = base
+    for _ in 2...power {
+        value *= base
+    }
+    return value
 }

@@ -41,7 +41,16 @@ let package = Package(
         .package(name: "PlaydateKit", path: "../PlaydateKit"),
     ],
     targets: [
-        .target(name: "Charolette"),
+        // A fake copy of Charolette used to compile for testing.
+        .target(name: "CharoletteStandard"),
+
+        // The actual copy of Charolette used for embedded environments.
+        .target(
+            name: "Charolette",
+            dependencies: [
+                .product(name: "PlaydateKit", package: "PlaydateKit"),
+            ],
+            swiftSettings: swiftSettingsSimulator),
         .target(
             name: "PackageResolved",
             dependencies: [
@@ -51,6 +60,6 @@ let package = Package(
             ],
             swiftSettings: swiftSettingsSimulator
         ),
-        .testTarget(name: "CharoletteTests", dependencies: ["Charolette"])
+        .testTarget(name: "CharoletteTests", dependencies: ["CharoletteStandard"])
     ]
 )

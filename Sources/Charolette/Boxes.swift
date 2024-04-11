@@ -1,5 +1,3 @@
-import Foundation
-
 /// A container for the box APIs.
 public enum Boxes {
     /// A representation of a box.

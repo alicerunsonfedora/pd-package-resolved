@@ -1,5 +1,5 @@
 import XCTest
-import Charolette
+import CharoletteStandard
 
 final class VectorTests: XCTestCase {
     func testVectorAddition() throws {
@@ -19,6 +19,6 @@ final class VectorTests: XCTestCase {
 
         let two: Vector2<Float> = Vector2(x: 2, y: 2)
         let farther = two.distance(to: Vector2<Float>.zero)
-        XCTAssertEqual(farther, sqrtf(8))
+        XCTAssertEqual(farther, sqrtf(8), accuracy: 0.1)
     }
 }

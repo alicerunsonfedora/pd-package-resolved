@@ -9,8 +9,6 @@
 //  file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-import Foundation
-
 public extension Comparable {
     /// Returns a value that exists within the range specified by its bounds.
     /// - Parameter lower: The lower bound of the range.
