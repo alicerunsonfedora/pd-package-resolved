@@ -93,3 +93,6 @@ Source/Fonts/Salmon-*.fnt
 .build/
 .swiftpm/xcode/xcuserdata/
 .swiftpm/xcode/package.xcworkspace/xcuserdata
+
+### Charolette Directories ###
+Sources/CharoletteStandard
