@@ -23,13 +23,13 @@ enum Palettes {
         static var paletteSize: Vector2<Float> { Vector2(x: 32, y: 32) }
     }
 
-    static func fill(palettes: inout [Palette], screen: ScreenData, image: Bitmap) {
-        for index in 0..<palettes.count {
+    static func fill(palettes: inout [Palette], to count: Int, screen: ScreenData, image: Bitmap) {
+        for _ in 0..<count {
             let position = createPalettePosition(screen: screen)
             let current = Palette(image: image, at: position)
             current.sprite.collisionsEnabled = true
             current.sprite.collideRect = .init(x: 4, y: 8, width: Constants.paletteSize.x - 8, height: Constants.paletteSize.y - 8)
-            palettes[index] = current
+            palettes.append(current)
         }
     }
 
@@ -46,8 +46,8 @@ enum Palettes {
     }
 
     private static func createPalettePosition(screen: ScreenData) -> Vector2<Float> {
-        let xPosition = Float.random(in: 0...screen.bounds.x)
-        let yPosition = Float.random(in: 128...screen.bounds.y)
+        let xPosition = Float(randomInteger()).truncatingRemainder(dividingBy: screen.bounds.x)
+        let yPosition = Float(randomInteger()).truncatingRemainder(dividingBy: screen.bounds.y)
         let originalPosition = Vector2<Float>(x: xPosition, y: yPosition)
         return screen.fencingIn(point: originalPosition)
     }

@@ -11,7 +11,8 @@ public enum Boxes {
         let leftBoundary = screen.edgeInsets.left
         let rightBoundary = screen.bounds.x - screen.edgeInsets.right
         for index in 0..<boxes.count {
-            let xPos = Float.random(in:leftBoundary...rightBoundary)
+            let xRandSeed = Float(randomInteger()).truncatingRemainder(dividingBy: screen.bounds.x)
+            let xPos = xRandSeed.clamp(lower: leftBoundary, upper: rightBoundary)
             let yPos = step * Float(index)
             boxes[index] = Vector2<Float>(x: xPos, y: yPos)
         }
@@ -32,8 +33,17 @@ public enum Boxes {
 
         let leftBoundary = screen.edgeInsets.left
         let rightBoundary = screen.bounds.x - screen.edgeInsets.right
-        transformed.x = Float.random(in: leftBoundary...rightBoundary)
+
+        let xRandSeed = Float(randomInteger()).truncatingRemainder(dividingBy: screen.bounds.x)
+        transformed.x = xRandSeed.clamp(lower: leftBoundary, upper: rightBoundary)
         transformed.y = Float(index) * step + abs(threshold)
         return transformed
     }
+}
+
+nonisolated(unsafe) var randomSeed: Int = 5
+
+public func randomInteger() -> Int {
+    randomSeed = (75 * randomSeed + 74) % 65537
+    return randomSeed
 }

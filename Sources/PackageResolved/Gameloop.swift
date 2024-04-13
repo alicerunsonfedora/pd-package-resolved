@@ -24,10 +24,8 @@ enum Gameloop {
         switch (boxFrame, even) {
         case (1, true), (0, false):
             self.drawBox(box: box, image: boxOnFrame)
-        case (1, false), (0, true):
-            self.drawBox(box: box, image: boxOffFrame)
         default:
-            break
+            self.drawBox(box: box, image: boxOffFrame)
         }
     }
 
@@ -54,7 +52,8 @@ enum Gameloop {
             updated = false
             return
         }
-        frame = (frame + 1).clamp(lower: 0, upper: 5)
+        frame += 1
+        if frame > 5 { frame = 0 }
         updated = true
     }
 }
