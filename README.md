@@ -1,11 +1,5 @@
 # 📦 Package Resolved for Playdate
 
-> **Important**  
-> The `rewrite/swift` branch is currently a work in progress as the game
-> is rewritten to use an embedded version of the Swift programming
-> language. Instructions outlined in this document may differ from the
-> actual build instructions.
-
 It's another day at the Swifty Package Factory, and you have a long list
 of orders to deliver, with no time to spare! Can you collect all of the
 packages to deliver in the time allotted? Watch out for palettes and wet
@@ -19,69 +13,66 @@ floors, or you'll get really injured!
 
 ## 🏗️ Build instructions
 
+> **Important**  
+> Package Resolved utilizes the Swift toolchain for building and running the
+> game. Some parts of the game or the toolchain may not work as expected due
+> to the unstable nature of Swift Embedded as of this time.
+
 **Required Tools**
 - Make
-- Clang or GCC
-- Playdate SDK 2.1.0 or later
-- (if using Nova) [Playdate extension][nova-ext]
-- (if using Nova) [Icarus extension][icarus-ext]
+- Swift toolchain (v6.0 or later)*
+- Playdate SDK
+- (For Linux, Windows via WSL) GNU Arm Embedded Toolchain (arm-gcc-none-eabi)
 
-[nova-ext]: nova://extension/?id=com.panic.Playdate&name=Playdate
-[icarus-ext]: nova://extension/?id=panic.Icarus&name=Icarus
+> \*At the time of writing, the Swift 6 toolchain is the latest nightly
+> toolchain.
 
-**Optional Tools**  
-- Just (https://just.systems)
-
-### Nova
-
-Start by cloning this repository via `git clone`, then open the project in
-Nova. Select the "Game (Simulator)" task and run the project, which will
-create the PDX file and open the game in the Playdate Simulator.
-
-> **Tip: Get Playdate autocompletions**  
-> To get autocompletions and type information for the Playdate C APIs, you
-> can use the `bear` tool to create a compile_commands.json file for
-> relevant APIs:
->
->     ```
->     bear -- make real_all
->     ```
->
-> You can also call on the `completions` recipe in the Justfile.
-
-### Command line 
-
-Start by cloning this repository via `git clone`, then run the following
-commands in the terminal for Make:
+Start by cloning the repository and the PlaydateKit package:
 
 ```
-make real_all
+git clone https://github.com/alicerunsonfedora/PlaydateKit
+git clone https://gitlab.com/marquiskurt/pd-package-resolved PackageResolved
 ```
 
-More information can be found on [Playdate's documentation to build via the command line][pdbuild].
-
-[pdbuild]: https://sdk.play.date/inside-playdate-with-c/#_make
-
-> **:warning: Unsupported on Asahi!**  
-> Due to Playdate SDK restrictions, building on ARM64 Linux devices is
-> not currently supported. However, you can still edit the charolette
-> library and update unit tests without issue, as it only requires the
-> compiler.
-
-To build and run the unit tests, run the following:
+It should be organized as follows:
 
 ```
-make test
-./test/test_app
+your-path/
+    PlaydateKit/
+    PackageResolved/
 ```
+
+You may need to edit the `gccIncludePath` located in Package.swift to pick
+up your Arm Embedded Toolchain libraries. In most cases, this shouldn't be
+necessary.
+
+You should be able to build for the device by running `make device`.
+
+### Running Charolette Unit Tests
+
+To run the unit tests for the Charolette library, be sure to make a symbolic
+link called `CharoletteStandard`:
+
+```
+ln -s /your/path/to/PackageResolved/Sources/Charolette /your/path/to/PackageResolved/Sources/CharoletteStandard
+```
+
+Then run `swift test -c release` to run the unit tests for the package.
+
+### Additional Instructions for WSL Users
+
+You may wish to write your code on a Windows system. As the Playdate SDK
+does not support using the Make build system, you can utilize the Windows
+Subsystem for Linux feature to use a Linux virtual machine. The following
+includes some helpful tips to get the project running:
+
+- You may want to install the GNU Arm Embedded Toolchain via `apt` rather
+  than downloading from the ARM developer website directly.
+- Make sure to include the Swift 6 toolchain in your PATH, so that Swift
+  can be detected.
+- For the best development experience, you may want to use Visual Studio
+  Code with the WSL extension to connect to your Linux virtual machine.
 
 ## License
 
 Package Resolved itself is licensed under the Mozilla Public License, v2.
-It also uses libraries under other open source licenses:
-
-- [munit][munit-git]: MIT License
-- [ckdl][ckdl-git]: MIT License
-
-[munit-git]: https://github.com/nemequ/munit
-[ckdl-git]: https://github.com/tjol/ckdl
