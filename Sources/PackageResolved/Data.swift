@@ -9,6 +9,7 @@ enum GameConstants {
 }
 
 enum GameResource {
+    nonisolated(unsafe) static var currentFont: FontSet?
     nonisolated(unsafe) static var playerTable: Playdate.Graphics.BitmapTable?
     nonisolated(unsafe) static var paletteImage: Playdate.Graphics.Bitmap?
     nonisolated(unsafe) static var boxOnFrame: Playdate.Graphics.Bitmap?

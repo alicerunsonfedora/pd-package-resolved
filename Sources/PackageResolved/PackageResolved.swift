@@ -16,8 +16,12 @@ func processGameOverState() -> Bool {
     return false
 }
 
-/// The update function should return true to tell the system to update the display, or false if update isn’t needed.
 func update() -> Bool {
+    return UI.displayAlert(message: "I like to eat pickles.")
+}
+
+/// The update function should return true to tell the system to update the display, or false if update isn’t needed.
+func mupdate() -> Bool {
     if !GameData.initializedGameLoop {
         return setup()
     }

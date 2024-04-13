@@ -12,6 +12,7 @@ import PlaydateKit
 
         do {
             let styled = try Fonts.styledFont(for: .bold)
+            GameResource.currentFont = styled
             Playdate.Graphics.setFont(styled.font)
         } catch {
             Playdate.System.error("Failed to load a suitable font!")
