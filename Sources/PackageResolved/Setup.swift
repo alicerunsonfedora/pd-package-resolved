@@ -31,27 +31,31 @@ func setup() -> Bool {
     Playdate.Graphics.clear(color: 1)
 
     let playerPosition = Vector2<Float>(x: 0, y: 24)
-    let table = Playdate.Graphics.BitmapTable(path: "Images/charlie")
-    GameResource.playerTable = table
-    GameData.player = Player(at: playerPosition, size: GameConstants.charlieSize, table: table)
+
+    if GameResource.playerTable == nil {
+        GameResource.playerTable = Playdate.Graphics.BitmapTable(path: "Images/charlie")
+    }
+
+    if let table = GameResource.playerTable {
+        GameData.player = Player(at: playerPosition, size: GameConstants.charlieSize, table: table)
+    }
     GameData.player?.move(to: .init(x: GameData.screen.bounds.x / 2, y: 24))
     Playdate.Sprite.updateAndDrawDisplayListSprites()
 
-    GameResource.paletteImage = Playdate.Graphics.Bitmap(path: "Images/palette")
     if GameResource.paletteImage == nil {
-        Playdate.System.error("Couldn't load palette image.")
-        GameData.gameOverState = .crash
-        return false
+        GameResource.paletteImage = Playdate.Graphics.Bitmap(path: "Images/palette")
+        if GameResource.paletteImage == nil {
+            Playdate.System.error("Couldn't load palette image.")
+            GameData.gameOverState = .crash
+            return false
+        }
     }
 
-    // let boxTable = try? Gameloop.getBoxTable()
-    // guard let (on, off) = boxTable else {
-    //     Playdate.System.error("Expected box images but found nothing.")
-    //     GameData.gameOverState = .crash
-    //     return false
-    // }
-    GameResource.boxOnFrame = Playdate.Graphics.Bitmap(path: "Images/boxOn")
-    GameResource.boxOffFrame = Playdate.Graphics.Bitmap(path: "Images/boxOff")
+    if GameResource.boxOnFrame == nil, GameResource.boxOffFrame == nil {
+        GameResource.boxOnFrame = Playdate.Graphics.Bitmap(path: "Images/boxOn")
+        GameResource.boxOffFrame = Playdate.Graphics.Bitmap(path: "Images/boxOff")
+    }
+
     Boxes.fill(boxes: &GameData.boxes, screen: GameData.screen)
     Playdate.System.resetElapsedTime()
 

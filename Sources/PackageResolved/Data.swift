@@ -43,4 +43,19 @@ enum GameData {
     nonisolated(unsafe) static var frameUpdated = false
     nonisolated(unsafe) static var initializedGameLoop = false
     nonisolated(unsafe) static var paletteGracePeriodActive = false
+
+    static func reset() {
+        GameData.initializedGameLoop = false
+        GameData.gameOverState = nil
+
+        GameData.palettes.removeAll()
+        GameData.boxes = Array(repeating: .zero, count: GameConstants.boxCount)
+        GameData.playerFrame = 0
+        GameData.boxFrame = 0
+        GameData.player = nil
+        GameData.boxesCollected = 0
+        GameData.timeRemaining = 60
+        GameData.frameUpdated = false
+        GameData.paletteGracePeriodActive = false
+    }
 }

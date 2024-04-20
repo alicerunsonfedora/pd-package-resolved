@@ -1,34 +1,28 @@
 import Charolette
 import PlaydateKit
 
-func processGameOverState() -> Bool {
-    guard let gameOverState = GameData.gameOverState else { return true }
-    switch gameOverState {
-    case .crash:
-        Playdate.System.error("A crash occurred.")
-    case .injury:
-        Playdate.System.log("You got injured by a palette.")
-    case .outOfTime:
-        Playdate.System.log("You ran out of time.")
-    default:
-        break
-    }
-    return false
+func processGameOver(state gameOverState: GameOverState) -> Bool {
+    return UI.displayAlert(message: gameOverState.staticMessage)
 }
 
-func update() -> Bool {
+func mupdate() -> Bool {
     return UI.displayAlert(message: "I like to eat pickles.")
 }
 
 /// The update function should return true to tell the system to update the display, or false if update isn’t needed.
-func mupdate() -> Bool {
+func update() -> Bool {
     if !GameData.initializedGameLoop {
         return setup()
     }
 
     // NOTE: Impl. here is just temporary until we get proper screenage.
-    if !processGameOverState() {
-        return false
+    if let gameOverState = GameData.gameOverState {
+        let (_, _, released) = Playdate.System.buttonState
+        if released.contains(.a) {
+            GameData.reset()
+            return false
+        }
+        return processGameOver(state: gameOverState)
     }
 
     guard let playerTable = GameResource.playerTable else {
@@ -134,9 +128,9 @@ func mupdate() -> Bool {
             bounds: GameData.screen.bounds))
     }
 
-    // if GameData.timeRemaining <= 0 {
-    //     GameData.gameOverState = .outOfTime
-    // }
+    if GameData.timeRemaining <= 0 {
+        GameData.gameOverState = .outOfTime
+    }
     
     return true
 }

@@ -6,6 +6,19 @@ enum GameOverState {
     case injury
     case crash
     case success
+
+    var staticMessage: StaticString {
+        switch self {
+        case .outOfTime:
+            "You couldn't complete\n\tthe mission in time."
+        case .injury:
+            "You got seriously injured."
+        case .crash:
+            "A serious error occurred and the game couldn't recover."
+        case .success:
+            "Congrats! You completed the mission."
+        }
+    }
 }
 
 enum Gameloop {

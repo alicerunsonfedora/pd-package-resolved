@@ -3,7 +3,6 @@ import PlaydateKit
 
 enum UI {
     static func displayAlert(message: StaticString) -> Bool {
-        Playdate.System.drawFPS()
         let width = Playdate.Display.width
         let height = Playdate.Display.height
 
@@ -14,6 +13,7 @@ enum UI {
         let halfHeight = CInt(styledFont.size / 2)
         let yOffset = (height / 2) - halfHeight
 
+        Playdate.Graphics.clear(color: 1)
         Playdate.Graphics.drawRect(x: 8, y: 8, width: width - 16, height: height - 16)
 
         _ = message.withUTF8Buffer { string in

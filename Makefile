@@ -16,6 +16,7 @@ build/Modules/charolette_device.o: Sources/Charolette/*.swift
 build/Modules/charolette_simulator.o: Sources/Charolette/*.swift
 	$(SWIFT_EXEC) $(SWIFT_FLAGS) $(SWIFT_FLAGS_SIMULATOR) -c $^ -emit-module -o $@
 
+SWIFT_FLAGS_SIMULATOR += -module-alias Charolette=charolette_simulator
 SWIFT_FLAGS_DEVICE += -module-alias Charolette=charolette_device
 
 # MARK: - Build BasicExample Swift Object
