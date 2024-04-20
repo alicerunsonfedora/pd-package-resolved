@@ -18,6 +18,10 @@ import PlaydateKit
             Playdate.System.error("Failed to load a suitable font!")
         }
 
+        Playdate.System.addMenuItem(title: "Restart") { _ in
+            GameData.reset()
+        }
+
         Playdate.System.updateCallback = update
     default: break
     }
