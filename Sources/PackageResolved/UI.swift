@@ -32,6 +32,23 @@ enum UI {
                 y: yOffset)
         }
 
+        let restartMsg: StaticString = "Press A to restart"
+        _ = restartMsg.withUTF8Buffer { string in
+            let halfScreenWidth: Int = Int(width) / 2
+            let stringWidth = styledFont.font.getTextWidth(
+                for: string.baseAddress!,
+                length: string.count,
+                encoding: .kUTF8Encoding,
+                tracking: 0)
+            
+            return Playdate.Graphics.drawText(
+                string.baseAddress,
+                length: string.count,
+                encoding: .kUTF8Encoding,
+                x: CInt(halfScreenWidth) - stringWidth / 2,
+                y: height - CInt(styledFont.size) - 16
+            )
+        }
         return true
     }
 }
