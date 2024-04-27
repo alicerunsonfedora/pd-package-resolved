@@ -14,6 +14,16 @@
             }
         },
         {
+            "label": "Run Local Build",
+            "type": "shell",
+            "command": "make simulator && PlaydateSimulator build/PackageResolved.pdx",
+            "problemMatcher": ["$swiftc"],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
             "label": "Clean Project",
             "type": "shell",
             "command": "make clean",

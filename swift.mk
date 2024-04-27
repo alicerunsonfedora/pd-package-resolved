@@ -74,6 +74,4 @@ SWIFT_FLAGS_SIMULATOR := \
 
 SIMCOMPILER += \
 	-nostdlib \
-	-dead_strip \
-	-Wl,-exported_symbol,_eventHandlerShim \
-	-Wl,-exported_symbol,_eventHandler \
+	-dead_strip
