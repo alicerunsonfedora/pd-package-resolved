@@ -120,14 +120,25 @@ func update() -> Bool {
     //                              (int)screen.bounds.y - fontSize - 8};
     // drawASCIIText(pd, timerMessage, timerPosition);
 
-    Gameloop.cycleFrames(frame: &GameData.playerFrame, updated: &GameData.frameUpdated)
+    let (currentButtons, _, _) = Playdate.System.buttonState
+    let currentXPosition = GameData.player?.position.x ?? 0
+
+    var movementDelta: Float = -1
     if !Playdate.System.isCrankDocked {
-        GameData.player?.move(to: Movement.translate(
-            from: GameData.player?.position ?? .zero,
-            withCrankRotation: Playdate.System.crankAngle,
-            bounds: GameData.screen.bounds))
+        movementDelta = Playdate.System.crankAngle
+    } else if currentButtons.contains(.left) {
+        movementDelta = currentXPosition - 4
+    } else if currentButtons.contains(.right) {
+        movementDelta = currentXPosition + 4
     }
 
+    Gameloop.cycleFrames(frame: &GameData.playerFrame, updated: &GameData.frameUpdated)
+    if movementDelta >= 0 {
+        GameData.player?.move(to: Movement.translate(
+            from: GameData.player?.position ?? .zero,
+            withCrankRotation: movementDelta,
+            bounds: GameData.screen.bounds))
+    }
     if GameData.timeRemaining <= 0 {
         GameData.gameOverState = .outOfTime
     }
