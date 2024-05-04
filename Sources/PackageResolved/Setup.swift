@@ -22,7 +22,8 @@ import PlaydateKit
             GameData.reset()
         }
 
-        Playdate.System.updateCallback = update
+        let mainGameloop = PackageResolvedGameloop()
+        Playdate.System.updateCallback = mainGameloop.runIteration
     default: break
     }
     return 0

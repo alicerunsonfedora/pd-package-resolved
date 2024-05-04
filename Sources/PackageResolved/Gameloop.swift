@@ -14,7 +14,7 @@ enum GameOverState {
         case .injury:
             "You got seriously injured."
         case .crash:
-            "A serious error occurred and the game couldn't recover."
+            "A serious error occurred\n\tand the game couldn't recover."
         case .success:
             "Congrats! You completed the mission."
         }
