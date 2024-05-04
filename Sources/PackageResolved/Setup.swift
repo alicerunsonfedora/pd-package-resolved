@@ -29,11 +29,13 @@ import PlaydateKit
 }
 
 func setup() -> Bool {
+    // MARK: Screen Clearing
     GameData.screen.bounds.x = Float(Playdate.Display.width)
     GameData.screen.bounds.y = Float(Playdate.Display.height)
 
     Playdate.Graphics.clear(color: 1)
 
+    // MARK: Player Setup
     let playerPosition = Vector2<Float>(x: 0, y: 24)
 
     if GameResource.playerTable == nil {
@@ -46,6 +48,7 @@ func setup() -> Bool {
     GameData.player?.move(to: .init(x: GameData.screen.bounds.x / 2, y: 24))
     Playdate.Sprite.updateAndDrawDisplayListSprites()
 
+    // MARK: Palette Resource
     if GameResource.paletteImage == nil {
         GameResource.paletteImage = Playdate.Graphics.Bitmap(path: "Images/palette")
         if GameResource.paletteImage == nil {
@@ -55,12 +58,24 @@ func setup() -> Bool {
         }
     }
 
+    // MARK: Boxes
     if GameResource.boxOnFrame == nil, GameResource.boxOffFrame == nil {
         GameResource.boxOnFrame = Playdate.Graphics.Bitmap(path: "Images/boxOn")
         GameResource.boxOffFrame = Playdate.Graphics.Bitmap(path: "Images/boxOff")
     }
 
     Boxes.fill(boxes: &GameData.boxes, screen: GameData.screen)
+
+    // MARK: UI
+    if GameResource.clockTable == nil {
+        let clockTable = Playdate.Graphics.BitmapTable(path: "Images/clock")
+        GameResource.clockTable = clockTable
+
+        if GameResource.clockFrame == nil {
+            GameResource.clockFrame = clockTable.bitmap(at: 0)
+        }
+    }
+    
     Playdate.System.resetElapsedTime()
 
     GameData.paletteGracePeriodActive = true

@@ -9,6 +9,20 @@
         "release"
     ],
     "presentation-mode.configBackup": {
-        "editor.fontSize": "undefined"
+        "editor.fontSize": "undefined",
+        "terminal.integrated.fontSize": "undefined"
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        ".build/**": true,
+        "build/**": true,
+        ".nova/**": true,
+        ".swiftpm/**": true,
+        "Sources/CharoletteStandard": true,
     }
 }

@@ -102,6 +102,8 @@ func update() -> Bool {
         GameData.paletteGracePeriodActive = false
     }
 
+    // NOTE: Allocate C string via UnsafeMutableBufferPointer.allocate - rauhul
+    
     // if (boxesCollected > currentBoxesCollectedInFrame) {
     //     pd->system->formatString(&counterMessage, "Boxes collected: %i", boxesCollected);
     // }
@@ -111,7 +113,18 @@ func update() -> Bool {
 
     let timeSinceReset = Int(Playdate.System.elapsedTime)
     // let currentTime = GameData.timeRemaining
+
+
+    // TODO: Get this to show different phases of the clock, not just the full clock
     GameData.timeRemaining = 60 - timeSinceReset
+    if let clockFrame = GameResource.clockFrame {
+        Playdate.Graphics.drawBitmap(clockFrame,
+                                     // TODO: this is NOT how math works
+                                     position: Vector2(x: 32, y: 32) - GameData.screen.bounds,
+                                     flip: .bitmapUnflipped)
+    } else {
+        Playdate.System.log("No clock?")
+    }
 
     // if (timeRemaning < currentTime || timerMessage == NULL)
     //     pd->system->formatString(&timerMessage, "%i", timeRemaning);
