@@ -2,7 +2,8 @@ import Charolette
 import PlaydateKit
 
 func processGameOver(state gameOverState: GameOverState) -> Bool {
-    return UI.displayAlert(message: gameOverState.staticMessage)
+    return UI.displayAlert(message: gameOverState.staticMessage,
+                           options: .displayRestart)
 }
 
 func mupdate() -> Bool {
@@ -15,7 +16,6 @@ func update() -> Bool {
         return setup()
     }
 
-    // NOTE: Impl. here is just temporary until we get proper screenage.
     if let gameOverState = GameData.gameOverState {
         let (_, _, released) = Playdate.System.buttonState
         if released.contains(.a) {
