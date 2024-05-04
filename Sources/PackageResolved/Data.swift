@@ -1,20 +1,44 @@
 import Charolette
 import PlaydateKit
 
+// TODO: How do we make these thread-safe?
+
+/// An enumeration containing various game constants.
 enum GameConstants {
+    /// A vector representation of the player's width and height.
     nonisolated(unsafe) static let charlieSize: Vector2<Float> = .init(x: 32, y: 64)
+
+    /// The number of boxes that should spawn in a given run on the screen.
     nonisolated(unsafe) static let boxCount: Int = 6
+    
+    /// The number of palettes that should spawn in a given run on the screen.
     nonisolated(unsafe) static let paletteCount: Int = 2
+
+    /// The default horizontal inset from either side of the screen.
     nonisolated(unsafe) static let xInset: Float = 32
 }
 
+/// An enumeration of the various resources the game may use.
 enum GameResource {
+    /// The current font for all text on the screen.
     nonisolated(unsafe) static var currentFont: FontSet?
+
+    /// The player's image table.
     nonisolated(unsafe) static var playerTable: Playdate.Graphics.BitmapTable?
+
+    /// The palette's bitmap image.
     nonisolated(unsafe) static var paletteImage: Playdate.Graphics.Bitmap?
+
+    /// The box's primary or "on" bitmap image.
     nonisolated(unsafe) static var boxOnFrame: Playdate.Graphics.Bitmap?
+
+    /// The box's secondary or "off" bitmap image.
     nonisolated(unsafe) static var boxOffFrame: Playdate.Graphics.Bitmap?
+
+    /// The clock UI's image table.
     nonisolated(unsafe) static var clockTable: Playdate.Graphics.BitmapTable?
+
+    /// The current frame in the clock UI's table.
     nonisolated(unsafe) static var clockFrame: Playdate.Graphics.Bitmap?
 }
 
