@@ -28,12 +28,21 @@ enum Palettes {
             let position = createPalettePosition(screen: screen)
             let current = Palette(image: image, at: position)
             current.sprite.collisionsEnabled = true
-            current.sprite.collideRect = .init(x: 4, y: 8, width: Constants.paletteSize.x - 8, height: Constants.paletteSize.y - 8)
+            current.sprite.collideRect = .init(
+                x: 4,
+                y: 8,
+                width: Constants.paletteSize.x - 8,
+                height: Constants.paletteSize.y - 8)
             palettes.append(current)
         }
     }
 
-    static func shift(palette: Palette, threshold: Float, screen: ScreenData, image: Bitmap) -> Palette {
+    static func shift(
+        palette: Palette,
+        threshold: Float,
+        screen: ScreenData,
+        image: Bitmap
+    ) -> Palette {
         var newPosition = palette.position
         newPosition.y -= 1
         if newPosition.y < threshold { newPosition = createPalettePosition(screen: screen) }
@@ -46,8 +55,10 @@ enum Palettes {
     }
 
     private static func createPalettePosition(screen: ScreenData) -> Vector2<Float> {
-        let xPosition = Float(randomInteger()).truncatingRemainder(dividingBy: screen.bounds.x)
-        let yPosition = Float(randomInteger()).truncatingRemainder(dividingBy: screen.bounds.y)
+        let xPosition = Float(randomInteger())
+            .truncatingRemainder(dividingBy: screen.bounds.x)
+        let yPosition = Float(randomInteger())
+            .truncatingRemainder(dividingBy: screen.bounds.y)
         let originalPosition = Vector2<Float>(x: xPosition, y: yPosition)
         return screen.fencingIn(point: originalPosition)
     }

@@ -31,7 +31,13 @@ enum Gameloop {
         case bitmapNotFound
     }
 
-    static func drawBox(from boxes: [Box], at index: Int, boxFrame: Int, boxOnFrame: Bitmap, boxOffFrame: Bitmap) {
+    static func drawBox(
+        from boxes: [Box],
+        at index: Int,
+        boxFrame: Int,
+        boxOnFrame: Bitmap,
+        boxOffFrame: Bitmap
+    ) {
         let box = boxes[index]
         let even = index % 2 == 0
         switch (boxFrame, even) {

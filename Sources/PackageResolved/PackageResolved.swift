@@ -10,11 +10,14 @@ func mupdate() -> Bool {
     return UI.displayAlert(message: "I like to eat pickles.")
 }
 
-/// The update function should return true to tell the system to update the display, or false if update isn’t needed.
+/// The update function should return true to tell the system to update the display, or false if
+/// update isn’t needed.
 func update() -> Bool {
     if !GameData.initializedGameLoop {
         return setup()
     }
+
+    // MARK: Processing Game Over
 
     if let gameOverState = GameData.gameOverState {
         let (_, _, released) = Playdate.System.buttonState
@@ -25,6 +28,7 @@ func update() -> Bool {
         return processGameOver(state: gameOverState)
     }
 
+    // MARK: Redraw Player
     guard let playerTable = GameResource.playerTable else {
         GameData.gameOverState = .crash
         Playdate.System.error("Uh oh, where's the player table?")
@@ -33,6 +37,7 @@ func update() -> Bool {
 
     GameData.player?.update(using: playerTable, frame: GameData.playerFrame)
 
+    // MARK: Palette Updates
     guard let paletteImage = GameResource.paletteImage else {
         GameData.gameOverState = .crash
         return false
@@ -63,6 +68,7 @@ func update() -> Bool {
 
     Playdate.Sprite.updateAndDrawDisplayListSprites()
 
+    // MARK: Box Updates
     guard let boxOnFrame = GameResource.boxOnFrame,
           let boxOffFrame = GameResource.boxOffFrame else {
             GameData.gameOverState = .crash
@@ -102,6 +108,7 @@ func update() -> Bool {
         GameData.paletteGracePeriodActive = false
     }
 
+    // MARK: Time Updates
     // NOTE: Allocate C string via UnsafeMutableBufferPointer.allocate - rauhul
     
     // if (boxesCollected > currentBoxesCollectedInFrame) {
@@ -133,6 +140,7 @@ func update() -> Bool {
     //                              (int)screen.bounds.y - fontSize - 8};
     // drawASCIIText(pd, timerMessage, timerPosition);
 
+    // MARK: Process Input
     let (currentButtons, _, _) = Playdate.System.buttonState
     let currentXPosition = GameData.player?.position.x ?? 0
 

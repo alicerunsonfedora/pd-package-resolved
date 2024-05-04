@@ -62,7 +62,10 @@ enum UI {
         return true
     }
 
-    private static func width(of string: UnsafeBufferPointer<UInt8>, using fontSet: FontSet) -> CInt {
+    private static func width(
+        of string: UnsafeBufferPointer<UInt8>,
+        using fontSet: FontSet
+    ) -> CInt {
         guard let baseAddress = string.baseAddress else { return -1 }
         return fontSet.font.getTextWidth(for: baseAddress,
                                          length: string.count,

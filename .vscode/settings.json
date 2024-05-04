@@ -12,6 +12,8 @@
         "editor.fontSize": "undefined",
         "terminal.integrated.fontSize": "undefined"
     },
+    "editor.rulers": [100],
+    "editor.inlayHints.enabled": "off",
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,
