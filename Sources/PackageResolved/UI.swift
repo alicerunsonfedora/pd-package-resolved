@@ -19,6 +19,7 @@ enum UI {
     /// - Parameter options: Additional options to configure the alert, such as whether to
     ///   whether to prompt the player to restart the game. Defaults to 'none'.
     /// - Returns: Whether the Playdate should redraw the screen.
+    @discardableResult
     static func displayAlert(message: StaticString, options: AlertOptions = .none) -> Bool {
         let width = Playdate.Display.width
         let height = Playdate.Display.height

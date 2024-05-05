@@ -23,7 +23,7 @@ import PlaydateKit
         }
 
         let mainGameloop = PackageResolvedGameloop()
-        Playdate.System.updateCallback = mainGameloop.runIteration
+        Playdate.System.updateCallback = mainGameloop.runManagedIteration
     default: break
     }
     return 0
