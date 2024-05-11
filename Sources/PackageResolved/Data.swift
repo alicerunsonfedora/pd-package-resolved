@@ -37,9 +37,6 @@ enum GameResource {
 
     /// The clock UI's image table.
     nonisolated(unsafe) static var clockTable: Playdate.Graphics.BitmapTable?
-
-    /// The current frame in the clock UI's table.
-    nonisolated(unsafe) static var clockFrame: Playdate.Graphics.Bitmap?
 }
 
 // FIXME: Big doo doo turd bad

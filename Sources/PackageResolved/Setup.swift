@@ -71,10 +71,6 @@ func setup() -> Bool {
     if GameResource.clockTable == nil {
         let clockTable = Playdate.Graphics.BitmapTable(path: "Images/clock")
         GameResource.clockTable = clockTable
-
-        if GameResource.clockFrame == nil {
-            GameResource.clockFrame = clockTable.bitmap(at: 0)
-        }
     }
     
     Playdate.System.resetElapsedTime()

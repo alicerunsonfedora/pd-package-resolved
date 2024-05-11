@@ -6,7 +6,7 @@ import PlaydateKit
 final class PackageResolvedGameloop {
     nonisolated(unsafe) var subsystems: [Subsystem] = [
         PlayerSubsystem(),
-        PaletteSubsystem(),
+        // PaletteSubsystem(),
         PackageSubsystem(),
         ClockSubsystem()
     ]
