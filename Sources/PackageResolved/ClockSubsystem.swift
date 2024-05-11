@@ -31,6 +31,11 @@ final class ClockSubsystem: Subsystem {
     }
 
     override func draw() -> Bool {
+        let yPos = Int32(GameData.screen.bounds.y) - 24
+        let width = Int32(GameData.screen.bounds.x)
+        Playdate.Graphics.fillRect(x: 0, y: yPos, width: width, height: 24, color: 1)
+        Playdate.Graphics.drawRect(x: 0, y: yPos, width: width, height: 24)
+
         guard let table = GameResource.clockTable,
               let frame = table.bitmap(at: frameForCurrentPercentage) else {
             Playdate.System.log("No clock?")
@@ -38,7 +43,7 @@ final class ClockSubsystem: Subsystem {
         }
 
         Playdate.Graphics.drawBitmap(frame,
-                                    position: Vector2(x: 32, y: 32) - GameData.screen.bounds,
+                                    position: Vector2(x: 24, y: 20) - GameData.screen.bounds,
                                     flip: .bitmapUnflipped)
         return true
     }
