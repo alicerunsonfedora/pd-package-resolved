@@ -35,6 +35,7 @@ let package = Package(
     name: "PackageResolved",
     products: [
         .library(name: "Charolette", targets: ["Charolette"]),
+        .library(name: "KDL", targets: ["KDL"]),
         .library(name: "PackageResolved", targets: ["PackageResolved"]),
     ],
     dependencies: [
@@ -52,11 +53,16 @@ let package = Package(
             ],
             swiftSettings: swiftSettingsSimulator),
         .target(
+          name: "KDL",
+          exclude: ["src/utils", "doc", "bindings", "tests"],
+          swiftSettings: swiftSettingsSimulator),
+        .target(
             name: "PackageResolved",
             dependencies: [
                 // .product(name: "CPlaydate", package: "PlaydateKit"),
                 .product(name: "PlaydateKit", package: "PlaydateKit"),
-                "Charolette"
+                "Charolette",
+                "KDL"
             ],
             swiftSettings: swiftSettingsSimulator
         ),

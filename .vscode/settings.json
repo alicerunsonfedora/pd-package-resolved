@@ -20,5 +20,8 @@
         ".nova/**": true,
         ".swiftpm/**": true,
         "Sources/CharoletteStandard": true,
-    }
+    },
+    "editor.lineHeight": 2,
+    "editor.fontSize": 17,
+    "terminal.integrated.fontSize": 16
 }

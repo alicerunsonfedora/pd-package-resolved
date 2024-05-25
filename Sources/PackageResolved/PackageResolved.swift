@@ -1,17 +1,25 @@
 import Charolette
+import KDL
 import PlaydateKit
 
 // MARK: Gameloop handler
-
 final class PackageResolvedGameloop {
     nonisolated(unsafe) var subsystems: [Subsystem] = [
         PlayerSubsystem(),
-        // PaletteSubsystem(),
+        PaletteSubsystem(),
         PackageSubsystem(),
         ClockSubsystem()
     ]
 
-    init() {}
+    init() {
+        let staticString = StaticString("Hello, world!")
+        staticString.withUTF8Buffer { buffer in
+            let kdlString = kdl_str_from_cstr(staticString.utf8Start)
+            if kdlString.len != 0 {
+                Playdate.System.log(kdlString.data)
+            }
+        }
+    }
 }
 
 // MARK: GameRunner conformance

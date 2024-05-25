@@ -1,0 +1,8 @@
+/* The following declares the configuration for the game. */
+gameconfig {
+
+    /* Levels should be defined here and contain arguments for packages and time. */
+    levels {
+        level packages=30 time=60
+    }
+}
