@@ -11,6 +11,16 @@ ifeq ($(SDK),)
 $(error SDK path not found; set ENV value PLAYDATE_SDK_PATH)
 endif
 
+UINCDIR = Sources/KDL/include
+ULIBDIR = Sources/KDL/include
+SRC = Sources/KDL/src/bigint.c \
+	  Sources/KDL/src/compat.c \
+	  Sources/KDL/src/emitter.c \
+	  Sources/KDL/src/parser.c \
+	  Sources/KDL/src/str.c \
+	  Sources/KDL/src/tokenizer.c \
+	  Sources/KDL/src/utf8.c
+
 include $(SDK)/C_API/buildsupport/common.mk
 
 ifeq ($(detected_OS), Darwin)
@@ -50,6 +60,7 @@ SWIFT_FLAGS := \
 	-I $(SDK)/C_API \
 	-I build/Modules \
 	-I $(REPO_ROOT)/Sources/CPlaydate/include \
+	-I Sources/KDL/include
 
 C_FLAGS_DEVICE := \
 	-mthumb \

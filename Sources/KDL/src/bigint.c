@@ -1,6 +1,7 @@
 #include "bigint.h"
 #include "compat.h"
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -29,7 +30,7 @@ _kdl_ubigint* _kdl_ubigint_dup(_kdl_ubigint const* value)
 void _kdl_ubigint_free(_kdl_ubigint* i) { free(i); }
 
 // a += b
-_kdl_ubigint* _kdl_ubigint_add_inplace(_kdl_ubigint* a, unsigned int b)
+_kdl_ubigint* _kdl_ubigint_add_inplace(_kdl_ubigint* a, uint32_t b)
 {
     uint64_t carry = b;
     for (size_t i = 0; i < a->n_digits; ++i) {
@@ -48,7 +49,7 @@ _kdl_ubigint* _kdl_ubigint_add_inplace(_kdl_ubigint* a, unsigned int b)
 }
 
 // a *= b
-_kdl_ubigint* _kdl_ubigint_multiply_inplace(_kdl_ubigint* a, unsigned int b)
+_kdl_ubigint* _kdl_ubigint_multiply_inplace(_kdl_ubigint* a, uint32_t b)
 {
     uint32_t carry = 0;
     for (size_t i = 0; i < a->n_digits; ++i) {
