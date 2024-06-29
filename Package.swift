@@ -59,7 +59,7 @@ let package = Package(
         .target(
             name: "PackageResolved",
             dependencies: [
-                // .product(name: "CPlaydate", package: "PlaydateKit"),
+                .product(name: "CPlaydate", package: "PlaydateKit"),
                 .product(name: "PlaydateKit", package: "PlaydateKit"),
                 "Charolette",
                 "KDL"

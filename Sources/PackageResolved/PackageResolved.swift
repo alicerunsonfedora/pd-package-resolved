@@ -12,12 +12,20 @@ final class PackageResolvedGameloop {
     ]
 
     init() {
-        let staticString = StaticString("Hello, world!")
-        staticString.withUTF8Buffer { buffer in
-            let kdlString = kdl_str_from_cstr(staticString.utf8Start)
-            if kdlString.len != 0 {
-                Playdate.System.log(kdlString.data)
-            }
+        let parser = GameConfigurationParser(path: "prconfig")
+
+        do {
+            let config = try parser.parse()
+        } catch GameConfigurationParser.ParserError.missingHandle {
+            Playdate.System.log("No handle available.")
+        } catch GameConfigurationParser.ParserError.missingFileStats {
+            Playdate.System.log("No file stats available.")
+        } catch GameConfigurationParser.ParserError.readFileFailure {
+            Playdate.System.log("Something went wrong in read.")
+        } catch GameConfigurationParser.ParserError.kdlStringEmpty {
+            Playdate.System.log("KDL string is empty")
+        } catch {
+            Playdate.System.log("Something else happened aaaaa")
         }
     }
 }
