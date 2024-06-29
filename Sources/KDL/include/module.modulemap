@@ -1,0 +1,4 @@
+module KDL {
+  umbrella header "kdl/kdl.h"
+  export *
+}
