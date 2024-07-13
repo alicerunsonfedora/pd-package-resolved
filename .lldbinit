@@ -1,0 +1,4 @@
+target create "PlaydateSimulator"
+breakpoint set -n eventHandler
+run build/PackageResolved.pdx
+

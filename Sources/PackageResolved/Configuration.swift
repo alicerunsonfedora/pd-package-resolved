@@ -12,6 +12,9 @@ struct GameConfiguration {
 }
 
 class GameConfigurationParser {
+    enum Constants {
+        static let gameConfigKeyword = StaticString("gameconfig")
+    }
     enum ParserError: Error {
         case missingHeader
         case missingHandle
@@ -86,11 +89,14 @@ class GameConfigurationParser {
                     parserState = .errored
                     break
                 }
-                if strcmp(currentEvent.name.data, StaticString("levels").utf8Start) == 0 {
+
+                switch currentEvent.name {
+                case Constants.gameConfigKeyword:
                     Playdate.System.log("foo")
-                } else {
-                    Playdate.System.log("bar")
+                default:
+                    break
                 }
+
             default:
                 Playdate.System.log("New event fired!")
             }
@@ -100,3 +106,19 @@ class GameConfigurationParser {
     }
 }
 
+// From @rauhul 
+extension kdl_str {
+  static func ==(lhs: Self, rhs: StaticString) -> Bool {
+    let rhsCount = lhs.len
+    let lhsCount = rhs.utf8CodeUnitCount
+    guard rhsCount == lhsCount else { return false }
+    let count = min(rhsCount, lhsCount)
+    return strncmp(lhs.data, rhs.utf8Start, count) == 0
+  }
+}
+
+extension StaticString { 
+  static func ~=(lhs: Self, rhs: kdl_str) -> Bool {
+    rhs == lhs
+  }
+}
