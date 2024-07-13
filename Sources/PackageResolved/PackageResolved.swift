@@ -24,6 +24,8 @@ final class PackageResolvedGameloop {
             Playdate.System.log("Something went wrong in read.")
         } catch GameConfigurationParser.ParserError.kdlStringEmpty {
             Playdate.System.log("KDL string is empty")
+        } catch GameConfigurationParser.ParserError.kdlParserError {
+            Playdate.System.log("Something went wrong when parsing the data.")
         } catch {
             Playdate.System.log("Something else happened aaaaa")
         }

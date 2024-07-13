@@ -1,19 +1,10 @@
-test:
-    #!/bin/sh
-    make test -B
-    ./test/test_app
+run:
+    make && PlaydateSimulator ./build/PackageResolved.pdx
 
-fmt:
-    #!/bin/sh
-    find charolette -name '*.[ch]' | xargs \
-        clang-format --style='file:.clang-format' -i
-    find include -name '*.[ch]' | xargs \
-        clang-format --style='file:.clang-format' -i
-    find src -name '*.[ch]' | xargs \
-        clang-format --style='file:.clang-format' -i
-    find test -name '*.[ch]' | xargs \
-        clang-format --style='file:.clang-format' -i
+make-deps:
+    cd Sources/KDL/
+    cmake .
+    make
 
-completions:
-    rm compile_commands.json
-    bear -- make real_all
+kdl-parser-dump:
+    ./Sources/KDL/src/utils/ckdl-parse-events Source/prconfig
