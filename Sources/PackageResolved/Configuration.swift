@@ -14,6 +14,11 @@ struct GameConfiguration {
 class GameConfigurationParser {
     enum Constants {
         static let gameConfigKeyword = StaticString("gameconfig")
+        static let levelsKeyword = StaticString("levels")
+        static let levelKeyword = StaticString("level")
+
+        static let packagesProperty = StaticString("packages")
+        static let timeProperty = StaticString("time")
     }
     enum ParserError: Error {
         case missingHeader
@@ -27,8 +32,10 @@ class GameConfigurationParser {
 
     enum InternalParserState {
         case initial
+        case probingConfiguration
         case probingLevels
         case probingLevel
+        case finished
         case errored
     }
 
@@ -65,8 +72,8 @@ class GameConfigurationParser {
         guard kdlString.len > 0 else {
             throw .kdlStringEmpty
         }
-        
-        Playdate.System.log("Data received: ")
+       
+        Playdate.System.log("[CONF] Data received: ")
         Playdate.System.log(kdlString.data)
 
         let parser = kdl_create_string_parser(kdlString, KDL_DEFAULTS)
@@ -80,29 +87,59 @@ class GameConfigurationParser {
             switch (currentEvent.event, parserState) {
             case (KDL_EVENT_PARSE_ERROR, _), (_, .errored):
                 throw .kdlParserError
-            case let (KDL_EVENT_START_NODE, state):
-                if currentEvent.event != KDL_EVENT_START_NODE {
-                    Playdate.System.log("HUH?!?!?!?!")
-                }
-
+            case (KDL_EVENT_START_NODE, let state):
                 if currentEvent.name == nil {
                     parserState = .errored
                     break
                 }
 
-                switch currentEvent.name {
-                case Constants.gameConfigKeyword:
-                    Playdate.System.log("foo")
+                switch (currentEvent.name, state) {
+                case (Constants.gameConfigKeyword, .initial):
+                    Playdate.System.log("[CONF] Starting a new game config read")
+                    parserState = .probingConfiguration
+                case (Constants.levelsKeyword, .probingConfiguration):
+                    Playdate.System.log("[CONF] Probing all available levels")
+                    parserState = .probingLevels
+                case (Constants.levelKeyword, .probingLevels):
+                    Playdate.System.log("[CONF] Probing new level")
+                    parserState = .probingLevel
                 default:
+                    parserState = .errored
                     break
                 }
-
+            case (KDL_EVENT_PROPERTY, .probingLevel):
+                switch currentEvent.name {
+                case Constants.packagesProperty:
+                    Playdate.System.log("[CONF] Updating package count.")
+                    currentPackages = Int(currentEvent.value.number.integer)
+                case Constants.timeProperty:
+                    Playdate.System.log("[CONF] Update time count.")
+                    currentTimeRemaining = Int(currentEvent.value.number.integer)
+                default:
+                    Playdate.System.log("[CONF] Unknown property. Skipping...")
+                }
+                break
+            case (KDL_EVENT_END_NODE, .probingLevel):
+                Playdate.System.log("[CONF] Adding new level to the level list.")
+                let newLevel = Level(packages: currentPackages, time: currentTimeRemaining)
+                levels.append(newLevel)
+                parserState = .probingLevels
+            case (KDL_EVENT_END_NODE, .probingLevels):
+                Playdate.System.log("[CONF] Finished probing levels.")
+                parserState = .probingConfiguration
+            case (KDL_EVENT_END_NODE, .probingConfiguration):
+                Playdate.System.log("[CONF] Done reading configuration block.")
+                parserState = .finished
             default:
-                Playdate.System.log("New event fired!")
+                Playdate.System.log("[CONF] New event fired, but not recognized or needed.")
             }
             currentEvent = kdl_parser_next_event(parser).pointee
         }
-        throw .unimplemented
+        
+        guard parserState == .finished else {
+            throw .kdlParserError
+        }
+        return GameConfiguration(levels: levels)
     }
 }
 
