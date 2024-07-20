@@ -66,6 +66,13 @@ enum GameData {
     nonisolated(unsafe) static var frameUpdated = false
     nonisolated(unsafe) static var initializedGameLoop = false
     nonisolated(unsafe) static var paletteGracePeriodActive = false
+    
+    nonisolated(unsafe) static var configuredLevelData = Level(packages: 30, time: 60)
+
+    static func set(level: Level) {
+        GameData.configuredLevelData = level
+        GameData.timeRemaining = level.time
+    }
 
     static func reset() {
         GameData.initializedGameLoop = false
@@ -77,7 +84,7 @@ enum GameData {
         GameData.boxFrame = 0
         GameData.player = nil
         GameData.boxesCollected = 0
-        GameData.timeRemaining = 60
+        GameData.timeRemaining = configuredLevelData.time 
         GameData.frameUpdated = false
         GameData.paletteGracePeriodActive = false
     }

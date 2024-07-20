@@ -4,7 +4,7 @@ import PlaydateKit
 /// The subsystem responsible for handling the game's current time.
 final class ClockSubsystem: Subsystem {
     private var percentRemaining: Float {
-        Float(GameData.timeRemaining) / 60
+        Float(GameData.timeRemaining) / Float(GameData.configuredLevelData.time) 
     }
 
     private var frameForCurrentPercentage: CInt {
@@ -19,7 +19,7 @@ final class ClockSubsystem: Subsystem {
 
     override func process() {
         let timeSinceReset = Int(Playdate.System.elapsedTime)
-        GameData.timeRemaining = 60 - timeSinceReset
+        GameData.timeRemaining = GameData.configuredLevelData.time - timeSinceReset
 
         if GameData.timeRemaining == 55 {
             GameData.paletteGracePeriodActive = false

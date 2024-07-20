@@ -4,6 +4,11 @@ import PlaydateKit
 /// The subsystem for displaying, placing, and collecting packages.
 final class PackageSubsystem: Subsystem {
     override func process() {
+        if GameData.timeRemaining <= 0, GameData.boxesCollected >= GameData.configuredLevelData.packages {
+            GameData.gameOverState = .success
+            return
+        }
+        
         for index in 0..<GameConstants.boxCount {
             let distanceToPlayer = GameData.player?.position
                 .distance(to: GameData.boxes[index]) ?? .zero

@@ -1,9 +1,8 @@
-/* The following declares the configuration for the game. */
+/* Start of the game configuration file */
 gameconfig {
 
-    /* Levels should be defined here and contain arguments for packages and time. */
+    /* Declare levels here, specifying packages to collect and time to collect them */
     levels {
-        level packages=30 time=60
+        level packages=1 time=10
     }
 }
-

@@ -16,6 +16,11 @@ final class PackageResolvedGameloop {
 
         do {
             let config = try parser.parse()
+            guard !config.levels.isEmpty else {
+                Playdate.System.error("WTF there are no levels")
+                return
+            }
+            GameData.set(level: config.levels[0])
         } catch GameConfigurationParser.ParserError.missingHandle {
             Playdate.System.log("No handle available.")
         } catch GameConfigurationParser.ParserError.missingFileStats {
@@ -38,6 +43,9 @@ extension PackageResolvedGameloop: GameSystem {
         if !GameData.initializedGameLoop {
             Playdate.System.log("Game loop not ready. Please call setup.")
             GameData.reset()
+            if GameData.timeRemaining == 60 {
+                Playdate.System.log("HUH?")
+            }
             return
         }
 
