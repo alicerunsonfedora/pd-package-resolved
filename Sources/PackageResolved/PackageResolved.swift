@@ -20,6 +20,7 @@ final class PackageResolvedGameloop {
                 Playdate.System.error("WTF there are no levels")
                 return
             }
+            GameData.configuration = config
             GameData.set(level: config.levels[0])
         } catch GameConfigurationParser.ParserError.missingHandle {
             Playdate.System.log("No handle available.")
@@ -43,16 +44,17 @@ extension PackageResolvedGameloop: GameSystem {
         if !GameData.initializedGameLoop {
             Playdate.System.log("Game loop not ready. Please call setup.")
             GameData.reset()
-            if GameData.timeRemaining == 60 {
-                Playdate.System.log("HUH?")
-            }
             return
         }
 
         if GameData.gameOverState != nil {
             let (_, _, released) = Playdate.System.buttonState
-            if released.contains(.a) { GameData.reset() }
-            Playdate.System.log("GAME OVER")
+            if released.contains(.a) {
+                if (GameData.gameOverState == .success) {
+                    GameData.nextLevel()
+                }
+                GameData.reset()
+            }
             return
         }
 

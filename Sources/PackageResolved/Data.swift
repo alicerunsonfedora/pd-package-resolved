@@ -68,6 +68,22 @@ enum GameData {
     nonisolated(unsafe) static var paletteGracePeriodActive = false
     
     nonisolated(unsafe) static var configuredLevelData = Level(packages: 30, time: 60)
+    nonisolated(unsafe) static var configuration: GameConfiguration = GameConfiguration(levels: [])
+    nonisolated(unsafe) static var currentLevel: Int = 0
+
+    static func nextLevel() {
+       guard GameData.currentLevel <= GameData.configuration.levels.endIndex else {
+           Playdate.System.log("No more levels to load.")
+           return
+       }
+
+       GameData.currentLevel += 1
+       if GameData.currentLevel >= GameData.configuration.levels.count {
+           GameData.currentLevel = GameData.configuration.levels.count - 1
+       }
+
+       GameData.set(level: GameData.configuration.levels[GameData.currentLevel])
+    }
 
     static func set(level: Level) {
         GameData.configuredLevelData = level

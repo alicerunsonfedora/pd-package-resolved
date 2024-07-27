@@ -25,8 +25,9 @@ final class ClockSubsystem: Subsystem {
             GameData.paletteGracePeriodActive = false
         }
 
-        if GameData.timeRemaining <= 0 {
-            GameData.gameOverState = .outOfTime
+        if GameData.timeRemaining <= 0, GameData.initializedGameLoop {
+            let metTarget = GameData.boxesCollected >= GameData.configuredLevelData.packages
+            GameData.gameOverState = metTarget ? .success : .outOfTime
         }
     }
 
