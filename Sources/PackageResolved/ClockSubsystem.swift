@@ -49,17 +49,17 @@ final class ClockSubsystem: Subsystem {
 
         // NOTE: Because the clock subsystem has the highest priority for UI drawing, all parts of the overlay with
         // text are written here.
-        let yBasline = GameData.screen.bounds.y - Float(GameResource.currentFont?.size ?? 9) - 1
+        let yBaseline = GameData.screen.bounds.y - Float(GameResource.currentFont?.size ?? 9) - 1
 
         let boxesCollectedMessage = "\(GameData.boxesCollected)/\(GameData.configuredLevelData.packages)"
-        Playdate.Graphics.drawText(boxesCollectedMessage,
-                                   x: 8,
-                                   y: CInt(yBasline))
+        UI.drawText(boxesCollectedMessage, at: .init(x: 8, y: Int(yBaseline)))
 
         let timeRemainingMessage = "\(GameData.timeRemaining < 10 ? "0" : "")\(GameData.timeRemaining)"
-        Playdate.Graphics.drawText(timeRemainingMessage,
-                                  x: CInt(GameData.screen.bounds.x - 28.0 - 9.0 * 2 - 8.0),
-                                  y: CInt(yBasline))
+        
+        // 36.0 to account for clock and padding, then n * 9.0 to account for string length.
+        let offset: Float = 36.0 + (2 * 9.0)
+        UI.drawText(timeRemainingMessage,
+                    at: .init(x: Int(GameData.screen.bounds.x - offset), y: Int(yBaseline)))
 
         return true
     }

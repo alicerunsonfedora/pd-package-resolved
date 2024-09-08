@@ -73,4 +73,9 @@ enum UI {
                                          encoding: .kUTF8Encoding,
                                          tracking: 0) 
     }
+
+    @discardableResult
+    static func drawText(_ text: String, at position: Vector2<Int>) -> Int {
+       Playdate.Graphics.drawText(text, x: CInt(position.x), y: CInt(position.y))
+    }
 }
