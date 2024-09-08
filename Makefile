@@ -1,4 +1,4 @@
-REPO_ROOT := ../PlaydateKit
+REPO_ROOT := ./PlaydateKit
 PRODUCT := build/PackageResolved.pdx
 include swift.mk
 

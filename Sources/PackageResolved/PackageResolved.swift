@@ -72,7 +72,16 @@ extension PackageResolvedGameloop: GameSystem {
             return false
         }
 
-        // NOTE: Allocate C string via UnsafeMutableBufferPointer.allocate - rauhul
+        let boxesCollectedMessage = "\(GameData.boxesCollected)/\(GameData.configuredLevelData.packages)"
+        let drawPoint = GameData.screen.fencingIn(
+            point: .init(x: 8,
+                         y: 8))
+                         // y: GameData.screen.bounds.y - Float(GameResource.currentFont?.size ?? 9) - 32))
+        
+        Playdate.Graphics.drawText(boxesCollectedMessage,
+                                   x: CInt(drawPoint.x),
+                                   y: CInt(drawPoint.y))
+
         return true
     }
 }

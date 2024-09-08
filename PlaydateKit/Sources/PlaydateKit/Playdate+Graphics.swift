@@ -428,6 +428,24 @@ public extension Playdate {
             graphics.setTextLeading(leading)
         }
 
+    /// Draws the given `text`. If no font has been set with `setFont`, the default
+    /// system font Asheville Sans 14 Light is used.
+    ///
+    /// Returns the drawn width of the given `text`.
+    @discardableResult public static func drawText(
+        _ text: String,
+        x: CInt,
+        y: CInt
+    ) -> Int {
+        Int(graphics.drawText.unsafelyUnwrapped(
+            text,
+            text.utf8.count,
+            .kUTF8Encoding,
+            x,
+            y
+        ))
+    }
+
         /// Returns true if any of the opaque pixels in `bitmap1` when positioned at `x1`, `y1` with `flip1` overlap any
         /// of the opaque pixels in `bitmap2` at `x2`, `y2` with `flip2` within the non-empty rect, or false
         /// if no pixels overlap or if one or both fall completely outside of rect.
@@ -490,6 +508,8 @@ public extension Playdate {
             graphics.tileBitmap(bitmap.pointer, x, y, width, height, flip)
         }
 
+        // NOTE: Yoinked from upstream, but it should do.
+
         /// Draws the given `text` using the provided options. If no font has been set with `setFont`, the default
         /// system font Asheville Sans 14 Light is used.
         public static func drawText(
@@ -499,7 +519,6 @@ public extension Playdate {
             x: CInt,
             y: CInt
         ) -> CInt {
-            // TODO: - Figure out what this returns
             graphics.drawText(text, length, encoding, x, y)
         }
 

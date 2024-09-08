@@ -46,6 +46,16 @@ final class ClockSubsystem: Subsystem {
         Playdate.Graphics.drawBitmap(frame,
                                     position: Vector2(x: 24, y: 20) - GameData.screen.bounds,
                                     flip: .bitmapUnflipped)
+
+        // NOTE: Because the clock subsystem has the highest priority for UI drawing, all parts of the overlay with
+        // text are written here.
+
+        let boxesCollectedMessage = "\(GameData.boxesCollected)/\(GameData.configuredLevelData.packages)"
+        Playdate.Graphics.drawText(boxesCollectedMessage,
+                                   x: 8,
+                                   y: CInt(GameData.screen.bounds.y - Float(GameResource.currentFont?.size ?? 9)))
+
+
         return true
     }
 }
