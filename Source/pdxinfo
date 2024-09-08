@@ -2,4 +2,5 @@ name=Package Resolved
 author=Marquis Kurt
 description=A small game about collecting packages
 bundleID=net.marquiskurt.pd-package-resolved
-imagePath=
+buildNumber=1
+imagePath=Images
