@@ -10,6 +10,9 @@ enum UI {
         /// Display the "Press A to restart" message at the bottom of the screen.
         nonisolated(unsafe) static let displayRestart = AlertOptions(rawValue: 1 << 0)
 
+        /// Display the "Press A to continue" message at the bottom of the screen.
+        nonisolated(unsafe) static let displayContinue = AlertOptions(rawValue: 2 << 0)
+
         /// No options configured.
         nonisolated(unsafe) static let none: AlertOptions = []
     }
@@ -20,7 +23,7 @@ enum UI {
     ///   whether to prompt the player to restart the game. Defaults to 'none'.
     /// - Returns: Whether the Playdate should redraw the screen.
     @discardableResult
-    static func displayAlert(message: StaticString, options: AlertOptions = .none) -> Bool {
+    static func displayAlert(message: String, options: AlertOptions = .none) -> Bool {
         let width = Playdate.Display.width
         let height = Playdate.Display.height
 
@@ -35,32 +38,25 @@ enum UI {
         Playdate.Graphics.clear(color: 1)
         Playdate.Graphics.drawRect(x: 8, y: 8, width: width - 16, height: height - 16)
 
-        _ = message.withUTF8Buffer { string in
-            let stringWidth = Self.width(of: string, using: styledFont)
-
-            return Playdate.Graphics.drawText(
-                string.baseAddress,
-                length: string.count,
-                encoding: .kUTF8Encoding,
-                x: CInt(halfScreenWidth) - stringWidth / 2,
-                y: yOffset)
-        }
+        let stringWidth = Self.width(of: message, using: styledFont)
+        UI.drawText(message, at: .init(x: halfScreenWidth - Int(stringWidth) / 2, y: Int(yOffset)))
 
         if options.contains(.displayRestart) {
-            let restartMsg: StaticString = "Press A to restart"
-            _ = restartMsg.withUTF8Buffer { string in
-                let stringWidth = Self.width(of: string, using: styledFont)
-                
-                return Playdate.Graphics.drawText(
-                    string.baseAddress,
-                    length: string.count,
-                    encoding: .kUTF8Encoding,
-                    x: CInt(halfScreenWidth) - stringWidth / 2,
-                    y: height - CInt(styledFont.size) - 16
-                )
-            }
+            Self.drawPrompt("Press A to restart.", font: styledFont)
+        } else if options.contains(.displayContinue) {
+            Self.drawPrompt("Press A to continue.", font: styledFont)
         }
+
         return true
+    }
+
+    private static func drawPrompt(_ message: String, font: FontSet) {
+        let promptWidth = Self.width(of: message, using: font)
+        let width = Playdate.Display.width
+        let halfScreenWidth: Int = Int(width) / 2
+        UI.drawText(message,
+                    at: .init(x: halfScreenWidth - Int(promptWidth) / 2,
+                              y: Int(GameData.screen.bounds.y - 10 - Float(font.size))))
     }
 
     private static func width(
@@ -72,6 +68,10 @@ enum UI {
                                          length: string.count,
                                          encoding: .kUTF8Encoding,
                                          tracking: 0) 
+    }
+
+    private static func width(of string: String, using fontSet: FontSet) -> CInt {
+        return CInt(fontSet.font.getTextWidth(for: string, tracking: 0))
     }
 
     @discardableResult

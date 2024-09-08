@@ -68,7 +68,13 @@ extension PackageResolvedGameloop: GameSystem {
         }
 
         if let gameOverState = GameData.gameOverState {
-            UI.displayAlert(message: gameOverState.staticMessage, options: .displayRestart)
+            var alertOptions: UI.AlertOptions = []
+            if gameOverState == .success {
+                alertOptions.insert(.displayContinue)
+            } else {
+                alertOptions.insert(.displayRestart)
+            }
+            UI.displayAlert(message: gameOverState.message, options: alertOptions)
             return false
         }
 

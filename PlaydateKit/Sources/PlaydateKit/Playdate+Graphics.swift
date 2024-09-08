@@ -349,6 +349,15 @@ public extension Playdate {
                 graphics.getTextWidth(pointer, text, length, encoding, tracking)
             }
 
+            public func getTextWidth(
+                for text: String,
+                tracking: Int
+            ) -> Int {
+                Int(
+                    graphics.getTextWidth.unsafelyUnwrapped(pointer, text, text.utf8.count, .kUTF8Encoding, CInt(tracking))
+                )
+            }
+
             /// Returns a `Font.Page` object for the given character code. Each font page contains information
             /// for 256 characters; specifically, if `(c1 & ~0xff) == (c2 & ~0xff)`, then `c1` and `c2` belong to the
             /// same page and the same font page can be used to fetch the character data for both instead of searching
