@@ -6,7 +6,7 @@ final class PaletteSubsystem: Subsystem {
     override var requiresManagedDrawCallsFromSprite: Bool { true }
     
     override func process() {
-        if !GameData.initializedGameLoop || GameData.paletteGracePeriodActive { return }
+        if !GameData.initializedGameLoop || GameData.paletteGracePeriodActive || GameData.gameState != .inLevel { return }
         // if GameData.palettes.count != GameConstants.paletteCount {
         //     Playdate.System.log("Palettes were not filled! This is very, very bad.")
         //     GameData.gameOverState = .crash
@@ -23,7 +23,7 @@ final class PaletteSubsystem: Subsystem {
     }
 
     override func draw() -> Bool {
-        if GameData.paletteGracePeriodActive || !GameData.initializedGameLoop { return true }
+        if GameData.paletteGracePeriodActive || !GameData.initializedGameLoop || GameData.gameState != .inLevel { return true }
 
         guard let paletteImage = GameResource.paletteImage else {
             GameData.gameOverState = .crash

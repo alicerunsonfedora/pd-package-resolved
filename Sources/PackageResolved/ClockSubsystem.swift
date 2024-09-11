@@ -18,6 +18,7 @@ final class ClockSubsystem: Subsystem {
     }
 
     override func process() {
+        guard GameData.gameState == .inLevel else { return }
         let timeSinceReset = Int(Playdate.System.elapsedTime)
         GameData.timeRemaining = GameData.configuredLevelData.time - timeSinceReset
 
@@ -27,11 +28,14 @@ final class ClockSubsystem: Subsystem {
 
         if GameData.timeRemaining <= 0, GameData.initializedGameLoop {
             let metTarget = GameData.boxesCollected >= GameData.configuredLevelData.packages
-            GameData.gameOverState = metTarget ? .success : .outOfTime
+            let gameOverState: GameOverState = metTarget ? .success : .outOfTime
+            GameData.gameOverState = gameOverState
+            GameData.gameState = .gameOver(gameOverState)
         }
     }
 
     override func draw() -> Bool {
+        guard GameData.gameState == .inLevel else { return true }
         let yPos = Int32(GameData.screen.bounds.y) - 24
         let width = Int32(GameData.screen.bounds.x)
         Playdate.Graphics.fillRect(x: 0, y: yPos, width: width, height: 24, color: 1)

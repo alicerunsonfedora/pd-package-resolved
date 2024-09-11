@@ -11,6 +11,14 @@ final class PackageResolvedGameloop {
         ClockSubsystem()
     ]
 
+    enum UIRecentDisplay {
+        case gameOver
+        case levelSummary
+        case none
+    }
+
+    var recentDisplay = UIRecentDisplay.none
+
     init() {
         let parser = GameConfigurationParser(path: "prconfig")
 
@@ -41,33 +49,46 @@ final class PackageResolvedGameloop {
 // MARK: GameRunner conformance
 extension PackageResolvedGameloop: GameSystem {
     func process() {
-        if !GameData.initializedGameLoop {
-            Playdate.System.log("Game loop not ready. Please call setup.")
-            GameData.reset()
-            return
-        }
-
-        if GameData.gameOverState != nil {
-            let (_, _, released) = Playdate.System.buttonState
-            if released.contains(.a) {
-                if (GameData.gameOverState == .success) {
-                    GameData.nextLevel()
-                }
-                GameData.reset()
+        let (_, _, released) = Playdate.System.buttonState
+        switch GameData.gameState {
+        case .gameOver(let gameOverState):
+            if !released.contains(.a) { return }
+            if (gameOverState == .success) {
+                GameData.nextLevel()
+                return
             }
-            return
+            GameData.reset()
+            self.recentDisplay = .none 
+        case .startingLevel:
+            if !released.contains(.a) { return }
+            GameData.reset(jumpIntoLevel: true)
+            self.recentDisplay = .none
+        default:
+            if !GameData.initializedGameLoop {
+                Playdate.System.log("Game loop not ready. Please call setup.")
+                GameData.reset()
+                return
+            }
+            Gameloop.cycleFrames(frame: &GameData.playerFrame, updated: &GameData.frameUpdated)
         }
-
-        Gameloop.cycleFrames(frame: &GameData.playerFrame, updated: &GameData.frameUpdated)
     }
 
     func draw() -> Bool {
-        if !GameData.initializedGameLoop {
-            Playdate.System.log("Calling setup.")
-            return setup()
-        }
-
-        if let gameOverState = GameData.gameOverState {
+        switch GameData.gameState {
+        case .startingLevel:
+            UI.displayLevelSummary(packages: GameData.configuredLevelData.packages, time: GameData.configuredLevelData.time)
+            if self.recentDisplay != .levelSummary {
+                self.recentDisplay = .levelSummary
+                return true
+            }
+            return false 
+        case .inLevel:
+            if !GameData.initializedGameLoop {
+                Playdate.System.log("Calling setup.")
+                return setup()
+            }
+            return true
+        case .gameOver(let gameOverState):
             var alertOptions: UI.AlertOptions = []
             if gameOverState == .success {
                 alertOptions.insert(.displayContinue)
@@ -75,20 +96,14 @@ extension PackageResolvedGameloop: GameSystem {
                 alertOptions.insert(.displayRestart)
             }
             UI.displayAlert(message: gameOverState.message, options: alertOptions)
-            return false
+            if self.recentDisplay != .gameOver {
+                self.recentDisplay = .gameOver
+                return true
+            }
+            return false 
+        default:
+           return false 
         }
-
-        let boxesCollectedMessage = "\(GameData.boxesCollected)/\(GameData.configuredLevelData.packages)"
-        let drawPoint = GameData.screen.fencingIn(
-            point: .init(x: 8,
-                         y: 8))
-                         // y: GameData.screen.bounds.y - Float(GameResource.currentFont?.size ?? 9) - 32))
-        
-        Playdate.Graphics.drawText(boxesCollectedMessage,
-                                   x: CInt(drawPoint.x),
-                                   y: CInt(drawPoint.y))
-
-        return true
     }
 }
 

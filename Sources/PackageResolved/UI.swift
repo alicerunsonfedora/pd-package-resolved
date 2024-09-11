@@ -50,6 +50,43 @@ enum UI {
         return true
     }
 
+    @discardableResult
+    static func displayLevelSummary(packages: Int, time: Int) -> Bool {
+        let width = Playdate.Display.width
+        let height = Playdate.Display.height
+
+        guard let styledFont = GameResource.currentFont else {
+            return false
+        }
+
+        let halfScreenWidth: Int = Int(width) / 2
+        let halfHeight: Int = Int(height) / 2
+
+        Playdate.Graphics.clear(color: 1)
+        Playdate.Graphics.drawRect(x: 8, y: 8, width: width - 16, height: height - 16)
+
+        UI.drawText("DELIVERY REQUEST", at: .init(x: 16, y: 16))
+        
+        // Draw left hand side.
+        UI.drawText("Packages Required:", at: .init(x: 16, y: 16 + styledFont.size + 8))
+        UI.drawText("Time Alotted:", at: .init(x: 16, y: 16 + (styledFont.size * 2) + 16))
+
+        // Draw right hand side
+        let packageCount = "\(packages)"
+        let packageWidth = Self.width(of: packageCount, using: styledFont)
+        UI.drawText(packageCount, at: .init(x: Int(width - 16 - packageWidth), y: 16 + styledFont.size + 8))
+
+        let timeCount = "\(time)"
+        let timeWidth = Self.width(of: timeCount, using: styledFont)
+        UI.drawText(timeCount, at: .init(x: Int(width - 16 - timeWidth), y: 16 + (styledFont.size * 2) + 16))
+
+        let prompt = "Press A to start."
+        let promptWidth = Self.width(of: prompt, using: styledFont)
+        UI.drawText(prompt, at: .init(x: Int(width) - 16 - Int(promptWidth), y: Int(height) - styledFont.size - 8))
+
+        return true
+    }
+
     private static func drawPrompt(_ message: String, font: FontSet) {
         let promptWidth = Self.width(of: message, using: font)
         let width = Playdate.Display.width
@@ -57,17 +94,6 @@ enum UI {
         UI.drawText(message,
                     at: .init(x: halfScreenWidth - Int(promptWidth) / 2,
                               y: Int(GameData.screen.bounds.y - 10 - Float(font.size))))
-    }
-
-    private static func width(
-        of string: UnsafeBufferPointer<UInt8>,
-        using fontSet: FontSet
-    ) -> CInt {
-        guard let baseAddress = string.baseAddress else { return -1 }
-        return fontSet.font.getTextWidth(for: baseAddress,
-                                         length: string.count,
-                                         encoding: .kUTF8Encoding,
-                                         tracking: 0) 
     }
 
     private static func width(of string: String, using fontSet: FontSet) -> CInt {

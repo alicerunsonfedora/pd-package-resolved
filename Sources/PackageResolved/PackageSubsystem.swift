@@ -4,6 +4,7 @@ import PlaydateKit
 /// The subsystem for displaying, placing, and collecting packages.
 final class PackageSubsystem: Subsystem {
     override func process() {
+        guard GameData.initializedGameLoop, GameData.gameState == .inLevel else { return }
         for index in 0..<GameConstants.boxCount {
             let distanceToPlayer = GameData.player?.position
                 .distance(to: GameData.boxes[index]) ?? .zero
@@ -14,6 +15,7 @@ final class PackageSubsystem: Subsystem {
     }
 
     override func draw() -> Bool {
+        guard GameData.gameState == .inLevel else { return true }
         guard let boxOnFrame = GameResource.boxOnFrame,
               let boxOffFrame = GameResource.boxOffFrame else {
                 GameData.gameOverState = .crash

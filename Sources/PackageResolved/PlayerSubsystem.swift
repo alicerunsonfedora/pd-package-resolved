@@ -6,6 +6,7 @@ final class PlayerSubsystem: Subsystem {
     override var requiresManagedDrawCallsFromSprite: Bool { true }
 
     override func process() {
+        guard GameData.gameState == .inLevel else { return }
         let (currentButtons, _, _) = Playdate.System.buttonState
         let currentXPosition = GameData.player?.position.x ?? 0
 
@@ -27,6 +28,7 @@ final class PlayerSubsystem: Subsystem {
     }
 
     override func draw() -> Bool {
+        guard GameData.gameState == .inLevel else { return true }
         guard let playerTable = GameResource.playerTable else {
             GameData.gameOverState = .crash
             Playdate.System.error("Uh oh, where's the player table?")

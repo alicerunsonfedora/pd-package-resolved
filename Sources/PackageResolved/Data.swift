@@ -1,6 +1,15 @@
 import Charolette
 import PlaydateKit
 
+enum GameState {
+   case menu
+   case startingLevel
+   case inLevel
+   case gameOver(GameOverState)
+}
+
+extension GameState: Equatable {}
+
 // TODO: How do we make these thread-safe?
 
 /// An enumeration containing various game constants.
@@ -61,7 +70,10 @@ enum GameData {
     nonisolated(unsafe) static var boxesCollected: Int = 0
     
     nonisolated(unsafe) static var timeRemaining: Int = 60
+
+    @available(*, deprecated, message: "Use GameState with the .gameOver case.")
     nonisolated(unsafe) static var gameOverState: GameOverState?
+    nonisolated(unsafe) static var gameState = GameState.menu
     
     nonisolated(unsafe) static var frameUpdated = false
     nonisolated(unsafe) static var initializedGameLoop = false
@@ -88,11 +100,16 @@ enum GameData {
     static func set(level: Level) {
         GameData.configuredLevelData = level
         GameData.timeRemaining = level.time
+        GameData.gameState = .startingLevel 
     }
 
-    static func reset() {
+    static func reset(jumpIntoLevel: Bool = true) {
         GameData.initializedGameLoop = false
         GameData.gameOverState = nil
+
+        if jumpIntoLevel {
+            GameData.gameState = .inLevel
+        }
 
         GameData.palettes.removeAll()
         GameData.boxes = Array(repeating: .zero, count: GameConstants.boxCount)

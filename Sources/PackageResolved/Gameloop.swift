@@ -34,6 +34,8 @@ enum GameOverState {
     }
 }
 
+extension GameOverState: Equatable {}
+
 enum Gameloop {
     typealias Box = Vector2<Float>
     typealias Bitmap = Playdate.Graphics.Bitmap
