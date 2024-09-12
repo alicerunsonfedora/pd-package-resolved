@@ -17,7 +17,7 @@ final class PackageResolvedGameloop {
         case none
     }
 
-    var recentDisplay = UIRecentDisplay.none
+    var recentDisplay = UIRecentDisplay.none 
 
     init() {
         let parser = GameConfigurationParser(path: "prconfig")
@@ -52,7 +52,7 @@ extension PackageResolvedGameloop: GameSystem {
         let (_, _, released) = Playdate.System.buttonState
         switch GameData.gameState {
         case .gameOver(let gameOverState):
-            if !released.contains(.a) { return }
+            guard released.contains(.a) else { return }
             if (gameOverState == .success) {
                 GameData.nextLevel()
                 return
@@ -60,7 +60,7 @@ extension PackageResolvedGameloop: GameSystem {
             GameData.reset()
             self.recentDisplay = .none 
         case .startingLevel:
-            if !released.contains(.a) { return }
+            guard released.contains(.a) else { return }
             GameData.reset(jumpIntoLevel: true)
             self.recentDisplay = .none
         default:
@@ -75,22 +75,30 @@ extension PackageResolvedGameloop: GameSystem {
 
     func draw() -> Bool {
         switch GameData.gameState {
-        case .startingLevel:
-            UI.displayLevelSummary(packages: GameData.configuredLevelData.packages, time: GameData.configuredLevelData.time)
-            if self.recentDisplay != .levelSummary {
-                self.recentDisplay = .levelSummary
-                return true
-            }
-            return false 
         case .inLevel:
             if !GameData.initializedGameLoop {
                 Playdate.System.log("Calling setup.")
                 return setup()
             }
             return true
+
+        default:
+           return true 
+        }
+    }
+
+    func drawUI() -> Bool {
+        switch GameData.gameState {
+        case .startingLevel:
+            UI.displayLevelSummary(packages: GameData.configuredLevelData.packages, time: GameData.configuredLevelData.time)
+            if self.recentDisplay != .levelSummary {
+                self.recentDisplay = .levelSummary
+                return true
+            }
+            return false
         case .gameOver(let gameOverState):
             var alertOptions: UI.AlertOptions = []
-            if gameOverState == .success {
+            if gameOverState == .success { 
                 alertOptions.insert(.displayContinue)
             } else {
                 alertOptions.insert(.displayRestart)
@@ -100,9 +108,9 @@ extension PackageResolvedGameloop: GameSystem {
                 self.recentDisplay = .gameOver
                 return true
             }
-            return false 
+            return false
         default:
-           return false 
+           return true 
         }
     }
 }

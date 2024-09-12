@@ -59,9 +59,6 @@ enum UI {
             return false
         }
 
-        let halfScreenWidth: Int = Int(width) / 2
-        let halfHeight: Int = Int(height) / 2
-
         Playdate.Graphics.clear(color: 1)
         Playdate.Graphics.drawRect(x: 8, y: 8, width: width - 16, height: height - 16)
 

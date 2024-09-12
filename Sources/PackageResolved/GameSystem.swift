@@ -6,6 +6,10 @@ protocol GameSystem {
     /// - Returns: Whether the screen should be updated.
     func draw() -> Bool
 
+    /// Draws pixels to the screen as necessary, with the highest priority.
+    /// - Returns: Whether the screen should be updated to reflect the UI.
+    func drawUI() -> Bool
+
     /// Process game inputs and perform state manipulations.
     /// - Important: This should be called *before* the draw process.
     func process()
@@ -37,6 +41,7 @@ class Subsystem: GameSystem {
 
     func process() {}
     func draw() -> Bool { true }
+    func drawUI() -> Bool { true }
 }
 
 /// A protocol that manages a series of subsystems.
@@ -52,7 +57,8 @@ extension SubsystemManaged where Self : GameSystem {
     /// remaining subsystems. Draw cycles are handled in two passes. The first pass checks draw
     /// calls for subsystems that require draw calls to be managed via the Playdate's Sprite APIs.
     /// Once the Playdate Sprite API's finish their drawing calls, the remaining subsystems will
-    /// update their draw calls, respectively.
+    /// update their draw calls, respectively. Finally, the game's drawUI method is called to draw
+    /// any remaining UI bits with the highest render priority.
     ///
     /// - Returns: Whether the screen should be updated.
     func runManagedIteration() -> Bool {
@@ -61,7 +67,7 @@ extension SubsystemManaged where Self : GameSystem {
             subsystem.process()
         }
 
-        var shouldRedrawScreen = draw()
+        var shouldRedrawScreen = draw() 
         
         // First pass: check for sprites managed by Playdate.
         for subsystem in subsystems where subsystem.requiresManagedDrawCallsFromSprite {
@@ -74,6 +80,7 @@ extension SubsystemManaged where Self : GameSystem {
         for subsystem in subsystems where !subsystem.requiresManagedDrawCallsFromSprite {
             shouldRedrawScreen = shouldRedrawScreen && subsystem.draw()
         }
-        return shouldRedrawScreen
+
+        return shouldRedrawScreen && drawUI()
     }
 }
