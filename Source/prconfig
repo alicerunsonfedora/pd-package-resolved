@@ -6,5 +6,6 @@ gameconfig {
         level packages=45 time=60
         level packages=50 time=60
         level packages=60 time=90
+        level packages=120 time=100
     }
 }

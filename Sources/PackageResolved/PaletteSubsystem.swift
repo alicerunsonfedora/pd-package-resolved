@@ -7,18 +7,18 @@ final class PaletteSubsystem: Subsystem {
     
     override func process() {
         if !GameData.initializedGameLoop || GameData.paletteGracePeriodActive || GameData.gameState != .inLevel { return }
-        // if GameData.palettes.count != GameConstants.paletteCount {
-        //     Playdate.System.log("Palettes were not filled! This is very, very bad.")
-        //     GameData.gameOverState = .crash
-        //     return
-        // }
+        if GameData.palettes.count != GameConstants.paletteCount {
+            Playdate.System.log("Palettes were not filled! This is very, very bad.")
+            GameData.gameState = .gameOver(.crash)
+            return
+        }
 
         for _ in 0..<GameConstants.paletteCount {
             let overlappingCounts = GameData.player?.sprite.overlappingSprites.count ?? 0
             if overlappingCounts <= 0 {
                 continue
             }
-            GameData.gameOverState = .injury
+            GameData.gameState = .gameOver(.injury)
         }
     }
 
@@ -26,7 +26,7 @@ final class PaletteSubsystem: Subsystem {
         if GameData.paletteGracePeriodActive || !GameData.initializedGameLoop || GameData.gameState != .inLevel { return true }
 
         guard let paletteImage = GameResource.paletteImage else {
-            GameData.gameOverState = .crash
+            GameData.gameState = .gameOver(.crash)
             return false
         }
 
