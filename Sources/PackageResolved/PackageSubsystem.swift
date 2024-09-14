@@ -18,7 +18,7 @@ final class PackageSubsystem: Subsystem {
         guard GameData.gameState == .inLevel else { return true }
         guard let boxOnFrame = GameResource.boxOnFrame,
               let boxOffFrame = GameResource.boxOffFrame else {
-                GameData.gameOverState = .crash
+                GameData.gameState = .gameOver(.crash)
                 Playdate.System.log("Missing image data for boxes.")
                 return true
         }

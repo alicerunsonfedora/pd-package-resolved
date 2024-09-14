@@ -29,7 +29,6 @@ final class ClockSubsystem: Subsystem {
         if GameData.timeRemaining <= 0, GameData.initializedGameLoop {
             let metTarget = GameData.boxesCollected >= GameData.configuredLevelData.packages
             let gameOverState: GameOverState = metTarget ? .success : .outOfTime
-            GameData.gameOverState = gameOverState
             GameData.gameState = .gameOver(gameOverState)
         }
     }

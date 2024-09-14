@@ -56,15 +56,11 @@ class GameConfigurationParser {
         let buffer = UnsafeMutableRawPointer.allocate(byteCount: Int(stats.size),
                                                       alignment: MemoryLayout<CChar>.alignment)
         
-        var readCount: CInt = 1
-        // while readCount != 0 {
-            do {
-                readCount = try handle.read(buffer: buffer, length: stats.size)
-                // try handle.seek(to: readCount)
-            } catch {
-                throw .readFileFailure
-            }
-        // }
+        do {
+            _ = try handle.read(buffer: buffer, length: stats.size)
+        } catch {
+            throw .readFileFailure
+        }
 
         try? handle.close()
 

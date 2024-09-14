@@ -54,7 +54,7 @@ func setup() -> Bool {
         GameResource.paletteImage = Playdate.Graphics.Bitmap(path: "Images/palette")
         if GameResource.paletteImage == nil {
             Playdate.System.error("Couldn't load palette image.")
-            GameData.gameOverState = .crash
+            GameData.gameState = .gameOver(.crash)
             return false
         }
     }

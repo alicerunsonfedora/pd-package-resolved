@@ -30,7 +30,7 @@ final class PlayerSubsystem: Subsystem {
     override func draw() -> Bool {
         guard GameData.gameState == .inLevel else { return true }
         guard let playerTable = GameResource.playerTable else {
-            GameData.gameOverState = .crash
+            GameData.gameState = .gameOver(.crash)
             Playdate.System.error("Uh oh, where's the player table?")
             return false
         }

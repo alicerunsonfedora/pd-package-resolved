@@ -8,13 +8,13 @@ enum UI {
         let rawValue: Int
 
         /// Display the "Press A to restart" message at the bottom of the screen.
-        nonisolated(unsafe) static let displayRestart = AlertOptions(rawValue: 1 << 0)
+        static let displayRestart = AlertOptions(rawValue: 1 << 0)
 
         /// Display the "Press A to continue" message at the bottom of the screen.
-        nonisolated(unsafe) static let displayContinue = AlertOptions(rawValue: 2 << 0)
+        static let displayContinue = AlertOptions(rawValue: 2 << 0)
 
         /// No options configured.
-        nonisolated(unsafe) static let none: AlertOptions = []
+        static let none: AlertOptions = []
     }
 
     /// Displays a blocking alert on the screen with the specified message.

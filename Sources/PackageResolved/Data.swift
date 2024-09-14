@@ -18,13 +18,13 @@ enum GameConstants {
     nonisolated(unsafe) static let charlieSize: Vector2<Float> = .init(x: 32, y: 64)
 
     /// The number of boxes that should spawn in a given run on the screen.
-    nonisolated(unsafe) static let boxCount: Int = 6
+    static let boxCount: Int = 6
     
     /// The number of palettes that should spawn in a given run on the screen.
-    nonisolated(unsafe) static let paletteCount: Int = 2
+    static let paletteCount: Int = 2
 
     /// The default horizontal inset from either side of the screen.
-    nonisolated(unsafe) static let xInset: Float = 32
+    static let xInset: Float = 32
 }
 
 /// An enumeration of the various resources the game may use.
@@ -105,8 +105,6 @@ enum GameData {
 
     static func reset(jumpIntoLevel: Bool = true) {
         GameData.initializedGameLoop = false
-        GameData.gameOverState = nil
-
         if jumpIntoLevel {
             GameData.gameState = .inLevel
         }
