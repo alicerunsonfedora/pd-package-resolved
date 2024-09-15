@@ -205,6 +205,13 @@ public extension Playdate {
             }
         }
 
+        public static func log(_ log: String) {
+            let logToConsole = unsafeBitCast(
+                system.logToConsole.unsafelyUnwrapped,
+                to: (@convention(c) (UnsafePointer<CChar>?) -> Void).self)
+            logToConsole(log)
+        }
+
         /// Calls the log function.
         public static func log(_ log: UnsafePointer<CChar>) {
             let logToConsole = unsafeBitCast(

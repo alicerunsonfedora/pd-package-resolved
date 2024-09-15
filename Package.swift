@@ -39,7 +39,7 @@ let package = Package(
         .library(name: "PackageResolved", targets: ["PackageResolved"]),
     ],
     dependencies: [
-        .package(name: "PlaydateKit", path: "../PlaydateKit"),
+        .package(name: "PlaydateKit", path: "./PlaydateKit"),
     ],
     targets: [
         // A fake copy of Charolette used to compile for testing.

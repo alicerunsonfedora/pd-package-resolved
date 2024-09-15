@@ -8,10 +8,10 @@ public enum Movement {
     public static func translate(from position: Vector2<Float>,
                                  withCrankRotation rotation: Float,
                                  bounds: Vector2<Float>) -> Vector2<Float> {
-        // TODO: Correctly calculate the delta here to be used in the final calculations.
-        let delta = position.x - rotation
+        // Use the delta change to determine which direction to go.
+        let xPosition: Float = rotation >= 0 ? position.x + 4 : position.x - 4
         return Vector2<Float>(
-            x: rotation.clamp(lower: 0, upper: bounds.x),
+            x: xPosition.clamp(lower: 16, upper: bounds.x - 16),
             y: position.y.clamp(lower: 0, upper: bounds.y))
     }
 }

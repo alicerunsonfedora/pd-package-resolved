@@ -10,20 +10,27 @@ final class PlayerSubsystem: Subsystem {
         let (currentButtons, _, _) = Playdate.System.buttonState
         let currentXPosition = GameData.player?.position.x ?? 0
 
-        var movementDelta: Float = -1
+        var movementDelta: Float = 0 
         if !Playdate.System.isCrankDocked {
-            movementDelta = Playdate.System.crankAngle
+            let crankChange = Playdate.System.crankChange
+            Playdate.System.log("Crank change: \(Int(crankChange))")
+            movementDelta = crankChange 
         } else if currentButtons.contains(.left) {
-            movementDelta = currentXPosition - 4
+            movementDelta = -4
         } else if currentButtons.contains(.right) {
-            movementDelta = currentXPosition + 4
+            movementDelta = +4
         }
 
-        if movementDelta >= 0 {
-            GameData.player?.move(to: Movement.translate(
+        if movementDelta != 0 {
+            let newMovementVector = Movement.translate(
                 from: GameData.player?.position ?? .zero,
                 withCrankRotation: movementDelta,
-                bounds: GameData.screen.bounds))
+                bounds: GameData.screen.bounds
+            )
+
+            Playdate.System.log("New X Position: \(Int(newMovementVector.x))")
+
+            GameData.player?.move(to: newMovementVector) 
         }
     }
 
