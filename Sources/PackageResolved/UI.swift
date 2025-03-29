@@ -24,8 +24,8 @@ enum UI {
     /// - Returns: Whether the Playdate should redraw the screen.
     @discardableResult
     static func displayAlert(message: String, options: AlertOptions = .none) -> Bool {
-        let width = Playdate.Display.width
-        let height = Playdate.Display.height
+        let width = Display.width
+        let height = Display.height
 
         guard let styledFont = GameResource.currentFont else {
             return false
@@ -33,10 +33,10 @@ enum UI {
 
         let halfScreenWidth: Int = Int(width) / 2
         let halfHeight = CInt(styledFont.size / 2)
-        let yOffset = (height / 2) - halfHeight
+        let yOffset = CInt(height / 2) - halfHeight
 
-        Playdate.Graphics.clear(color: 1)
-        Playdate.Graphics.drawRect(x: 8, y: 8, width: width - 16, height: height - 16)
+        Graphics.clear(color: .white)
+        Graphics.drawRect(Rect(x: 8, y: 8, width: width - 16, height: height - 16))
 
         let stringWidth = Self.width(of: message, using: styledFont)
         UI.drawText(message, at: .init(x: halfScreenWidth - Int(stringWidth) / 2, y: Int(yOffset)))
@@ -52,15 +52,15 @@ enum UI {
 
     @discardableResult
     static func displayLevelSummary(packages: Int, time: Int) -> Bool {
-        let width = Playdate.Display.width
-        let height = Playdate.Display.height
+        let width = Display.width
+        let height = Display.height
 
         guard let styledFont = GameResource.currentFont else {
             return false
         }
 
-        Playdate.Graphics.clear(color: 1)
-        Playdate.Graphics.drawRect(x: 8, y: 8, width: width - 16, height: height - 16)
+        Graphics.clear(color: .white)
+        Graphics.drawRect(Rect(x: 8, y: 8, width: width - 16, height: height - 16))
 
         UI.drawText("DELIVERY REQUEST", at: .init(x: 16, y: 16))
         
@@ -71,11 +71,11 @@ enum UI {
         // Draw right hand side
         let packageCount = "\(packages)"
         let packageWidth = Self.width(of: packageCount, using: styledFont)
-        UI.drawText(packageCount, at: .init(x: Int(width - 16 - packageWidth), y: 16 + styledFont.size + 8))
+        UI.drawText(packageCount, at: .init(x: width - 16 - Int(packageWidth), y: 16 + styledFont.size + 8))
 
         let timeCount = "\(time)"
         let timeWidth = Self.width(of: timeCount, using: styledFont)
-        UI.drawText(timeCount, at: .init(x: Int(width - 16 - timeWidth), y: 16 + (styledFont.size * 2) + 16))
+        UI.drawText(timeCount, at: .init(x: width - 16 - Int(timeWidth), y: 16 + (styledFont.size * 2) + 16))
 
         let prompt = "Press A to start."
         let promptWidth = Self.width(of: prompt, using: styledFont)
@@ -86,7 +86,7 @@ enum UI {
 
     private static func drawPrompt(_ message: String, font: FontSet) {
         let promptWidth = Self.width(of: message, using: font)
-        let width = Playdate.Display.width
+        let width = Display.width
         let halfScreenWidth: Int = Int(width) / 2
         UI.drawText(message,
                     at: .init(x: halfScreenWidth - Int(promptWidth) / 2,
@@ -99,6 +99,6 @@ enum UI {
 
     @discardableResult
     static func drawText(_ text: String, at position: Vector2<Int>) -> Int {
-       Playdate.Graphics.drawText(text, x: CInt(position.x), y: CInt(position.y))
+        Graphics.drawText(text, at: Point(x: position.x, y: position.y))
     }
 }

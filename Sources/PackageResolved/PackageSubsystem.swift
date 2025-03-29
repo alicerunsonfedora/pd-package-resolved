@@ -19,7 +19,7 @@ final class PackageSubsystem: Subsystem {
         guard let boxOnFrame = GameResource.boxOnFrame,
               let boxOffFrame = GameResource.boxOffFrame else {
                 GameData.gameState = .gameOver(.crash)
-                Playdate.System.log("Missing image data for boxes.")
+                System.log("Missing image data for boxes.")
                 return true
         }
 

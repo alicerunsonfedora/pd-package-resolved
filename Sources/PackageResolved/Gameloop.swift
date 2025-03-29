@@ -38,8 +38,8 @@ extension GameOverState: Equatable {}
 
 enum Gameloop {
     typealias Box = Vector2<Float>
-    typealias Bitmap = Playdate.Graphics.Bitmap
-    typealias BitmapTable = Playdate.Graphics.BitmapTable
+    typealias Bitmap = Graphics.Bitmap
+    typealias BitmapTable = Graphics.BitmapTable
 
     enum GameloopError: Error {
         case tableNotFound
@@ -65,12 +65,14 @@ enum Gameloop {
 
     @inlinable
     static func drawBox(box: Box, image: Bitmap) {
-        Playdate.Graphics.drawBitmap(image, position: box, flip: .bitmapUnflipped)
+        Graphics.drawBitmap(image, at: Point(x: Int(box.x), y: Int(box.y)), flip: .unflipped)
     }
 
     static func getBoxTable() throws(GameloopError) -> (Bitmap, Bitmap) {
-        let boxSheet: StaticString = "Images/box"
-        let table = BitmapTable(path: boxSheet)
+        let boxSheet: String = "Images/box"
+        guard let table = try? BitmapTable(path: boxSheet) else {
+            throw .bitmapNotFound
+        }
         let onFrame = table.bitmap(at: 0)
         let offFrame = table.bitmap(at: 1)
 
@@ -89,11 +91,5 @@ enum Gameloop {
         frame += 1
         if frame > 5 { frame = 0 }
         updated = true
-    }
-}
-
-extension Playdate.Graphics {
-    static func drawBitmap(_ bitmap: Bitmap, position: Vector2<Float>, flip: Bitmap.Flip) {
-        Self.drawBitmap(bitmap, x: CInt(position.x), y: CInt(position.y), flip: flip)
     }
 }

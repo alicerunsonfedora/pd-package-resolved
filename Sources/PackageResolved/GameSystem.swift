@@ -26,7 +26,7 @@ extension GameSystem {
         process()
         let drawCall = draw()
         if !drawCall { return false }
-        Playdate.Sprite.updateAndDrawDisplayListSprites()
+        Sprite.updateAndDrawDisplayListSprites()
         return true
     }
 }
@@ -74,7 +74,7 @@ extension SubsystemManaged where Self : GameSystem {
             shouldRedrawScreen = shouldRedrawScreen && subsystem.draw()
         }
         if !shouldRedrawScreen { return false }
-        Playdate.Sprite.updateAndDrawDisplayListSprites()
+        Sprite.updateAndDrawDisplayListSprites()
 
         // Second pass: check for everything else.
         for subsystem in subsystems where !subsystem.requiresManagedDrawCallsFromSprite {

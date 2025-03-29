@@ -3,7 +3,7 @@ import PlaydateKit
 
 @_cdecl("eventHandler") func eventHandler(
     pointer: UnsafeMutableRawPointer!,
-    event: Playdate.System.Event,
+    event: System.Event,
     _: UInt32
 ) -> Int32 {
     switch event {
@@ -13,17 +13,17 @@ import PlaydateKit
         do {
             let styled = try Fonts.styledFont(for: .bold)
             GameResource.currentFont = styled
-            Playdate.Graphics.setFont(styled.font)
+            Graphics.setFont(styled.font)
         } catch {
-            Playdate.System.error("Failed to load a suitable font!")
+            System.error("Failed to load a suitable font!")
         }
 
-        Playdate.System.addMenuItem(title: "Restart") { _ in
+        System.addMenuItem(title: "Restart") {
             GameData.reset()
         }
 
         let mainGameloop = PackageResolvedGameloop()
-        Playdate.System.updateCallback = mainGameloop.runManagedIteration
+        System.updateCallback = mainGameloop.runManagedIteration
     default: break
     }
     return 0
@@ -31,29 +31,29 @@ import PlaydateKit
 
 func setup() -> Bool {
     // MARK: Screen Clearing
-    GameData.screen.bounds.x = Float(Playdate.Display.width)
-    GameData.screen.bounds.y = Float(Playdate.Display.height)
+    GameData.screen.bounds.x = Float(Display.width)
+    GameData.screen.bounds.y = Float(Display.height)
 
-    Playdate.Graphics.clear(color: 1)
+    Graphics.clear(color: .white)
 
     // MARK: Player Setup
     let playerPosition = Vector2<Float>(x: 0, y: 24)
 
     if GameResource.playerTable == nil {
-        GameResource.playerTable = Playdate.Graphics.BitmapTable(path: "Images/charlie")
+        GameResource.playerTable = try? Graphics.BitmapTable(path: "Images/charlie")
     }
 
     if let table = GameResource.playerTable {
         GameData.player = Player(at: playerPosition, size: GameConstants.charlieSize, table: table)
     }
     GameData.player?.move(to: .init(x: GameData.screen.bounds.x / 2, y: 24))
-    Playdate.Sprite.updateAndDrawDisplayListSprites()
+    Sprite.updateAndDrawDisplayListSprites()
 
     // MARK: Palette Resource
     if GameResource.paletteImage == nil {
-        GameResource.paletteImage = Playdate.Graphics.Bitmap(path: "Images/palette")
+        GameResource.paletteImage = try? Graphics.Bitmap(path: "Images/palette")
         if GameResource.paletteImage == nil {
-            Playdate.System.error("Couldn't load palette image.")
+            System.error("Couldn't load palette image.")
             GameData.gameState = .gameOver(.crash)
             return false
         }
@@ -61,23 +61,23 @@ func setup() -> Bool {
 
     // MARK: Boxes
     if GameResource.boxOnFrame == nil, GameResource.boxOffFrame == nil {
-        GameResource.boxOnFrame = Playdate.Graphics.Bitmap(path: "Images/boxOn")
-        GameResource.boxOffFrame = Playdate.Graphics.Bitmap(path: "Images/boxOff")
+        GameResource.boxOnFrame = try? Graphics.Bitmap(path: "Images/boxOn")
+        GameResource.boxOffFrame = try? Graphics.Bitmap(path: "Images/boxOff")
     }
 
     Boxes.fill(boxes: &GameData.boxes, screen: GameData.screen)
 
     // MARK: UI
     if GameResource.clockTable == nil {
-        let clockTable = Playdate.Graphics.BitmapTable(path: "Images/clock")
+        let clockTable = try? Graphics.BitmapTable(path: "Images/clock")
         GameResource.clockTable = clockTable
     }
     
-    Playdate.System.resetElapsedTime()
+    System.resetElapsedTime()
 
     GameData.paletteGracePeriodActive = true
 
     GameData.initializedGameLoop = true
-    Playdate.System.log("Game has been set up.")
+    System.log("Game has been set up.")
     return true
 }

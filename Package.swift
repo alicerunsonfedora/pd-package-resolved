@@ -1,71 +1,55 @@
-// swift-tools-version: 5.10
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version: 6.0
 
 import Foundation
 import PackageDescription
 
-#if os(macOS)
-let gccIncludePrefix =
-    "/usr/local/playdate/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1"
-#else
-// Note: this may change depending on how the ARM GNU toolchain is installed.
-let gccIncludePrefix = "/usr/lib/gcc/arm-none-eabi/10.3.1"
-#endif
-
-guard let home = Context.environment["HOME"] else {
-    fatalError("could not determine home directory")
-}
-
-let swiftSettingsSimulator: [SwiftSetting] = [
+let pdSettings: [SwiftSetting] = [
     .enableExperimentalFeature("Embedded"),
     .unsafeFlags([
+        "-whole-module-optimization",
         "-Xfrontend", "-disable-objc-interop",
         "-Xfrontend", "-disable-stack-protector",
         "-Xfrontend", "-function-sections",
         "-Xfrontend", "-gline-tables-only",
         "-Xcc", "-DTARGET_EXTENSION",
-        "-Xcc", "-I", "-Xcc", "\(gccIncludePrefix)/include",
-        "-Xcc", "-I", "-Xcc", "\(gccIncludePrefix)/include-fixed",
-        "-Xcc", "-I", "-Xcc", "\(gccIncludePrefix)/../../../../arm-none-eabi/include",
-        "-I", "\(home)/Developer/PlaydateSDK/C_API",
+        "-Xcc", "-I", "-Xcc",
+        "/usr/local/playdate/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/include",
+        "-Xcc", "-I", "-Xcc",
+        "/usr/local/playdate/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/include-fixed",
+        "-Xcc", "-I", "-Xcc",
+        "/usr/local/playdate/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/include",
+        "-I",
+        "\(Context.environment["PLAYDATE_SDK_PATH"] ?? "\(Context.environment["HOME"]!)/Developer/PlaydateSDK/")/C_API",
     ]),
 ]
 
 let package = Package(
     name: "PackageResolved",
+    platforms: [.macOS(.v14)],
     products: [
-        .library(name: "Charolette", targets: ["Charolette"]),
-        .library(name: "KDL", targets: ["KDL"]),
+//        .library(name: "Charolette", targets: ["Charolette"]),
+//        .library(name: "KDL", targets: ["KDL"]),
         .library(name: "PackageResolved", targets: ["PackageResolved"]),
     ],
     dependencies: [
-        .package(name: "PlaydateKit", path: "./PlaydateKit"),
+        .package(url: "https://github.com/finnvoor/PlaydateKit.git", branch: "main")
     ],
     targets: [
-        // A fake copy of Charolette used to compile for testing.
-        .target(name: "CharoletteStandard"),
-
-        // The actual copy of Charolette used for embedded environments.
         .target(
             name: "Charolette",
-            dependencies: [
-                .product(name: "PlaydateKit", package: "PlaydateKit"),
-            ],
-            swiftSettings: swiftSettingsSimulator),
+            swiftSettings: pdSettings),
         .target(
-          name: "KDL",
-          exclude: ["src/utils", "doc", "bindings", "tests"],
-          swiftSettings: swiftSettingsSimulator),
+            name: "KDL",
+            exclude: ["src/utils", "doc", "bindings", "tests"],
+            swiftSettings: pdSettings),
         .target(
             name: "PackageResolved",
             dependencies: [
-                .product(name: "CPlaydate", package: "PlaydateKit"),
-                .product(name: "PlaydateKit", package: "PlaydateKit"),
                 "Charolette",
-                "KDL"
+                "KDL",
+                .product(name: "PlaydateKit", package: "PlaydateKit")
             ],
-            swiftSettings: swiftSettingsSimulator
-        ),
-        .testTarget(name: "CharoletteTests", dependencies: ["CharoletteStandard"])
-    ]
+            swiftSettings: pdSettings),
+    ],
+    swiftLanguageModes: [.v6]
 )

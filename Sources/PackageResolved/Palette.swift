@@ -2,22 +2,22 @@ import Charolette
 import PlaydateKit
 
 struct Palette {
-    var sprite: Playdate.Sprite.Sprite
+    var sprite: Sprite.Sprite
     var position: Vector2<Float>
 
-    init(sprite: Playdate.Sprite.Sprite, position: Vector2<Float>) {
+    init(sprite: Sprite.Sprite, position: Vector2<Float>) {
         self.sprite = sprite
         self.position = position
     }
 
-    init(image: Playdate.Graphics.Bitmap, at position: Vector2<Float>) {
+    init(image: Graphics.Bitmap, at position: Vector2<Float>) {
         self.sprite = Images.imagedSprite(bitmap: image, at: position)
         self.position = position
     }
 }
 
 enum Palettes {
-    typealias Bitmap = Playdate.Graphics.Bitmap
+    typealias Bitmap = Graphics.Bitmap
 
     private enum Constants {
         static var paletteSize: Vector2<Float> { Vector2(x: 32, y: 32) }
@@ -47,8 +47,8 @@ enum Palettes {
         newPosition.y -= 1
         if newPosition.y < threshold { newPosition = createPalettePosition(screen: screen) }
 
-        palette.sprite.setImage(image: image)
-        palette.sprite.moveTo(x: newPosition.x, y: newPosition.y)
+        palette.sprite.image = image
+        palette.sprite.moveTo(Point(x: Int(newPosition.x), y: Int(newPosition.y)))
         palette.sprite.markDirty()
         
         return Palette(sprite: palette.sprite, position: newPosition)

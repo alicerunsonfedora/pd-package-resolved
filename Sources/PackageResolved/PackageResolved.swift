@@ -25,23 +25,23 @@ final class PackageResolvedGameloop {
         do {
             let config = try parser.parse()
             guard !config.levels.isEmpty else {
-                Playdate.System.error("WTF there are no levels")
+                System.error("WTF there are no levels")
                 return
             }
             GameData.configuration = config
             GameData.set(level: config.levels[0])
         } catch GameConfigurationParser.ParserError.missingHandle {
-            Playdate.System.log("No handle available.")
+            System.log("No handle available.")
         } catch GameConfigurationParser.ParserError.missingFileStats {
-            Playdate.System.log("No file stats available.")
+            System.log("No file stats available.")
         } catch GameConfigurationParser.ParserError.readFileFailure {
-            Playdate.System.log("Something went wrong in read.")
+            System.log("Something went wrong in read.")
         } catch GameConfigurationParser.ParserError.kdlStringEmpty {
-            Playdate.System.log("KDL string is empty")
+            System.log("KDL string is empty")
         } catch GameConfigurationParser.ParserError.kdlParserError {
-            Playdate.System.log("Something went wrong when parsing the data.")
+            System.log("Something went wrong when parsing the data.")
         } catch {
-            Playdate.System.log("Something else happened aaaaa")
+            System.log("Something else happened aaaaa")
         }
     }
 }
@@ -49,7 +49,7 @@ final class PackageResolvedGameloop {
 // MARK: GameRunner conformance
 extension PackageResolvedGameloop: GameSystem {
     func process() {
-        let (_, _, released) = Playdate.System.buttonState
+        let (_, _, released) = System.buttonState
         switch GameData.gameState {
         case .gameOver(let gameOverState):
             guard released.contains(.a) else { return }
@@ -65,7 +65,7 @@ extension PackageResolvedGameloop: GameSystem {
             self.recentDisplay = .none
         default:
             if !GameData.initializedGameLoop {
-                Playdate.System.log("Game loop not ready. Please call setup.")
+                System.log("Game loop not ready. Please call setup.")
                 GameData.reset()
                 return
             }
@@ -77,7 +77,7 @@ extension PackageResolvedGameloop: GameSystem {
         switch GameData.gameState {
         case .inLevel:
             if !GameData.initializedGameLoop {
-                Playdate.System.log("Calling setup.")
+                System.log("Calling setup.")
                 return setup()
             }
             return true

@@ -8,7 +8,7 @@ final class PaletteSubsystem: Subsystem {
     override func process() {
         if !GameData.initializedGameLoop || GameData.paletteGracePeriodActive || GameData.gameState != .inLevel { return }
         if GameData.palettes.count != GameConstants.paletteCount {
-            Playdate.System.log("Palettes were not filled! This is very, very bad.")
+            System.log("Palettes were not filled! This is very, very bad.")
             GameData.gameState = .gameOver(.crash)
             return
         }

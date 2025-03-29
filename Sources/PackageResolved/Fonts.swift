@@ -1,11 +1,11 @@
 import PlaydateKit
 
 enum Fonts {
-    typealias Font = Playdate.Graphics.Font
+    typealias Font = Graphics.Font
 
     private enum Constants {
-        static let sBoldPath: StaticString = "Fonts/Salmon-Sans-9-Bold-18.pft"
-        static let sBoldFallback: StaticString = "/System/Fonts/Asheville-Sans-14-Bold.pft"
+        static let sBoldPath: String = "Fonts/Salmon-Sans-9-Bold-18.pft"
+        static let sBoldFallback: String = "/System/Fonts/Asheville-Sans-14-Bold.pft"
     }
 
     enum FontError: Error {

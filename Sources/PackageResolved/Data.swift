@@ -33,19 +33,19 @@ enum GameResource {
     nonisolated(unsafe) static var currentFont: FontSet?
 
     /// The player's image table.
-    nonisolated(unsafe) static var playerTable: Playdate.Graphics.BitmapTable?
+    nonisolated(unsafe) static var playerTable: Graphics.BitmapTable?
 
     /// The palette's bitmap image.
-    nonisolated(unsafe) static var paletteImage: Playdate.Graphics.Bitmap?
+    nonisolated(unsafe) static var paletteImage: Graphics.Bitmap?
 
     /// The box's primary or "on" bitmap image.
-    nonisolated(unsafe) static var boxOnFrame: Playdate.Graphics.Bitmap?
+    nonisolated(unsafe) static var boxOnFrame: Graphics.Bitmap?
 
     /// The box's secondary or "off" bitmap image.
-    nonisolated(unsafe) static var boxOffFrame: Playdate.Graphics.Bitmap?
+    nonisolated(unsafe) static var boxOffFrame: Graphics.Bitmap?
 
     /// The clock UI's image table.
-    nonisolated(unsafe) static var clockTable: Playdate.Graphics.BitmapTable?
+    nonisolated(unsafe) static var clockTable: Graphics.BitmapTable?
 }
 
 // FIXME: Big doo doo turd bad
@@ -85,7 +85,7 @@ enum GameData {
 
     static func nextLevel() {
        guard GameData.currentLevel <= GameData.configuration.levels.endIndex else {
-           Playdate.System.log("No more levels to load.")
+           System.log("No more levels to load.")
            return
        }
 

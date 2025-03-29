@@ -39,17 +39,17 @@ class GameConfigurationParser {
         case errored
     }
 
-    let path: StaticString
+    let path: String
     
-    init(path: StaticString) {
+    init(path: String) {
         self.path = path
     }
 
     func parse() throws(ParserError) -> GameConfiguration {
-        guard let handle = try? Playdate.File.open(path: path, mode: FileOptions(rawValue: 0)) else {
+        guard let handle = try? File.open(path: path, mode: .read) else {
             throw .missingHandle
         }
-        guard let stats = try? Playdate.File.stat(path: self.path) else {
+        guard let stats = try? File.stat(path: self.path) else {
             throw .missingFileStats
         }
 
@@ -69,8 +69,10 @@ class GameConfigurationParser {
             throw .kdlStringEmpty
         }
        
-        Playdate.System.log("[CONF] Data received: ")
-        Playdate.System.log(kdlString.data)
+        System.log("[CONF] Data received: ")
+        if let data = kdlString.data {
+            System.log(String(cString: data))
+        }
 
         let parser = kdl_create_string_parser(kdlString, KDL_DEFAULTS)
         var currentEvent: kdl_event_data = kdl_parser_next_event(parser).pointee
@@ -91,13 +93,13 @@ class GameConfigurationParser {
 
                 switch (currentEvent.name, state) {
                 case (Constants.gameConfigKeyword, .initial):
-                    Playdate.System.log("[CONF] Starting a new game config read")
+                    System.log("[CONF] Starting a new game config read")
                     parserState = .probingConfiguration
                 case (Constants.levelsKeyword, .probingConfiguration):
-                    Playdate.System.log("[CONF] Probing all available levels")
+                    System.log("[CONF] Probing all available levels")
                     parserState = .probingLevels
                 case (Constants.levelKeyword, .probingLevels):
-                    Playdate.System.log("[CONF] Probing new level")
+                    System.log("[CONF] Probing new level")
                     parserState = .probingLevel
                 default:
                     parserState = .errored
@@ -106,28 +108,28 @@ class GameConfigurationParser {
             case (KDL_EVENT_PROPERTY, .probingLevel):
                 switch currentEvent.name {
                 case Constants.packagesProperty:
-                    Playdate.System.log("[CONF] Updating package count.")
+                    System.log("[CONF] Updating package count.")
                     currentPackages = Int(currentEvent.value.number.integer)
                 case Constants.timeProperty:
-                    Playdate.System.log("[CONF] Update time count.")
+                    System.log("[CONF] Update time count.")
                     currentTimeRemaining = Int(currentEvent.value.number.integer)
                 default:
-                    Playdate.System.log("[CONF] Unknown property. Skipping...")
+                    System.log("[CONF] Unknown property. Skipping...")
                 }
                 break
             case (KDL_EVENT_END_NODE, .probingLevel):
-                Playdate.System.log("[CONF] Adding new level to the level list.")
+                System.log("[CONF] Adding new level to the level list.")
                 let newLevel = Level(packages: currentPackages, time: currentTimeRemaining)
                 levels.append(newLevel)
                 parserState = .probingLevels
             case (KDL_EVENT_END_NODE, .probingLevels):
-                Playdate.System.log("[CONF] Finished probing levels.")
+                System.log("[CONF] Finished probing levels.")
                 parserState = .probingConfiguration
             case (KDL_EVENT_END_NODE, .probingConfiguration):
-                Playdate.System.log("[CONF] Done reading configuration block.")
+                System.log("[CONF] Done reading configuration block.")
                 parserState = .finished
             default:
-                Playdate.System.log("[CONF] New event fired, but not recognized or needed.")
+                System.log("[CONF] New event fired, but not recognized or needed.")
             }
             currentEvent = kdl_parser_next_event(parser).pointee
         }

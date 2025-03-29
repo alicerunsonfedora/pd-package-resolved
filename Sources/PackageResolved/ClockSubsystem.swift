@@ -19,7 +19,7 @@ final class ClockSubsystem: Subsystem {
 
     override func process() {
         guard GameData.gameState == .inLevel else { return }
-        let timeSinceReset = Int(Playdate.System.elapsedTime)
+        let timeSinceReset = Int(System.elapsedTime)
         GameData.timeRemaining = GameData.configuredLevelData.time - timeSinceReset
 
         if GameData.timeRemaining == 55 {
@@ -35,20 +35,19 @@ final class ClockSubsystem: Subsystem {
 
     override func draw() -> Bool {
         guard GameData.gameState == .inLevel else { return true }
-        let yPos = Int32(GameData.screen.bounds.y) - 24
-        let width = Int32(GameData.screen.bounds.x)
-        Playdate.Graphics.fillRect(x: 0, y: yPos, width: width, height: 24, color: 1)
-        Playdate.Graphics.drawRect(x: 0, y: yPos, width: width, height: 24)
+        let yPos = Int(GameData.screen.bounds.y) - 24
+        let width = Int(GameData.screen.bounds.x)
+        Graphics.fillRect(Rect(x: 0, y: yPos, width: width, height: 24), color: .white)
+        Graphics.drawRect(Rect(x: 0, y: yPos, width: width, height: 24))
 
         guard let table = GameResource.clockTable,
-              let frame = table.bitmap(at: frameForCurrentPercentage) else {
-            Playdate.System.log("No clock?")
+              let frame = table.bitmap(at: Int(frameForCurrentPercentage)) else {
+            System.log("No clock?")
             return false
         }
 
-        Playdate.Graphics.drawBitmap(frame,
-                                    position: Vector2(x: 24, y: 20) - GameData.screen.bounds,
-                                    flip: .bitmapUnflipped)
+        let pos = Vector2(x: 24, y: 20) - GameData.screen.bounds
+        Graphics.drawBitmap(frame, at: Point(x: pos.x, y: pos.y), flip: .unflipped)
 
         // NOTE: Because the clock subsystem has the highest priority for UI drawing, all parts of the overlay with
         // text are written here.
